@@ -214,7 +214,8 @@ export function ReceiptCard({
               {repos.map((repo) => (
                 <li
                   key={repo.id}
-                  className=" border-b border-dashed"
+                  className="gh-receipt__repo"
+                  style={{ borderBottom: `1px dashed ${borderColor}` }}
                 >
                   <a
                     href={repo.html_url}

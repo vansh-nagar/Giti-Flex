@@ -127,7 +127,7 @@ export const backgroundOptions: BackgroundItem[] = [
       />
     ),
     backgroundColor: "#ffffff",
-    text: "#ffffff",
+    text: "#4b5563",
     heading: "#000",
   },
   {

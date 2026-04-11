@@ -55,7 +55,12 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
       }),
       fetch(
         `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`,
-      ).then((response) => response.json() as Promise<GitHubRepo[]>),
+      ).then((response) => {
+        if (!response.ok) {
+          throw new Error("Could not fetch repositories");
+        }
+        return response.json() as Promise<GitHubRepo[]>;
+      }),
     ])
       .then(([fetchedUser, allRepos]) => {
         setUser(fetchedUser);

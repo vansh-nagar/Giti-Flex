@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import { Check, Palette, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,117 +22,51 @@ export function CustomizationPanel({
   onClose,
   onSelect,
 }: CustomizationPanelProps) {
+  if (!open) return null;
+
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          className="gh-customize"
-          initial={{ opacity: 0, x: -30, width: 0 }}
-          animate={{ opacity: 1, x: 0, width: 260 }}
-          exit={{ opacity: 0, x: -30, width: 0 }}
-          transition={{
-            duration: 0.45,
-            ease: [0.23, 1, 0.32, 1],
-          }}
-          style={{
-            flexShrink: 0,
-            overflow: "hidden",
-            paddingTop: "1em",
-            alignSelf: "flex-start",
-            position: "sticky",
-            top: "1em",
-          }}
-        >
-          <div style={{ width: 260 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "1.25em",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                  color: "#111",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                <Palette size={16} /> Customize
-              </h3>
-              <Button variant="ghost" size="icon" onClick={onClose}>
-                <X size={14} />
-              </Button>
-            </div>
+    <div className="sticky top-4 self-start w-[260px] shrink-0 pt-4">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="flex items-center gap-1 text-base">
+          <Palette size={16} /> Customize
+        </h3>
+        <Button variant="ghost" size="icon" onClick={onClose}>
+          <X size={14} />
+        </Button>
+      </div>
 
-            <div className="gh-customize__section">
-              <div className="">Themes & Backgrounds</div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: "8px",
-                  maxHeight: "60vh",
-                  overflowY: "auto",
-                  paddingRight: "4px",
-                }}
-              >
-                {backgrounds.map((background) => {
-                  const isSelected = selectedBackground.name === background.name;
+      <div className="mb-5">
+        <div className="mb-3 text-[0.85rem] text-[#666]">Themes & Backgrounds</div>
+        <div className="grid grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto pr-1">
+          {backgrounds.map((background) => {
+            const isSelected = selectedBackground.name === background.name;
 
-                  return (
-                    <div key={background.name} style={{ textAlign: "left" }}>
-                      <button
-                        type="button"
-                        aria-label={`Choose ${background.name}`}
-                        title={background.description}
-                        className={cn(
-                          "gh-customize__swatch",
-                          isSelected && "gh-customize__swatch--selected",
-                        )}
-                        style={{
-                          aspectRatio: "16/9",
-                          height: "auto",
-                          backgroundColor: "#f9fafb",
-                          overflow: "hidden",
-                        }}
-                        onClick={() => onSelect(background)}
-                      >
-                        <div>{background.component}</div>
-                        {isSelected && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              inset: 0,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              backgroundColor: "rgba(59, 130, 246, 0.2)",
-                              zIndex: 10,
-                            }}
-                          >
-                            <Check size={18} color="#fff" strokeWidth={3} />
-                          </div>
-                        )}
-                      </button>
-                      <div
-                        className="gh-customize__swatch-name"
-                        style={{ marginTop: "4px", fontWeight: 500 }}
-                      >
-                        {background.name}
-                      </div>
+            return (
+              <div key={background.name} className="text-left">
+                <button
+                  type="button"
+                  aria-label={`Choose ${background.name}`}
+                  title={background.description}
+                  className={cn(
+                    "relative w-full aspect-video h-auto overflow-hidden rounded-[10px] border-2 bg-[#f9fafb] flex items-center justify-center transition-colors cursor-pointer",
+                    isSelected
+                      ? "border-blue-500 shadow-[0_0_0_2px_rgba(59,130,246,0.3)]"
+                      : "border-transparent",
+                  )}
+                  onClick={() => onSelect(background)}
+                >
+                  <div className="w-full h-full">{background.component}</div>
+                  {isSelected && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-blue-500/20">
+                      <Check size={18} className="text-white" strokeWidth={3} />
                     </div>
-                  );
-                })}
+                  )}
+                </button>
               </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }

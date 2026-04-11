@@ -40,7 +40,7 @@ export function formatPrintedAt() {
 
 export function getReceiptThemeStyles(
   selectedBackground: BackgroundItem,
-  customization: ReceiptCustomization,
+  customization: ReceiptCustomization = getDefaultCustomization(selectedBackground),
 ): ReceiptThemeStyles {
   const backgroundColor = customization.backgroundColor;
   const textColor = customization.textColor;
