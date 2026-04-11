@@ -1,7 +1,5 @@
 "use client";
 
-import { GitBranchPlus } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,6 +43,7 @@ export function GithubReceiptSearch({
             fontWeight: 700,
             color: "#111",
             marginBottom: "0.5em",
+            marginTop: "0.5em",
           }}
         >
           GitHub Receipt
@@ -77,6 +76,7 @@ export function GithubReceiptSearch({
           </div>
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
           <Button
+            variant={"secondary"}
             type="submit"
             disabled={loading || !inputUsername.trim()}
             className="w-full"
@@ -85,14 +85,13 @@ export function GithubReceiptSearch({
               <Spinner />
             ) : (
               <>
-                <GitBranchPlus size={18} />
+                <GithubLogo size={18} color="000000" />
                 Generate Receipt
               </>
             )}
           </Button>
         </div>
       </form>
-      <style>{`@keyframes ghreceipt-spin { to { transform: rotate(360deg) } }`}</style>
     </div>
   );
 }

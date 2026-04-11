@@ -10,7 +10,11 @@ import { GithubReceiptSearch } from "./components/github-receipt-search";
 import { ReceiptCard } from "./components/receipt-card";
 import { githubReceiptStyles } from "./styles";
 import type { BackgroundItem, GitHubRepo, GitHubUser } from "./types";
-import { getDefaultCustomization, getReceiptThemeStyles, getTopRepos } from "./utils";
+import {
+  getDefaultCustomization,
+  getReceiptThemeStyles,
+  getTopRepos,
+} from "./utils";
 
 interface GithubReceiptProps {
   username?: string;
@@ -119,7 +123,10 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     );
   }
 
-  const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+  const totalStars = repos.reduce(
+    (sum, repo) => sum + repo.stargazers_count,
+    0,
+  );
   const customization = getDefaultCustomization(selectedBackground);
   const themeStyles = getReceiptThemeStyles(selectedBackground, customization);
 
@@ -129,7 +136,6 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
       <div
         style={{
           display: "flex",
-          alignItems: "flex-start",
           justifyContent: "center",
           gap: customizing ? "2em" : "0",
           width: "100%",
