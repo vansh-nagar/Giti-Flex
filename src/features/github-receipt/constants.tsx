@@ -7,32 +7,11 @@ const fullCover: CSSProperties = {
   inset: 0,
 };
 
-const Gradient1 = () => (
-  <div
-    aria-hidden
-    style={{
-      ...fullCover,
-      zIndex: 0,
-      background:
-        "radial-gradient(125% 125% at 50% 0%, transparent 40%, #2563eb 100%)",
-      opacity: 0.1,
-    }}
-  />
-);
-
-const Gradient2 = () => (
-  <div
-    style={{
-      ...fullCover,
-      background: "radial-gradient(circle at bottom, #f0f9ff, #e0f2fe)",
-    }}
-  />
-);
-
 const Gradient3 = () => (
   <div
     style={{
       ...fullCover,
+      backgroundColor: "#ffffff",
       backgroundImage:
         "repeating-linear-gradient(315deg, #e5e7eb 0, #e5e7eb 1px, transparent 0, transparent 50%)",
       backgroundSize: "10px 10px",
@@ -43,7 +22,14 @@ const Gradient3 = () => (
 );
 
 const Gradient4 = () => (
-  <div style={{ height: "100%", width: "100%", position: "relative" }}>
+  <div
+    style={{
+      height: "100%",
+      width: "100%",
+      position: "relative",
+      backgroundColor: "#ffffff",
+    }}
+  >
     <div
       style={{
         ...fullCover,
@@ -60,7 +46,8 @@ const Gradient5 = () => (
   <div
     style={{
       ...fullCover,
-      background: "radial-gradient(#9ca3af 1px, transparent 0)",
+      backgroundColor: "#ffffff",
+      backgroundImage: "radial-gradient(#9ca3af 1px, transparent 0)",
       backgroundSize: "10px 10px",
       opacity: 0.1,
     }}
@@ -83,20 +70,7 @@ export const backgroundOptions: BackgroundItem[] = [
     name: "Standard",
     description: "Original clean look",
     component: <div style={{ ...fullCover, background: "#fff" }} />,
-    text: "#6b7280",
-    heading: "#1b1b1b",
-  },
-  {
-    name: "Gradient 1",
-    description: "Radial glow fade",
-    component: <Gradient1 />,
-    text: "#6b7280",
-    heading: "#1b1b1b",
-  },
-  {
-    name: "Gradient 2",
-    description: "Bottom radial bloom",
-    component: <Gradient2 />,
+    backgroundColor: "#ffffff",
     text: "#6b7280",
     heading: "#1b1b1b",
   },
@@ -104,6 +78,7 @@ export const backgroundOptions: BackgroundItem[] = [
     name: "Gradient 3",
     description: "Diagonal micro pattern",
     component: <Gradient3 />,
+    backgroundColor: "#ffffff",
     text: "#6b7280",
     heading: "#1b1b1b",
   },
@@ -111,6 +86,7 @@ export const backgroundOptions: BackgroundItem[] = [
     name: "Gradient 4",
     description: "Dual grid system",
     component: <Gradient4 />,
+    backgroundColor: "#ffffff",
     text: "#6b7280",
     heading: "#1b1b1b",
   },
@@ -118,6 +94,7 @@ export const backgroundOptions: BackgroundItem[] = [
     name: "Gradient 5",
     description: "Dot mesh texture",
     component: <Gradient5 />,
+    backgroundColor: "#ffffff",
     text: "#6b7280",
     heading: "#1b1b1b",
   },
@@ -132,6 +109,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#2d00ff",
     text: "#e0e7ff",
     heading: "#fff",
     isDark: true,
@@ -148,7 +126,8 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
-    text: "#374151",
+    backgroundColor: "#ffffff",
+    text: "#ffffff",
     heading: "#000",
   },
   {
@@ -163,22 +142,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
-    text: "#fff",
-    heading: "#fff",
-    isDark: true,
-  },
-  {
-    name: "Gradient 9",
-    description: "Coral blur",
-    component: (
-      <div
-        style={{
-          ...fullCover,
-          background:
-            "linear-gradient(137.47deg, #FF6D5E 11.08%, #FF9186 42.04%, #FF5948 95.9%)",
-        }}
-      />
-    ),
+    backgroundColor: "#ff4a4a",
     text: "#fff",
     heading: "#fff",
     isDark: true,
@@ -195,6 +159,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#0140ff",
     text: "#e0f2fe",
     heading: "#fff",
     isDark: true,
@@ -211,6 +176,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#ff4001",
     text: "#fff7ed",
     heading: "#fff",
     isDark: true,
@@ -227,6 +193,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#fef1a2",
     text: "#451a03",
     heading: "#78350f",
   },
@@ -242,6 +209,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#fdfdfd",
     text: "#1f2937",
     heading: "#030712",
   },
@@ -258,6 +226,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#895dec",
     text: "#f5f3ff",
     heading: "#fff",
     isDark: true,
@@ -275,6 +244,7 @@ export const backgroundOptions: BackgroundItem[] = [
         }}
       />
     ),
+    backgroundColor: "#f9f9f9",
     text: "#4b5563",
     heading: "#111827",
   },

@@ -10,9 +10,13 @@ import { GithubReceiptSearch } from "./components/github-receipt-search";
 import { ReceiptCard } from "./components/receipt-card";
 import { githubReceiptStyles } from "./styles";
 import type { BackgroundItem, GitHubRepo, GitHubUser } from "./types";
-import { getReceiptThemeStyles, getTopRepos } from "./utils";
+import { getDefaultCustomization, getReceiptThemeStyles, getTopRepos } from "./utils";
 
-export function GithubReceipt() {
+interface GithubReceiptProps {
+  username?: string;
+}
+
+export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [customizing, setCustomizing] = useState(false);
@@ -23,8 +27,10 @@ export function GithubReceipt() {
   const [exportScale, setExportScale] = useState(2);
   const [exportName, setExportName] = useState("");
   const [downloading, setDownloading] = useState(false);
-  const [inputUsername, setInputUsername] = useState("");
-  const [submittedUsername, setSubmittedUsername] = useState<string | null>(null);
+  const [inputUsername, setInputUsername] = useState(username || "");
+  const [submittedUsername, setSubmittedUsername] = useState<string | null>(
+    username || null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const receiptRef = useRef<HTMLElement>(null);
@@ -109,7 +115,8 @@ export function GithubReceipt() {
   }
 
   const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-  const themeStyles = getReceiptThemeStyles(selectedBackground);
+  const customization = getDefaultCustomization(selectedBackground);
+  const themeStyles = getReceiptThemeStyles(selectedBackground, customization);
 
   return (
     <>

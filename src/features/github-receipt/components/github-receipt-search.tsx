@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import GithubLogo from "@/components/logo/github";
 
 interface GithubReceiptSearchProps {
   error: string | null;
@@ -33,8 +34,11 @@ export function GithubReceiptSearch({
           "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
     >
-      <div style={{ marginBottom: "2em" }}>
-        <GitBranchPlus size={48} style={{ margin: "0 auto 1em", opacity: 0.8 }} />
+      <div
+        className="flex flex-col justify-center items-center"
+        style={{ marginBottom: "2em" }}
+      >
+        <GithubLogo />
         <h1
           style={{
             fontSize: "1.5rem",
@@ -46,7 +50,8 @@ export function GithubReceiptSearch({
           GitHub Receipt
         </h1>
         <p style={{ color: "#6b7280", fontSize: "0.9rem" }}>
-          Generate a thermal-style receipt for any GitHub user
+          Generate cool receipts for your GitHub profile <br /> and share them
+          with your friends!
         </p>
       </div>
 

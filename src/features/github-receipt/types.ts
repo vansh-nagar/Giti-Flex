@@ -28,12 +28,21 @@ export interface BackgroundItem {
   name: string;
   description: string;
   component: ReactNode;
+  backgroundColor?: string;
   text: string;
   heading: string;
   isDark?: boolean;
 }
 
+export interface ReceiptCustomization {
+  backgroundColor: string;
+  textColor: string;
+  headingColor: string;
+  borderColor: string;
+}
+
 export interface ReceiptThemeStyles {
+  backgroundColor: string;
   textColor: string;
   headingColor: string;
   borderColor: string;

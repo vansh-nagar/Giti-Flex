@@ -1,5 +1,5 @@
-import { GithubReceipt } from "@/features/github-receipt/github-receipt";
+import { GithubReceiptHome } from "@/features/github-receipt/github-receipt-home";
 
 export default function Page() {
-  return <GithubReceipt />;
+  return <GithubReceiptHome />;
 }

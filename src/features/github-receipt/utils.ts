@@ -1,6 +1,7 @@
 import type {
   BackgroundItem,
   GitHubRepo,
+  ReceiptCustomization,
   ReceiptThemeStyles,
 } from "./types";
 
@@ -39,21 +40,19 @@ export function formatPrintedAt() {
 
 export function getReceiptThemeStyles(
   selectedBackground: BackgroundItem,
+  customization: ReceiptCustomization,
 ): ReceiptThemeStyles {
-  const textColor = selectedBackground.text;
-  const headingColor = selectedBackground.heading;
-  const isDark = Boolean(selectedBackground.isDark);
-  const borderColor = isDark ? "rgba(255,255,255,0.12)" : "#d1d5db";
-  const dotBorderColor = isDark ? "rgba(255,255,255,0.08)" : "#e5e7eb";
-  const dashPattern = isDark
-    ? `repeating-linear-gradient(90deg, ${headingColor}, ${headingColor} 8px, transparent 8px, transparent 16px)`
-    : "repeating-linear-gradient(90deg, #1b1b1b, #1b1b1b 8px, transparent 8px, transparent 16px)";
-  const sectionDash = isDark
-    ? `repeating-linear-gradient(90deg, ${borderColor}, ${borderColor} 4px, transparent 4px, transparent 8px)`
-    : "repeating-linear-gradient(90deg, #d1d5db, #d1d5db 4px, transparent 4px, transparent 8px)";
-  const barcodeColor = isDark ? headingColor : "#111";
+  const backgroundColor = customization.backgroundColor;
+  const textColor = customization.textColor;
+  const headingColor = customization.headingColor;
+  const borderColor = customization.borderColor;
+  const dotBorderColor = borderColor;
+  const dashPattern = `repeating-linear-gradient(90deg, ${headingColor}, ${headingColor} 8px, transparent 8px, transparent 16px)`;
+  const sectionDash = `repeating-linear-gradient(90deg, ${borderColor}, ${borderColor} 4px, transparent 4px, transparent 8px)`;
+  const barcodeColor = headingColor;
 
   return {
+    backgroundColor,
     textColor,
     headingColor,
     borderColor,
@@ -61,6 +60,19 @@ export function getReceiptThemeStyles(
     dashPattern,
     sectionDash,
     barcodeColor,
+  };
+}
+
+export function getDefaultCustomization(
+  selectedBackground: BackgroundItem,
+): ReceiptCustomization {
+  const isDark = Boolean(selectedBackground.isDark);
+
+  return {
+    backgroundColor: selectedBackground.backgroundColor ?? "#ffffff",
+    textColor: selectedBackground.text,
+    headingColor: selectedBackground.heading,
+    borderColor: isDark ? "rgba(255,255,255,0.12)" : "#d1d5db",
   };
 }
 

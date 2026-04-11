@@ -71,7 +71,7 @@ export function CustomizationPanel({
             </div>
 
             <div className="gh-customize__section">
-              <div className="gh-customize__label">Themes & Backgrounds</div>
+              <div className="">Themes & Backgrounds</div>
               <div
                 style={{
                   display: "grid",

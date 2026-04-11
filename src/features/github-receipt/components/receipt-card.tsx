@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import {
   BookOpen,
   Download,
   ExternalLink,
-  GitBranchPlus,
   GitFork,
   Globe,
   Palette,
@@ -31,6 +31,7 @@ import {
   getBlogUrl,
   getDisplayBlog,
 } from "../utils";
+import GithubLogo from "@/components/logo/github";
 
 interface ReceiptCardProps {
   customizing: boolean;
@@ -60,6 +61,7 @@ export function ReceiptCard({
   user,
 }: ReceiptCardProps) {
   const {
+    backgroundColor,
     barcodeColor,
     borderColor,
     dashPattern,
@@ -87,7 +89,7 @@ export function ReceiptCard({
           <div
             className="gh-receipt__invoice"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor,
               color: textColor,
               overflow: "hidden",
             }}
@@ -124,11 +126,14 @@ export function ReceiptCard({
               className="gh-receipt__header"
               style={{ borderBottom: `1.5px dashed ${borderColor}` }}
             >
-              <img
+              <Image
                 className="gh-receipt__avatar"
                 src={user.avatar_url}
                 alt={user.login}
+                width={52}
+                height={52}
                 style={{ borderColor: dotBorderColor }}
+                unoptimized
               />
               <div className="gh-receipt__name" style={{ color: headingColor }}>
                 {user.name || user.login}
@@ -191,7 +196,10 @@ export function ReceiptCard({
               </div>
             </div>
 
-            <div className="gh-receipt__section-title" style={{ color: textColor }}>
+            <div
+              className="gh-receipt__section-title"
+              style={{ color: textColor }}
+            >
               Top Repositories
               <span
                 style={{
@@ -206,8 +214,7 @@ export function ReceiptCard({
               {repos.map((repo) => (
                 <li
                   key={repo.id}
-                  className="gh-receipt__repo"
-                  style={{ borderBottom: `1px dotted ${dotBorderColor}` }}
+                  className=" border-b border-dashed"
                 >
                   <a
                     href={repo.html_url}
@@ -227,13 +234,17 @@ export function ReceiptCard({
                       {repo.description}
                     </div>
                   )}
-                  <div className="gh-receipt__repo-meta" style={{ color: textColor }}>
+                  <div
+                    className="gh-receipt__repo-meta"
+                    style={{ color: textColor }}
+                  >
                     {repo.language && (
                       <span>
                         <span
                           className="gh-receipt__lang-dot"
                           style={{
-                            backgroundColor: languageColors[repo.language] || "#888",
+                            backgroundColor:
+                              languageColors[repo.language] || "#888",
                           }}
                         />
                         {repo.language}
@@ -256,7 +267,10 @@ export function ReceiptCard({
             >
               <div className="gh-receipt__total-row">
                 <span style={{ color: textColor }}>TOTAL STARS</span>
-                <span className="gh-receipt__total-value" style={{ color: headingColor }}>
+                <span
+                  className="gh-receipt__total-value"
+                  style={{ color: headingColor }}
+                >
                   &#9733; {totalStars.toLocaleString()}
                 </span>
               </div>
@@ -319,12 +333,16 @@ export function ReceiptCard({
           style={{ textDecoration: "none" }}
         >
           <Button className="w-full">
-            <GitBranchPlus size={18} />
+            <GithubLogo size={16} />
             View Profile
           </Button>
         </a>
         <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
-          <Button variant="outline" onClick={onToggleCustomizing} style={{ flex: 1 }}>
+          <Button
+            variant="outline"
+            onClick={onToggleCustomizing}
+            style={{ flex: 1 }}
+          >
             {customizing ? (
               <>
                 <X size={16} /> Close
