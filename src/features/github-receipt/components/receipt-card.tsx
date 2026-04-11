@@ -80,13 +80,18 @@ export function ReceiptCard({
       }}
       style={{ flexShrink: 0 }}
     >
-      <section className="gh-receipt">
-        <section ref={receiptRef} className="gh-receipt__invoice-container">
-          <div className="gh-receipt__slot">
-            <div className="gh-receipt__slot-hole" />
-          </div>
+      <section
+        className={`gh-receipt ${downloading ? "gh-receipt--downloading" : ""}`}
+      >
+        <section className="gh-receipt__invoice-container">
+          {!downloading && (
+            <div className="gh-receipt__slot">
+              <div className="gh-receipt__slot-hole" />
+            </div>
+          )}
 
           <div
+            ref={receiptRef}
             className="gh-receipt__invoice"
             style={{
               backgroundColor,
@@ -94,6 +99,7 @@ export function ReceiptCard({
               overflow: "hidden",
             }}
           >
+            {!downloading && <div className="gh-receipt__invoice-shadow" />}
             <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
               {selectedBackground.component}
             </div>
@@ -312,58 +318,6 @@ export function ReceiptCard({
             </div>
           </div>
         </section>
-
-        <hr />
-        <div className="gh-receipt__payment-info">
-          <p>Website</p>
-          <a
-            href={getBlogUrl(user.blog)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="gh-receipt__card-info"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <p>{getDisplayBlog(user.blog)}</p>
-            <Globe size={20} color="#1a43bf" />
-          </a>
-        </div>
-        <a
-          href={user.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none" }}
-        >
-          <Button className="w-full">
-            <GithubLogo size={16} />
-            View Profile
-          </Button>
-        </a>
-        <div style={{ display: "flex", gap: "12px", marginTop: "12px" }}>
-          <Button
-            variant="outline"
-            onClick={onToggleCustomizing}
-            style={{ flex: 1 }}
-          >
-            {customizing ? (
-              <>
-                <X size={16} /> Close
-              </>
-            ) : (
-              <>
-                <Palette size={16} /> Customize
-              </>
-            )}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={onOpenExport}
-            disabled={downloading}
-            style={{ flex: 1 }}
-          >
-            <Download size={16} />
-            {downloading ? "Exporting..." : "Download"}
-          </Button>
-        </div>
       </section>
     </motion.div>
   );

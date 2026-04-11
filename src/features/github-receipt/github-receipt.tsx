@@ -1,6 +1,5 @@
 "use client";
 
-import html2canvas from "html2canvas-pro";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { backgroundOptions } from "./constants";
@@ -23,7 +22,7 @@ interface GithubReceiptProps {
 export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
-  const [customizing, setCustomizing] = useState(false);
+  const [customizing, setCustomizing] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState<BackgroundItem>(
     backgroundOptions[0],
   );
@@ -94,15 +93,25 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     setShowExportModal(false);
 
     try {
-      const canvas = await html2canvas(receiptRef.current, {
-        scale: exportScale,
-        useCORS: true,
-        backgroundColor: null,
-        logging: false,
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(receiptRef.current, {
+        pixelRatio: exportScale,
+        skipAutoScale: true,
+        cacheBust: true,
+        backgroundColor: "transparent",
+        fontEmbedCSS: "", // Can help with some environments
+        style: {
+          transform: "scale(1)",
+          transformOrigin: "top left",
+          margin: "0",
+          width: "380px", // Fixed width for the card itself in export
+          boxShadow: "none",
+        },
       });
+
       const link = document.createElement("a");
       link.download = `${exportName || "github-receipt"}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = dataUrl;
       link.click();
     } catch (downloadError) {
       console.error("Failed to export image:", downloadError);
@@ -149,8 +158,11 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
           open={customizing}
           selectedBackground={selectedBackground}
           backgrounds={backgroundOptions}
+          user={user}
+          downloading={downloading}
           onClose={() => setCustomizing(false)}
           onSelect={setSelectedBackground}
+          onOpenExport={() => setShowExportModal(true)}
         />
 
         <ReceiptCard
