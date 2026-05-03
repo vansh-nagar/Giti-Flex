@@ -4,19 +4,13 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import {
   BookOpen,
-  Download,
   ExternalLink,
   GitFork,
-  Globe,
-  Palette,
   Star,
   UserPlus,
   Users,
-  X,
 } from "lucide-react";
 import type { RefObject } from "react";
-
-import { Button } from "@/components/ui/button";
 
 import { languageColors } from "../constants";
 import type {
@@ -25,19 +19,9 @@ import type {
   GitHubUser,
   ReceiptThemeStyles,
 } from "../types";
-import {
-  formatMemberSince,
-  formatPrintedAt,
-  getBlogUrl,
-  getDisplayBlog,
-} from "../utils";
-import GithubLogo from "@/components/logo/github";
+import { formatMemberSince, formatPrintedAt } from "../utils";
 
 interface ReceiptCardProps {
-  customizing: boolean;
-  downloading: boolean;
-  onOpenExport: () => void;
-  onToggleCustomizing: () => void;
   receiptRef: RefObject<HTMLElement | null>;
   repos: GitHubRepo[];
   selectedBackground: BackgroundItem;
@@ -49,10 +33,6 @@ interface ReceiptCardProps {
 const barcodePattern = [1, 2, 3, 1, 2, 1, 3, 2, 1, 2];
 
 export function ReceiptCard({
-  customizing,
-  downloading,
-  onOpenExport,
-  onToggleCustomizing,
   receiptRef,
   repos,
   selectedBackground,
@@ -80,18 +60,13 @@ export function ReceiptCard({
       }}
       style={{ flexShrink: 0 }}
     >
-      <section
-        className={`gh-receipt ${downloading ? "gh-receipt--downloading" : ""}`}
-      >
+      <section ref={receiptRef} className="gh-receipt">
         <section className="gh-receipt__invoice-container">
-          {!downloading && (
-            <div className="gh-receipt__slot">
-              <div className="gh-receipt__slot-hole" />
-            </div>
-          )}
+          <div className="gh-receipt__slot">
+            <div className="gh-receipt__slot-hole" />
+          </div>
 
           <div
-            ref={receiptRef}
             className="gh-receipt__invoice"
             style={{
               backgroundColor,
@@ -99,7 +74,6 @@ export function ReceiptCard({
               overflow: "hidden",
             }}
           >
-            {!downloading && <div className="gh-receipt__invoice-shadow" />}
             <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
               {selectedBackground.component}
             </div>

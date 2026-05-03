@@ -1,6 +1,19 @@
 "use client";
 
-import { Check, Download, Globe, Moon, Palette, Sun, X } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
+import {
+  Check,
+  Globe,
+  Link2,
+  Moon,
+  Palette,
+  Sun,
+  Swords,
+  X,
+} from "lucide-react";
+
+import DownloadIcon from "./download-icon";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,7 +24,6 @@ import { getBlogUrl, getDisplayBlog } from "../utils";
 import { useTheme } from "@/hooks/use-theme";
 
 interface CustomizationPanelProps {
-  open: boolean;
   selectedBackground: BackgroundItem;
   backgrounds: BackgroundItem[];
   user: GitHubUser;
@@ -19,10 +31,56 @@ interface CustomizationPanelProps {
   onClose: () => void;
   onSelect: (background: BackgroundItem) => void;
   onOpenExport: () => void;
+  onOpenVersus: () => void;
 }
 
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.18,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 340, damping: 28, mass: 0.8 },
+  },
+};
+
+const gridVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.035,
+    },
+  },
+};
+
+const swatchVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.85, y: 6 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 420, damping: 24 },
+  },
+};
+
+const iconSwapTransition = {
+  type: "spring" as const,
+  stiffness: 420,
+  damping: 22,
+  mass: 0.7,
+};
+
 export function CustomizationPanel({
-  open,
   selectedBackground,
   backgrounds,
   user,
@@ -30,110 +88,317 @@ export function CustomizationPanel({
   onClose,
   onSelect,
   onOpenExport,
+  onOpenVersus,
 }: CustomizationPanelProps) {
   const { theme, toggleTheme } = useTheme();
- 
-  if (!open) return null;
+  const [copied, setCopied] = useState(false);
+  const [downloadHovered, setDownloadHovered] = useState(false);
+
+  const handleCopyShareLink = async () => {
+    const shareUrl =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/${encodeURIComponent(user.login)}`
+        : "";
+
+    if (!shareUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error("Failed to copy share link:", error);
+    }
+  };
 
   return (
-    <div className="sticky top-4 self-start w-[350px] pt-4">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="flex items-center gap-1 text-base">
-          <Palette size={16} /> Customize
-        </h3>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-          >
-            {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
-          </Button>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X size={14} />
-          </Button>
-        </div>
-      </div>
-
-      <div className="  mb-2 text-sm text-muted-foreground underline">
-        Themes & Backgrounds
-      </div>
-      <div className="grid grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto pr-1">
-        {backgrounds.map((background) => {
-          const isSelected = selectedBackground.name === background.name;
-
-          return (
-            <div key={background.name} className="text-left">
-              <button
-                type="button"
-                aria-label={`Choose ${background.name}`}
-                title={background.description}
-                className={cn(
-                  "relative w-full aspect-video h-auto overflow-hidden rounded-[10px] border-2 flex items-center justify-center transition-colors cursor-pointer",
-                  isSelected ? "border-primary" : "border-transparent",
-                )}
-                onClick={() => onSelect(background)}
-              >
-                <div className="w-full h-full">{background.component}</div>
-                {isSelected && (
-                  <div className="absolute inset-0 z-10 flex items-center justify-center ">
-                    <Check size={18} className="text-white" strokeWidth={3} />
-                  </div>
-                )}
-              </button>
-            </div>
-          );
-        })}
-      </div>
- 
-      <section className="mt-8 flex flex-col justify-center">
-        <div style={{ marginBottom: "12px" }} className="flex justify-between items-center text-sm">
-          <p className="text-muted-foreground">Website</p>
-          <a
-            href={getBlogUrl(user.blog)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:underline"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <p className="text-foreground font-medium">{getDisplayBlog(user.blog)}</p>
-            <Globe size={16} className="text-primary" />
-          </a>
-        </div>
- 
-        <a
-          href={user.html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none" }}
-          className="mb-3"
+    <motion.div
+      initial={{ width: 0, opacity: 0 }}
+      animate={{ width: 382, opacity: 1 }}
+      exit={{ width: 0, opacity: 0 }}
+      transition={{
+        width: { duration: 0.4, ease: [0.32, 0.72, 0, 1] },
+        opacity: { duration: 0.25, ease: [0.32, 0.72, 0, 1] },
+      }}
+      style={{ overflow: "hidden" }}
+      className="sticky top-4 self-start shrink-0"
+    >
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        style={{ width: 350, paddingRight: 32 }}
+        className="pt-4"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="flex items-center justify-between mb-2"
         >
-          <Button className="w-full" variant="outline">
-            <GithubLogo size={16} />
-            View Profile
-          </Button>
-        </a>
- 
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="flex-1"
+          <h3 className="flex items-center gap-1 text-base">
+            <motion.span
+              initial={{ rotate: -60, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 380,
+                damping: 22,
+                delay: 0.25,
+              }}
+              whileHover={{ rotate: 18, scale: 1.1 }}
+              className="inline-flex"
+            >
+              <Palette size={16} />
+            </motion.span>
+            Customize
+          </h3>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={theme}
+                  initial={{ opacity: 0, rotate: -90, scale: 0.6 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 90, scale: 0.6 }}
+                  transition={iconSwapTransition}
+                  className="inline-flex"
+                >
+                  {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+                </motion.span>
+              </AnimatePresence>
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <motion.span
+                whileHover={{ rotate: 90 }}
+                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                className="inline-flex"
+              >
+                <X size={14} />
+              </motion.span>
+            </Button>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          className="mb-2 text-sm text-muted-foreground underline"
+        >
+          Themes & Backgrounds
+        </motion.div>
+
+        <motion.div
+          variants={gridVariants}
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+          }}
+          className="grid grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto px-2 pt-1 pb-6 [&::-webkit-scrollbar]:hidden"
+        >
+          {backgrounds.map((background) => {
+            const isSelected = selectedBackground.name === background.name;
+
+            return (
+              <motion.div
+                key={background.name}
+                variants={swatchVariants}
+                className="text-left"
+              >
+                <motion.button
+                  type="button"
+                  aria-label={`Choose ${background.name}`}
+                  title={background.description}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 480,
+                    damping: 24,
+                  }}
+                  className={cn(
+                    "relative w-full aspect-video h-auto overflow-hidden rounded-[10px] border-2 flex items-center justify-center cursor-pointer transition-colors",
+                    isSelected ? "border-primary" : "border-transparent",
+                  )}
+                  onClick={() => onSelect(background)}
+                >
+                  <div className="w-full h-full">{background.component}</div>
+                  <AnimatePresence>
+                    {isSelected && (
+                      <motion.div
+                        key="check"
+                        initial={{ opacity: 0, scale: 0.3, rotate: -45 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        exit={{ opacity: 0, scale: 0.3, rotate: 45 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 520,
+                          damping: 22,
+                        }}
+                        className="absolute inset-0 z-10 flex items-center justify-center"
+                      >
+                        <Check
+                          size={18}
+                          className="text-white"
+                          strokeWidth={3}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        <motion.section
+          variants={itemVariants}
+          className="mt-8 flex flex-col justify-center"
+        >
+          <motion.div
+            variants={itemVariants}
+            style={{ marginBottom: "12px" }}
+            className="flex justify-between items-center text-sm"
           >
-            <X size={16} /> Close
-          </Button>
-          <Button
-            variant="default"
-            onClick={onOpenExport}
-            disabled={downloading}
-            className="flex-1"
-          >
-            <Download size={16} />
-            {downloading ? "Exporting..." : "Download"}
-          </Button>
-        </div>
-      </section>
-    </div>
+            <p className="text-muted-foreground">Website</p>
+            <motion.a
+              href={getBlogUrl(user.blog)}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ x: -2 }}
+              transition={{ type: "spring", stiffness: 380, damping: 24 }}
+              className="flex items-center gap-2 hover:underline text-primary"
+              style={{ textDecoration: "none" }}
+            >
+              <p className="text-foreground font-medium">
+                {getDisplayBlog(user.blog)}
+              </p>
+              <motion.span
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+                className="inline-flex"
+              >
+                <Globe size={16} className="text-primary" />
+              </motion.span>
+            </motion.a>
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <motion.a
+              href={user.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -1 }}
+              whileTap={{ y: 1 }}
+              transition={{ type: "spring", stiffness: 420, damping: 20 }}
+              style={{ textDecoration: "none" }}
+              className="mb-2 block"
+            >
+              <Button className="w-full" variant="outline">
+                <GithubLogo size={16} />
+                View Profile
+              </Button>
+            </motion.a>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="mb-2">
+            <Button
+              className="w-full bg-linear-to-r from-red-500 via-orange-500 to-yellow-400 text-white border-0 hover:opacity-90"
+              onClick={onOpenVersus}
+            >
+              <motion.span
+                animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
+                transition={{
+                  duration: 1.4,
+                  repeat: Infinity,
+                  repeatDelay: 1.6,
+                  ease: "easeInOut",
+                }}
+                className="inline-flex"
+              >
+                <Swords size={16} />
+              </motion.span>
+              Versus Battle
+            </Button>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="mb-3">
+            <Button
+              className="w-full"
+              variant="outline"
+              onClick={handleCopyShareLink}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={copied ? "check" : "link"}
+                  initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+                  transition={iconSwapTransition}
+                  className="inline-flex"
+                >
+                  {copied ? <Check size={16} /> : <Link2 size={16} />}
+                </motion.span>
+              </AnimatePresence>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={copied ? "copied-text" : "link-text"}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  transition={{ duration: 0.16 }}
+                >
+                  {copied ? "Link copied!" : "Copy Share Link"}
+                </motion.span>
+              </AnimatePresence>
+            </Button>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="flex gap-2">
+            <Button variant="outline" onClick={onClose} className="flex-1">
+              <motion.span
+                whileHover={{ rotate: 90 }}
+                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                className="inline-flex"
+              >
+                <X size={16} />
+              </motion.span>
+              Close
+            </Button>
+            <Button
+              variant="default"
+              onClick={onOpenExport}
+              disabled={downloading}
+              onMouseEnter={() => setDownloadHovered(true)}
+              onMouseLeave={() => setDownloadHovered(false)}
+              className="flex-1"
+            >
+              <DownloadIcon
+                size={28}
+                className="size-7"
+                state={downloadHovered && !downloading ? "done" : "idle"}
+              />
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={downloading ? "exporting" : "download"}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  transition={{ duration: 0.16 }}
+                >
+                  {downloading ? "Exporting..." : "Download"}
+                </motion.span>
+              </AnimatePresence>
+            </Button>
+          </motion.div>
+        </motion.section>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -1,12 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Palette } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { backgroundOptions } from "./constants";
 import { CustomizationPanel } from "./components/customization-panel";
 import { ExportDialog } from "./components/export-dialog";
 import { GithubReceiptSearch } from "./components/github-receipt-search";
 import { ReceiptCard } from "./components/receipt-card";
+import { VersusDialog } from "./components/versus-dialog";
+import { VersusView } from "./components/versus-view";
 import { githubReceiptStyles } from "./styles";
 import type { BackgroundItem, GitHubRepo, GitHubUser } from "./types";
 import {
@@ -37,6 +42,13 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const receiptRef = useRef<HTMLElement>(null);
+
+  const [versusDialogOpen, setVersusDialogOpen] = useState(false);
+  const [versusInput, setVersusInput] = useState("");
+  const [versusUser, setVersusUser] = useState<GitHubUser | null>(null);
+  const [versusRepos, setVersusRepos] = useState<GitHubRepo[]>([]);
+  const [versusLoading, setVersusLoading] = useState(false);
+  const [versusError, setVersusError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -84,29 +96,69 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     }
   }, [fetchGithubData, submittedUsername]);
 
+  const handleVersusSubmit = useCallback(() => {
+    const trimmed = versusInput.trim();
+    if (!trimmed || versusLoading) return;
+
+    setVersusLoading(true);
+    setVersusError(null);
+
+    Promise.all([
+      fetch(`https://api.github.com/users/${trimmed}`).then((response) => {
+        if (!response.ok) throw new Error("Opponent not found");
+        return response.json() as Promise<GitHubUser>;
+      }),
+      fetch(
+        `https://api.github.com/users/${trimmed}/repos?per_page=100&sort=updated`,
+      ).then((response) => {
+        if (!response.ok) throw new Error("Could not fetch opponent repos");
+        return response.json() as Promise<GitHubRepo[]>;
+      }),
+    ])
+      .then(([fetchedUser, allRepos]) => {
+        setVersusUser(fetchedUser);
+        setVersusRepos(getTopRepos(allRepos));
+        setVersusDialogOpen(false);
+      })
+      .catch((fetchError: Error) => {
+        setVersusError(fetchError.message);
+      })
+      .finally(() => {
+        setVersusLoading(false);
+      });
+  }, [versusInput, versusLoading]);
+
+  const handleExitVersus = useCallback(() => {
+    setVersusUser(null);
+    setVersusRepos([]);
+    setVersusInput("");
+    setVersusError(null);
+  }, []);
+
   const handleDownload = useCallback(async () => {
     if (!receiptRef.current || downloading) {
       return;
     }
 
-    setDownloading(true);
     setShowExportModal(false);
+    setDownloading(true);
 
     try {
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => resolve());
+        });
+      });
+
       const { toPng } = await import("html-to-image");
+      const { width, height } = receiptRef.current.getBoundingClientRect();
       const dataUrl = await toPng(receiptRef.current, {
         pixelRatio: exportScale,
         skipAutoScale: true,
         cacheBust: true,
         backgroundColor: "transparent",
-        fontEmbedCSS: "", // Can help with some environments
-        style: {
-          transform: "scale(1)",
-          transformOrigin: "top left",
-          margin: "0",
-          width: "380px", // Fixed width for the card itself in export
-          boxShadow: "none",
-        },
+        width: Math.ceil(width),
+        height: Math.ceil(height),
       });
 
       const link = document.createElement("a");
@@ -139,37 +191,78 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const customization = getDefaultCustomization(selectedBackground);
   const themeStyles = getReceiptThemeStyles(selectedBackground, customization);
 
+  const versusActive = versusUser !== null;
+
+  if (versusActive && versusUser) {
+    return (
+      <>
+        <style>{githubReceiptStyles}</style>
+        <VersusView
+          user={user}
+          repos={repos}
+          opponent={versusUser}
+          opponentRepos={versusRepos}
+          selectedBackground={selectedBackground}
+          onClose={handleExitVersus}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <style>{githubReceiptStyles}</style>
+      <AnimatePresence>
+        {!customizing && (
+          <motion.div
+            key="open-customizer"
+            initial={{ opacity: 0, scale: 0.85, y: -8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: -8 }}
+            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+            className="fixed top-4 right-4 z-50"
+          >
+            <Button
+              variant="default"
+              onClick={() => setCustomizing(true)}
+              title="Open customizer"
+            >
+              <Palette size={16} />
+              Customize
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          gap: customizing ? "2em" : "0",
+          alignItems: "flex-start",
           width: "100%",
-          maxWidth: customizing ? "900px" : "425px",
           margin: "0 auto",
-          transition:
-            "max-width 0.5s cubic-bezier(0.23, 1, 0.32, 1), gap 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
         }}
       >
-        <CustomizationPanel
-          open={customizing}
-          selectedBackground={selectedBackground}
-          backgrounds={backgroundOptions}
-          user={user}
-          downloading={downloading}
-          onClose={() => setCustomizing(false)}
-          onSelect={setSelectedBackground}
-          onOpenExport={() => setShowExportModal(true)}
-        />
+        <AnimatePresence initial={false}>
+          {customizing && (
+            <CustomizationPanel
+              key="customization-panel"
+              selectedBackground={selectedBackground}
+              backgrounds={backgroundOptions}
+              user={user}
+              downloading={downloading}
+              onClose={() => setCustomizing(false)}
+              onSelect={setSelectedBackground}
+              onOpenExport={() => setShowExportModal(true)}
+              onOpenVersus={() => {
+                setVersusError(null);
+                setVersusDialogOpen(true);
+              }}
+            />
+          )}
+        </AnimatePresence>
 
         <ReceiptCard
-          customizing={customizing}
-          downloading={downloading}
-          onOpenExport={() => setShowExportModal(true)}
-          onToggleCustomizing={() => setCustomizing((current) => !current)}
           receiptRef={receiptRef}
           repos={repos}
           selectedBackground={selectedBackground}
@@ -187,6 +280,16 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
         onExportNameChange={setExportName}
         onExportScaleChange={setExportScale}
         onOpenChange={setShowExportModal}
+      />
+
+      <VersusDialog
+        open={versusDialogOpen}
+        inputUsername={versusInput}
+        loading={versusLoading}
+        error={versusError}
+        onInputChange={setVersusInput}
+        onOpenChange={setVersusDialogOpen}
+        onSubmit={handleVersusSubmit}
       />
     </>
   );

@@ -11,3 +11,5 @@ export default async function UserPage({ params }: UserPageProps) {
 
   return <GithubReceipt username={decodeURIComponent(username)} />;
 }
+
+

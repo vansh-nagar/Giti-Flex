@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "emil-design-eng": {
+      "source": "emilkowalski/skill",
+      "sourceType": "github",
+      "skillPath": "skills/emil-design-eng/SKILL.md",
+      "computedHash": "ac3fc5b4e206488ffc408a2806f829bb2e5eaf518fded09be34790685c2b3a0d"
+    },
+    "micro-interactions": {
+      "source": "dylantarre/animation-principles",
+      "sourceType": "github",
+      "skillPath": "skills/01-by-domain/micro-interactions/SKILL.md",
+      "computedHash": "3329f824de3660f2aef6ea2974f7410fab5865ce0250fa2191a87370c616c093"
+    }
+  }
+}
