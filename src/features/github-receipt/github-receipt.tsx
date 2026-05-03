@@ -22,9 +22,13 @@ import {
 
 interface GithubReceiptProps {
   username?: string;
+  versusUsername?: string;
 }
 
-export function GithubReceipt({ username }: GithubReceiptProps = {}) {
+export function GithubReceipt({
+  username,
+  versusUsername,
+}: GithubReceiptProps = {}) {
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [customizing, setCustomizing] = useState(true);
@@ -44,11 +48,12 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const receiptRef = useRef<HTMLElement>(null);
 
   const [versusDialogOpen, setVersusDialogOpen] = useState(false);
-  const [versusInput, setVersusInput] = useState("");
+  const [versusInput, setVersusInput] = useState(versusUsername || "");
   const [versusUser, setVersusUser] = useState<GitHubUser | null>(null);
   const [versusRepos, setVersusRepos] = useState<GitHubRepo[]>([]);
   const [versusLoading, setVersusLoading] = useState(false);
   const [versusError, setVersusError] = useState<string | null>(null);
+  const versusAutoTriggered = useRef(false);
 
   useEffect(() => {
     if (user) {
@@ -96,20 +101,17 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     }
   }, [fetchGithubData, submittedUsername]);
 
-  const handleVersusSubmit = useCallback(() => {
-    const trimmed = versusInput.trim();
-    if (!trimmed || versusLoading) return;
-
+  const fetchVersus = useCallback((opponentLogin: string) => {
     setVersusLoading(true);
     setVersusError(null);
 
     Promise.all([
-      fetch(`https://api.github.com/users/${trimmed}`).then((response) => {
+      fetch(`https://api.github.com/users/${opponentLogin}`).then((response) => {
         if (!response.ok) throw new Error("Opponent not found");
         return response.json() as Promise<GitHubUser>;
       }),
       fetch(
-        `https://api.github.com/users/${trimmed}/repos?per_page=100&sort=updated`,
+        `https://api.github.com/users/${opponentLogin}/repos?per_page=100&sort=updated`,
       ).then((response) => {
         if (!response.ok) throw new Error("Could not fetch opponent repos");
         return response.json() as Promise<GitHubRepo[]>;
@@ -126,14 +128,47 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
       .finally(() => {
         setVersusLoading(false);
       });
-  }, [versusInput, versusLoading]);
+  }, []);
+
+  const handleVersusSubmit = useCallback(() => {
+    const trimmed = versusInput.trim();
+    if (!trimmed || versusLoading) return;
+    fetchVersus(trimmed);
+  }, [fetchVersus, versusInput, versusLoading]);
 
   const handleExitVersus = useCallback(() => {
     setVersusUser(null);
     setVersusRepos([]);
     setVersusInput("");
     setVersusError(null);
-  }, []);
+    if (typeof window !== "undefined" && user) {
+      window.history.replaceState(null, "", `/${user.login}`);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (
+      versusUsername &&
+      user &&
+      !versusUser &&
+      !versusLoading &&
+      !versusAutoTriggered.current
+    ) {
+      versusAutoTriggered.current = true;
+      fetchVersus(versusUsername);
+    }
+  }, [fetchVersus, user, versusLoading, versusUser, versusUsername]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !user) return;
+    const baseUrl = `/${user.login}`;
+    const newUrl = versusUser
+      ? `${baseUrl}?vs=${encodeURIComponent(versusUser.login)}`
+      : baseUrl;
+    if (window.location.pathname + window.location.search !== newUrl) {
+      window.history.replaceState(null, "", newUrl);
+    }
+  }, [user, versusUser]);
 
   const handleDownload = useCallback(async () => {
     if (!receiptRef.current || downloading) {
@@ -193,84 +228,98 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
 
   const versusActive = versusUser !== null;
 
-  if (versusActive && versusUser) {
-    return (
-      <>
-        <style>{githubReceiptStyles}</style>
-        <VersusView
-          user={user}
-          repos={repos}
-          opponent={versusUser}
-          opponentRepos={versusRepos}
-          selectedBackground={selectedBackground}
-          onClose={handleExitVersus}
-        />
-      </>
-    );
-  }
-
   return (
     <>
       <style>{githubReceiptStyles}</style>
-      <AnimatePresence>
-        {!customizing && (
+
+      <AnimatePresence mode="wait" initial={false}>
+        {versusActive && versusUser ? (
           <motion.div
-            key="open-customizer"
-            initial={{ opacity: 0, scale: 0.85, y: -8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: -8 }}
-            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-            className="fixed top-4 right-4 z-50"
+            key="versus-scene"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
+            transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
           >
-            <Button
-              variant="default"
-              onClick={() => setCustomizing(true)}
-              title="Open customizer"
+            <VersusView
+              user={user}
+              repos={repos}
+              opponent={versusUser}
+              opponentRepos={versusRepos}
+              selectedBackground={selectedBackground}
+              onClose={handleExitVersus}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="receipt-scene"
+            initial={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
+          >
+            <AnimatePresence>
+              {!customizing && (
+                <motion.div
+                  key="open-customizer"
+                  initial={{ opacity: 0, scale: 0.85, y: -8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.85, y: -8 }}
+                  transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                  className="fixed top-4 right-4 z-50"
+                >
+                  <Button
+                    variant="default"
+                    onClick={() => setCustomizing(true)}
+                    title="Open customizer"
+                  >
+                    <Palette size={16} />
+                    Customize
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                width: "100%",
+                margin: "0 auto",
+              }}
             >
-              <Palette size={16} />
-              Customize
-            </Button>
+              <AnimatePresence initial={false}>
+                {customizing && (
+                  <CustomizationPanel
+                    key="customization-panel"
+                    selectedBackground={selectedBackground}
+                    backgrounds={backgroundOptions}
+                    user={user}
+                    downloading={downloading}
+                    onClose={() => setCustomizing(false)}
+                    onSelect={setSelectedBackground}
+                    onOpenExport={() => setShowExportModal(true)}
+                    onOpenVersus={() => {
+                      setVersusError(null);
+                      setVersusDialogOpen(true);
+                    }}
+                  />
+                )}
+              </AnimatePresence>
+
+              <ReceiptCard
+                receiptRef={receiptRef}
+                repos={repos}
+                selectedBackground={selectedBackground}
+                themeStyles={themeStyles}
+                totalStars={totalStars}
+                user={user}
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          width: "100%",
-          margin: "0 auto",
-        }}
-      >
-        <AnimatePresence initial={false}>
-          {customizing && (
-            <CustomizationPanel
-              key="customization-panel"
-              selectedBackground={selectedBackground}
-              backgrounds={backgroundOptions}
-              user={user}
-              downloading={downloading}
-              onClose={() => setCustomizing(false)}
-              onSelect={setSelectedBackground}
-              onOpenExport={() => setShowExportModal(true)}
-              onOpenVersus={() => {
-                setVersusError(null);
-                setVersusDialogOpen(true);
-              }}
-            />
-          )}
-        </AnimatePresence>
-
-        <ReceiptCard
-          receiptRef={receiptRef}
-          repos={repos}
-          selectedBackground={selectedBackground}
-          themeStyles={themeStyles}
-          totalStars={totalStars}
-          user={user}
-        />
-      </div>
 
       <ExportDialog
         exportName={exportName}
