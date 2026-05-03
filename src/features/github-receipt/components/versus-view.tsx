@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Check, Crown, Link2, Skull, Swords, X } from "lucide-react";
 
@@ -45,6 +45,16 @@ export function VersusView({
   const oppScore = calcScore(opponent, opponentRepos);
   const tie = userScore === oppScore;
   const userWins = !tie && userScore > oppScore;
+
+  useEffect(() => {
+    const winner = tie ? user.login : userWins ? user.login : opponent.login;
+    const loser = tie ? opponent.login : userWins ? opponent.login : user.login;
+    fetch("/api/battle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ winner, loser, isTie: tie }),
+    }).catch((error) => console.error("Failed to record battle:", error));
+  }, [user.login, opponent.login, tie, userWins]);
 
   const customization = getDefaultCustomization(selectedBackground);
   const themeStyles = getReceiptThemeStyles(selectedBackground, customization);

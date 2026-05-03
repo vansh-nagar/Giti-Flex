@@ -62,10 +62,6 @@ export function ReceiptCard({
     >
       <section ref={receiptRef} className="gh-receipt">
         <section className="gh-receipt__invoice-container">
-          <div className="gh-receipt__slot">
-            <div className="gh-receipt__slot-hole" />
-          </div>
-
           <div
             className="gh-receipt__invoice"
             style={{
@@ -106,15 +102,22 @@ export function ReceiptCard({
               className="gh-receipt__header"
               style={{ borderBottom: `1.5px dashed ${borderColor}` }}
             >
-              <Image
-                className="gh-receipt__avatar"
-                src={user.avatar_url}
-                alt={user.login}
-                width={52}
-                height={52}
-                style={{ borderColor: dotBorderColor }}
-                unoptimized
-              />
+              <motion.div
+                whileHover={{ scale: 1.06, y: -1 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                style={{ display: "inline-block" }}
+              >
+                <Image
+                  className="gh-receipt__avatar"
+                  src={user.avatar_url}
+                  alt={user.login}
+                  width={52}
+                  height={52}
+                  style={{ borderColor: dotBorderColor }}
+                  unoptimized
+                />
+              </motion.div>
               <div className="gh-receipt__name" style={{ color: headingColor }}>
                 {user.name || user.login}
               </div>
@@ -132,48 +135,36 @@ export function ReceiptCard({
               className="gh-receipt__stats"
               style={{ borderBottom: `1.5px dashed ${borderColor}` }}
             >
-              <div className="gh-receipt__stat">
-                <span
-                  className="gh-receipt__stat-value"
-                  style={{ color: headingColor }}
+              {[
+                { value: user.public_repos, label: "Repos", Icon: BookOpen },
+                { value: user.followers, label: "Followers", Icon: Users },
+                { value: user.following, label: "Following", Icon: UserPlus },
+              ].map(({ value, label, Icon }, index) => (
+                <motion.div
+                  key={label}
+                  className="gh-receipt__stat"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.25,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: 0.06 * index,
+                  }}
                 >
-                  {user.public_repos}
-                </span>
-                <span
-                  className="gh-receipt__stat-label"
-                  style={{ color: textColor }}
-                >
-                  <BookOpen size={10} /> Repos
-                </span>
-              </div>
-              <div className="gh-receipt__stat">
-                <span
-                  className="gh-receipt__stat-value"
-                  style={{ color: headingColor }}
-                >
-                  {user.followers}
-                </span>
-                <span
-                  className="gh-receipt__stat-label"
-                  style={{ color: textColor }}
-                >
-                  <Users size={10} /> Followers
-                </span>
-              </div>
-              <div className="gh-receipt__stat">
-                <span
-                  className="gh-receipt__stat-value"
-                  style={{ color: headingColor }}
-                >
-                  {user.following}
-                </span>
-                <span
-                  className="gh-receipt__stat-label"
-                  style={{ color: textColor }}
-                >
-                  <UserPlus size={10} /> Following
-                </span>
-              </div>
+                  <span
+                    className="gh-receipt__stat-value"
+                    style={{ color: headingColor }}
+                  >
+                    {value}
+                  </span>
+                  <span
+                    className="gh-receipt__stat-label"
+                    style={{ color: textColor }}
+                  >
+                    <Icon size={10} /> {label}
+                  </span>
+                </motion.div>
+              ))}
             </div>
 
             <div
@@ -191,11 +182,18 @@ export function ReceiptCard({
             </div>
 
             <ul className="gh-receipt__repos">
-              {repos.map((repo) => (
-                <li
+              {repos.map((repo, index) => (
+                <motion.li
                   key={repo.id}
                   className="gh-receipt__repo"
                   style={{ borderBottom: `1px dashed ${borderColor}` }}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.2,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: 0.04 * index,
+                  }}
                 >
                   <a
                     href={repo.html_url}
@@ -238,7 +236,7 @@ export function ReceiptCard({
                       <GitFork size={11} /> {repo.forks_count}
                     </span>
                   </div>
-                </li>
+                </motion.li>
               ))}
             </ul>
 
@@ -248,12 +246,19 @@ export function ReceiptCard({
             >
               <div className="gh-receipt__total-row">
                 <span style={{ color: textColor }}>TOTAL STARS</span>
-                <span
+                <motion.span
+                  key={totalStars}
                   className="gh-receipt__total-value"
-                  style={{ color: headingColor }}
+                  style={{ color: headingColor, display: "inline-block" }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    duration: 0.4,
+                    ease: [0.34, 1.56, 0.64, 1],
+                  }}
                 >
                   &#9733; {totalStars.toLocaleString()}
-                </span>
+                </motion.span>
               </div>
               <div className="gh-receipt__total-row">
                 <span style={{ color: textColor }}>MEMBER SINCE</span>

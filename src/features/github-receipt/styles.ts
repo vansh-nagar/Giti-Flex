@@ -20,57 +20,16 @@ export const githubReceiptStyles = `
   .gh-receipt__invoice-container {
     position: relative;
     margin-bottom: 2em;
-    height: 880px;
-  }
-
-  .gh-receipt__slot {
-    z-index: 0;
-    width: 100%;
-    height: 120px;
-    background-color: #2b2b2b;
-    border: 2px solid #2c2c2c;
-    border-radius: 1em;
-    box-shadow: 0 0 1px 0 #000, 0 5px 15px 0 rgba(0, 0, 0, 0.45);
-  }
-
-  .gh-receipt__slot-hole {
-    background-color: #000;
-    border-radius: 100vmax;
-    width: 90%;
-    height: 25px;
-    margin: 1em auto;
-    border: 1px solid #1b1b1b;
-    box-shadow: 0 0 1px 0 #000, 0 5px 15px 0 rgba(0, 0, 0, 0.45);
   }
 
   .gh-receipt__invoice {
-    position: absolute;
+    position: relative;
     width: 85%;
-    top: 1.5em;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0 auto;
     padding: 1em;
     border-radius: 0.5em;
     box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.15);
     transition: background-color 0.4s ease, color 0.4s ease;
-  }
-
-  .gh-receipt__invoice::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 80px;
-    left: 0;
-    top: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.95) 0%,
-      rgba(0, 0, 0, 0.75) 10%,
-      rgba(0, 0, 0, 0.65) 25%,
-      rgba(0, 0, 0, 0.45) 40%,
-      rgba(0, 0, 0, 0.25) 60%,
-      transparent 100%
-    );
   }
 
   .gh-receipt__title {
@@ -170,6 +129,17 @@ export const githubReceiptStyles = `
     display: flex;
     align-items: center;
     justify-content: space-between;
+    transition: transform 120ms ease-out, opacity 120ms ease-out;
+    transform-origin: left center;
+  }
+
+  .gh-receipt__repo-name:hover {
+    transform: translateX(2px);
+    opacity: 0.85;
+  }
+
+  .gh-receipt__repo-name:active {
+    transform: translateX(2px) scale(0.98);
   }
 
   .gh-receipt__repo-meta {
@@ -234,6 +204,37 @@ export const githubReceiptStyles = `
 
   .gh-receipt__barcode-bar {
     border-radius: 0.5px;
+    animation: gh-barcode-rise 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes gh-barcode-rise {
+    from {
+      transform: scaleY(0);
+      transform-origin: bottom;
+      opacity: 0;
+    }
+    to {
+      transform: scaleY(1);
+      transform-origin: bottom;
+      opacity: 1;
+    }
+  }
+
+  .gh-receipt__lang-dot {
+    transition: transform 150ms ease-out;
+  }
+
+  .gh-receipt__repo:hover .gh-receipt__lang-dot {
+    transform: scale(1.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-receipt *,
+    .gh-receipt *::before,
+    .gh-receipt *::after {
+      animation: none !important;
+      transition: none !important;
+    }
   }
 
   .gh-receipt__tagline {
@@ -326,10 +327,6 @@ export const githubReceiptStyles = `
     .gh-receipt__title {
       font-size: 1rem;
       padding: 0.5em 0;
-    }
-
-    .gh-receipt__slot-hole {
-      width: 95%;
     }
 
     .gh-receipt__name {
