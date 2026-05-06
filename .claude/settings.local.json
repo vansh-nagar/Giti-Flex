@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(findstr /R /C:\"clerk\" /C:\"@clerk\" package.json)"
     ]
   }
 }

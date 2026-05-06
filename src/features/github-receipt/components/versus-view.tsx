@@ -1,23 +1,22 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Check, Crown, Link2, Skull, Swords, X } from "lucide-react";
+import { Check, Crown, Link2, Shuffle, Skull, Star, Sword, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { ReceiptCard } from "./receipt-card";
-import type { BackgroundItem, GitHubRepo, GitHubUser } from "../types";
-import { getDefaultCustomization, getReceiptThemeStyles } from "../utils";
+import type { GitHubRepo, GitHubUser } from "../types";
 
 interface VersusViewProps {
   user: GitHubUser;
   repos: GitHubRepo[];
   opponent: GitHubUser;
   opponentRepos: GitHubRepo[];
-  selectedBackground: BackgroundItem;
   onClose: () => void;
+  onRandomBattle: () => void;
 }
 
 function calcScore(user: GitHubUser, repos: GitHubRepo[]) {
@@ -34,8 +33,8 @@ export function VersusView({
   repos,
   opponent,
   opponentRepos,
-  selectedBackground,
   onClose,
+  onRandomBattle,
 }: VersusViewProps) {
   const userRef = useRef<HTMLElement>(null);
   const oppRef = useRef<HTMLElement>(null);
@@ -58,9 +57,6 @@ export function VersusView({
       body: JSON.stringify({ winner, loser, isTie: tie }),
     }).catch((error) => console.error("Failed to record battle:", error));
   }, [user.login, opponent.login, tie, userWins]);
-
-  const customization = getDefaultCustomization(selectedBackground);
-  const themeStyles = getReceiptThemeStyles(selectedBackground, customization);
 
   const shareUrl =
     typeof window !== "undefined"
@@ -112,7 +108,7 @@ export function VersusView({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center gap-12 py-16">
       <motion.div
         initial={{ opacity: 0, scale: 0.85, y: -8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -125,52 +121,44 @@ export function VersusView({
         </Button>
       </motion.div>
 
-      <div className="flex items-center justify-center gap-6 w-full px-4 overflow-x-auto">
+      <div className="flex w-full items-center justify-center gap-6 px-4">
         <ContestantSide
           ref={userRef}
           side="left"
           user={user}
-          repos={repos}
           totalStars={totalStarsOf(repos)}
           score={userScore}
           isWinner={userWins}
           isLoser={!tie && !userWins}
           isTie={tie}
-          selectedBackground={selectedBackground}
-          themeStyles={themeStyles}
         />
 
         <motion.div
-          initial={{ scale: 0, rotate: -180, opacity: 0 }}
-          animate={{
-            scale: [0, 1.6, 1],
-            rotate: [180, 12, -8, 0],
-            opacity: [0, 1, 1],
-          }}
+          initial={{ scale: 0.6, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={{
             delay: 0.6,
-            duration: 0.7,
-            times: [0, 0.6, 1],
-            ease: [0.23, 1, 0.32, 1],
+            type: "spring",
+            stiffness: 260,
+            damping: 22,
           }}
           className="z-10 flex flex-col items-center gap-3 shrink-0"
         >
-          <div className="relative">
-            <motion.div
-              animate={{ rotate: [0, 8, -8, 0] }}
-              transition={{
-                delay: 1.4,
-                duration: 0.6,
-                repeat: Infinity,
-                repeatType: "loop",
-                repeatDelay: 1.4,
-              }}
-              className="rounded-full bg-linear-to-br from-red-500 via-orange-500 to-yellow-400 p-4 shadow-[0_0_50px_rgba(239,68,68,0.45)]"
-            >
-              <Swords size={42} className="text-white" strokeWidth={2.5} />
-            </motion.div>
-          </div>
-          <div className="bg-linear-to-br from-red-500 to-orange-500 bg-clip-text text-5xl font-black text-transparent">
+          <motion.div
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{
+              delay: 1.4,
+              duration: 0.8,
+              repeat: Infinity,
+              repeatType: "loop",
+              repeatDelay: 2,
+              ease: "easeInOut",
+            }}
+            className="flex items-center justify-center size-14 rounded-full bg-zinc-950 text-white shadow-[0_4px_16px_rgba(0,0,0,0.18)] ring-1 ring-white/10 dark:ring-white/15"
+          >
+            <Sword size={22} strokeWidth={2} />
+          </motion.div>
+          <div className="text-3xl font-black tracking-[-0.04em] text-zinc-900 dark:text-zinc-50">
             VS
           </div>
         </motion.div>
@@ -179,14 +167,11 @@ export function VersusView({
           ref={oppRef}
           side="right"
           user={opponent}
-          repos={opponentRepos}
           totalStars={totalStarsOf(opponentRepos)}
           score={oppScore}
           isWinner={!tie && !userWins}
           isLoser={!tie && userWins}
           isTie={tie}
-          selectedBackground={selectedBackground}
-          themeStyles={themeStyles}
         />
       </div>
 
@@ -198,7 +183,7 @@ export function VersusView({
           duration: 0.4,
           ease: [0.23, 1, 0.32, 1],
         }}
-        className="mt-12 mb-8 flex flex-col items-center gap-3"
+        className="flex flex-col items-center gap-3"
       >
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
           Share this battle
@@ -242,6 +227,15 @@ export function VersusView({
             )}
           </ShareIconButton>
         </div>
+
+        <Button
+          variant="outline"
+          onClick={onRandomBattle}
+          className="mt-4"
+        >
+          <Shuffle size={16} />
+          Battle a random GitHub user
+        </Button>
       </motion.div>
     </div>
   );
@@ -348,31 +342,25 @@ interface ContestantSideProps {
   ref: React.RefObject<HTMLElement | null>;
   side: "left" | "right";
   user: GitHubUser;
-  repos: GitHubRepo[];
   totalStars: number;
   score: number;
   isWinner: boolean;
   isLoser: boolean;
   isTie: boolean;
-  selectedBackground: BackgroundItem;
-  themeStyles: ReturnType<typeof getReceiptThemeStyles>;
 }
 
 function ContestantSide({
   ref,
   side,
   user,
-  repos,
   totalStars,
   score,
   isWinner,
   isLoser,
   isTie,
-  selectedBackground,
-  themeStyles,
 }: ContestantSideProps) {
   const fromX = side === "left" ? -360 : 360;
-  const tiltAngle = side === "left" ? -10 : 10;
+  const tiltAngle = side === "left" ? -6 : 6;
 
   return (
     <motion.div
@@ -387,44 +375,67 @@ function ContestantSide({
       }}
       className="relative shrink-0"
     >
-      <motion.div
+      <motion.section
+        ref={ref}
         animate={
           isWinner
             ? {
                 filter: [
                   "drop-shadow(0 0 0 rgba(34,197,94,0))",
-                  "drop-shadow(0 0 40px rgba(34,197,94,0.85))",
-                  "drop-shadow(0 0 25px rgba(34,197,94,0.6))",
+                  "drop-shadow(0 0 40px rgba(34,197,94,0.7))",
+                  "drop-shadow(0 0 22px rgba(34,197,94,0.5))",
                 ],
-                scale: [1, 1.04, 1.02],
+                scale: [1, 1.03, 1.015],
               }
             : isLoser
               ? {
                   filter: [
                     "drop-shadow(0 0 0 rgba(239,68,68,0))",
-                    "drop-shadow(0 0 35px rgba(239,68,68,0.7)) grayscale(0.5)",
-                    "drop-shadow(0 0 20px rgba(239,68,68,0.5)) grayscale(0.6)",
+                    "drop-shadow(0 0 28px rgba(239,68,68,0.55)) grayscale(0.4)",
+                    "drop-shadow(0 0 16px rgba(239,68,68,0.4)) grayscale(0.5)",
                   ],
-                  opacity: [1, 0.92, 0.78],
-                  x: [0, -6, 6, -4, 4, 0],
+                  opacity: [1, 0.94, 0.82],
+                  x: [0, -4, 4, -2, 2, 0],
                 }
-              : { filter: "drop-shadow(0 0 18px rgba(99,102,241,0.5))" }
+              : { filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.12))" }
         }
         transition={{
           delay: 1.5,
           duration: isLoser ? 1 : 0.9,
           ease: [0.23, 1, 0.32, 1],
         }}
+        className="flex w-[260px] flex-col items-center gap-5 rounded-3xl border border-border bg-background/70 px-8 py-10 backdrop-blur"
       >
-        <ReceiptCard
-          receiptRef={ref}
-          repos={repos}
-          selectedBackground={selectedBackground}
-          themeStyles={themeStyles}
-          totalStars={totalStars}
-          user={user}
-        />
-      </motion.div>
+        <div className="relative">
+          <Image
+            src={user.avatar_url}
+            alt={user.login}
+            width={140}
+            height={140}
+            className="rounded-full border-4 border-background shadow-[0_8px_24px_rgba(0,0,0,0.18)]"
+            unoptimized
+          />
+        </div>
+
+        <div className="flex flex-col items-center gap-0.5 text-center">
+          <h3 className="text-xl font-bold tracking-tight">
+            {user.name || user.login}
+          </h3>
+          <p className="font-mono text-xs text-muted-foreground">
+            @{user.login}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2">
+          <Star className="size-4 fill-amber-400 text-amber-400" />
+          <span className="font-mono text-base font-bold tabular-nums">
+            {totalStars.toLocaleString()}
+          </span>
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+            stars
+          </span>
+        </div>
+      </motion.section>
 
       <motion.div
         initial={{ y: 30, opacity: 0, scale: 0.7 }}
@@ -463,9 +474,6 @@ function ContestantSide({
           {isTie && "TIE"}
           <span className="font-mono">{score.toLocaleString()}</span>
         </motion.div>
-        <span className="text-xs text-muted-foreground font-mono">
-          @{user.login}
-        </span>
       </motion.div>
     </motion.div>
   );

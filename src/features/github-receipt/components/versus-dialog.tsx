@@ -1,6 +1,6 @@
 "use client";
 
-import { Swords } from "lucide-react";
+import { Shuffle, Sword, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ interface VersusDialogProps {
   onInputChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
   onSubmit: () => void;
+  onRandomBattle: () => void;
 }
 
 export function VersusDialog({
@@ -32,13 +33,14 @@ export function VersusDialog({
   onInputChange,
   onOpenChange,
   onSubmit,
+  onRandomBattle,
 }: VersusDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Swords size={18} className="text-red-500" />
+            <Users size={18} />
             Battle a friend
           </DialogTitle>
         </DialogHeader>
@@ -55,7 +57,9 @@ export function VersusDialog({
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <Label htmlFor="versus-username">Opponent&apos;s GitHub Username</Label>
+            <Label htmlFor="versus-username">
+              Opponent&apos;s GitHub Username
+            </Label>
             <Input
               id="versus-username"
               type="text"
@@ -68,6 +72,17 @@ export function VersusDialog({
               autoCorrect="off"
               spellCheck={false}
             />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-1 w-full"
+              onClick={onRandomBattle}
+              disabled={loading}
+            >
+              <Shuffle size={14} />
+              Battle a random GitHub user
+            </Button>
           </div>
 
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
@@ -89,7 +104,7 @@ export function VersusDialog({
                 <Spinner />
               ) : (
                 <>
-                  <Swords size={16} />
+                  <Sword size={16} />
                   Start Battle
                 </>
               )}

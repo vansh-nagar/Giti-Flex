@@ -91,3 +91,15 @@ export function getDisplayBlog(blog: string | null) {
 
   return blog.replace(/^https?:\/\//, "");
 }
+
+export async function fetchRandomGithubLogin(): Promise<string> {
+  const since = Math.floor(Math.random() * 50_000_000);
+  const response = await fetch(
+    `https://api.github.com/users?since=${since}&per_page=30`,
+  );
+  if (!response.ok) throw new Error("Failed to fetch random user list");
+  const list = (await response.json()) as { login: string; type: string }[];
+  const real = list.filter((entry) => entry.type === "User");
+  if (real.length === 0) throw new Error("No real users in this slice");
+  return real[Math.floor(Math.random() * real.length)].login;
+}

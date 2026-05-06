@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 
 const POINTS_PER_BATTLE = 10;
@@ -9,7 +10,25 @@ function isLogin(value: unknown): value is string {
   return typeof value === "string" && /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(value);
 }
 
+async function getAuthedGithubLogin(): Promise<string | null> {
+  const { userId } = await auth();
+  if (!userId) return null;
+  const user = await currentUser();
+  const githubAccount = user?.externalAccounts?.find(
+    (account) => account.provider === "oauth_github",
+  );
+  return githubAccount?.username ?? null;
+}
+
 export async function POST(req: Request) {
+  const authedLogin = await getAuthedGithubLogin();
+  if (!authedLogin) {
+    return NextResponse.json(
+      { error: "Sign in with GitHub to record a battle" },
+      { status: 401 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();
@@ -30,39 +49,42 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Same player" }, { status: 400 });
   }
 
+  const authedLower = authedLogin.toLowerCase();
+  const winnerLower = winner.toLowerCase();
+  const loserLower = loser.toLowerCase();
+  if (authedLower !== winnerLower && authedLower !== loserLower) {
+    return NextResponse.json(
+      { error: "You can only record battles you took part in" },
+      { status: 403 },
+    );
+  }
+
   const id = crypto.randomUUID();
   const tie = Boolean(isTie);
   const points = tie ? 0 : POINTS_PER_BATTLE;
+  const authedIsWinner = authedLower === winnerLower;
 
   try {
     const result = await prisma.$transaction(async (tx) => {
       await tx.player.upsert({
-        where: { login: winner },
-        create: { login: winner },
-        update: {},
-      });
-      await tx.player.upsert({
-        where: { login: loser },
-        create: { login: loser },
+        where: { login: authedLogin },
+        create: { login: authedLogin },
         update: {},
       });
 
       if (tie) {
         await tx.player.update({
-          where: { login: winner },
+          where: { login: authedLogin },
           data: { ties: { increment: 1 } },
         });
+      } else if (authedIsWinner) {
         await tx.player.update({
-          where: { login: loser },
-          data: { ties: { increment: 1 } },
+          where: { login: authedLogin },
+          data: { points: { increment: points }, wins: { increment: 1 } },
         });
       } else {
         await tx.player.update({
-          where: { login: winner },
-          data: { points: { increment: points }, wins: { increment: 1 } },
-        });
-        await tx.player.update({
-          where: { login: loser },
+          where: { login: authedLogin },
           data: { points: { decrement: points }, losses: { increment: 1 } },
         });
       }

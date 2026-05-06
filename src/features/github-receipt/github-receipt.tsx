@@ -15,6 +15,7 @@ import { VersusView } from "./components/versus-view";
 import { githubReceiptStyles } from "./styles";
 import type { BackgroundItem, GitHubRepo, GitHubUser } from "./types";
 import {
+  fetchRandomGithubLogin,
   getDefaultCustomization,
   getReceiptThemeStyles,
   getTopRepos,
@@ -138,6 +139,22 @@ export function GithubReceipt({
     fetchVersus(trimmed);
   }, [fetchVersus, versusInput, versusLoading]);
 
+  const handleVersusRandom = useCallback(async () => {
+    if (versusLoading) return;
+    setVersusError(null);
+    setVersusLoading(true);
+    try {
+      const login = await fetchRandomGithubLogin();
+      setVersusInput(login);
+      setVersusLoading(false);
+      fetchVersus(login);
+    } catch (randomError) {
+      console.error("Failed to find random opponent:", randomError);
+      setVersusError("Couldn't find a random opponent. Try again.");
+      setVersusLoading(false);
+    }
+  }, [fetchVersus, versusLoading]);
+
   const handleExitVersus = useCallback(() => {
     setVersusUser(null);
     setVersusRepos([]);
@@ -251,7 +268,7 @@ export function GithubReceipt({
       <AnimatePresence mode="wait" initial={false}>
         {versusActive && versusUser ? (
           <motion.div
-            key="versus-scene"
+            key={`versus-scene-${versusUser.login}`}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
@@ -262,8 +279,8 @@ export function GithubReceipt({
               repos={repos}
               opponent={versusUser}
               opponentRepos={versusRepos}
-              selectedBackground={selectedBackground}
               onClose={handleExitVersus}
+              onRandomBattle={handleVersusRandom}
             />
           </motion.div>
         ) : (
@@ -355,6 +372,7 @@ export function GithubReceipt({
         onInputChange={setVersusInput}
         onOpenChange={setVersusDialogOpen}
         onSubmit={handleVersusSubmit}
+        onRandomBattle={handleVersusRandom}
       />
     </>
   );

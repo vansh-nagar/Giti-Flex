@@ -229,6 +229,228 @@ const PatternAurora = () => (
   />
 );
 
+const PatternPlasma = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "radial-gradient(circle at 25% 25%, rgba(236, 72, 153, 0.75) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.75) 0%, transparent 50%), radial-gradient(circle at 75% 25%, rgba(139, 92, 246, 0.65) 0%, transparent 50%), radial-gradient(circle at 25% 75%, rgba(245, 158, 11, 0.55) 0%, transparent 50%), #1e1b4b",
+    }}
+  />
+);
+
+const PatternLiquidMetal = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "conic-gradient(from 45deg at 50% 50%, #d4d4d8, #71717a, #ffffff, #a1a1aa, #d4d4d8, #52525b, #d4d4d8)",
+    }}
+  />
+);
+
+const PatternBauhaus = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#fef3c7",
+      backgroundImage:
+        "radial-gradient(circle at 28% 35%, #ef4444 0%, #ef4444 22%, transparent 22%), radial-gradient(circle at 72% 70%, #3b82f6 0%, #3b82f6 18%, transparent 18%), radial-gradient(circle at 50% 82%, #fbbf24 0%, #fbbf24 13%, transparent 13%)",
+    }}
+  />
+);
+
+const PatternBloodmoon = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "radial-gradient(circle at 50% 50%, #dc2626 0%, #7f1d1d 25%, #1c0a0a 65%, #000000 100%)",
+    }}
+  />
+);
+
+const PatternLavaLamp = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "radial-gradient(ellipse at 30% 20%, #f97316 0%, transparent 30%), radial-gradient(ellipse at 70% 60%, #dc2626 0%, transparent 35%), radial-gradient(ellipse at 30% 90%, #fbbf24 0%, transparent 28%), radial-gradient(ellipse at 80% 30%, #ea580c 0%, transparent 25%), #1c0a0a",
+    }}
+  />
+);
+
+const PatternFrostbite = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "repeating-linear-gradient(45deg, transparent 0 13px, rgba(255, 255, 255, 0.45) 13px 14px), repeating-linear-gradient(-45deg, transparent 0 13px, rgba(255, 255, 255, 0.45) 13px 14px), linear-gradient(135deg, #dbeafe 0%, #93c5fd 50%, #3b82f6 100%)",
+    }}
+  />
+);
+
+const PatternCyberStreets = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#0a0a14",
+      backgroundImage:
+        "linear-gradient(rgba(236, 72, 153, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.5) 1px, transparent 1px), radial-gradient(ellipse at 50% 100%, rgba(236, 72, 153, 0.28) 0%, transparent 60%)",
+      backgroundSize: "40px 40px, 40px 40px, 100% 100%",
+    }}
+  />
+);
+
+const PatternSynthwave = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "linear-gradient(rgba(236, 72, 153, 0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 72, 153, 0.55) 1px, transparent 1px), linear-gradient(180deg, #1e1b4b 0%, #4c1d95 50%, #ec4899 100%)",
+      backgroundSize: "40px 40px, 40px 40px, 100% 100%",
+    }}
+  />
+);
+
+const PatternAcidRain = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#0f1f0a",
+      backgroundImage:
+        "repeating-linear-gradient(180deg, transparent 0 4px, rgba(132, 204, 22, 0.45) 4px 5px, transparent 5px 11px), radial-gradient(ellipse at 50% 100%, rgba(132, 204, 22, 0.25) 0%, transparent 70%)",
+    }}
+  />
+);
+
+const PatternCarbonFiber = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#1f2937",
+      backgroundImage:
+        "linear-gradient(45deg, rgba(0, 0, 0, 0.5) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 75%, transparent 75%, transparent)",
+      backgroundSize: "12px 12px",
+    }}
+  />
+);
+
+const PatternHalftone = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#fff7ed",
+      backgroundImage:
+        "radial-gradient(#1f2937 25%, transparent 26%), radial-gradient(#1f2937 25%, transparent 26%)",
+      backgroundSize: "14px 14px",
+      backgroundPosition: "0 0, 7px 7px",
+    }}
+  />
+);
+
+const PatternTartan = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#7f1d1d",
+      backgroundImage:
+        "repeating-linear-gradient(0deg, transparent 0 18px, rgba(255, 255, 255, 0.16) 18px 21px, transparent 21px 39px, rgba(0, 0, 0, 0.5) 39px 42px), repeating-linear-gradient(90deg, transparent 0 18px, rgba(255, 255, 255, 0.16) 18px 21px, transparent 21px 39px, rgba(0, 0, 0, 0.5) 39px 42px)",
+    }}
+  />
+);
+
+const PatternPolkadot = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#fef3c7",
+      backgroundImage:
+        "radial-gradient(circle at 25% 25%, #ec4899 0%, #ec4899 22%, transparent 22%), radial-gradient(circle at 75% 75%, #3b82f6 0%, #3b82f6 22%, transparent 22%), radial-gradient(circle at 75% 25%, #10b981 0%, #10b981 22%, transparent 22%), radial-gradient(circle at 25% 75%, #f97316 0%, #f97316 22%, transparent 22%)",
+      backgroundSize: "50px 50px, 50px 50px, 50px 50px, 50px 50px",
+    }}
+  />
+);
+
+const PatternSandstone = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.18) 0%, transparent 35%), radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 40%), linear-gradient(135deg, #fcd34d 0%, #f97316 50%, #c2410c 100%)",
+    }}
+  />
+);
+
+const PatternForestCanopy = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#14532d",
+      backgroundImage:
+        "radial-gradient(circle at 22% 25%, rgba(187, 247, 208, 0.42) 0%, rgba(187, 247, 208, 0.42) 4%, transparent 4%), radial-gradient(circle at 78% 65%, rgba(254, 240, 138, 0.35) 0%, rgba(254, 240, 138, 0.35) 3%, transparent 3%), radial-gradient(circle at 60% 35%, rgba(132, 204, 22, 0.4) 0%, rgba(132, 204, 22, 0.4) 5%, transparent 5%), radial-gradient(ellipse at 50% 0%, rgba(254, 240, 138, 0.22) 0%, transparent 65%)",
+      backgroundSize: "55px 55px, 50px 50px, 70px 70px, 100% 100%",
+    }}
+  />
+);
+
+const PatternCrystal = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "conic-gradient(from 0deg at 50% 50%, #ec4899 0deg 45deg, #8b5cf6 45deg 90deg, #3b82f6 90deg 135deg, #10b981 135deg 180deg, #fbbf24 180deg 225deg, #f97316 225deg 270deg, #ef4444 270deg 315deg, #ec4899 315deg 360deg)",
+    }}
+  />
+);
+
+const PatternSunsetBeach = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "linear-gradient(180deg, #fbbf24 0%, #f97316 28%, #ec4899 58%, #6366f1 88%, #1e1b4b 100%)",
+    }}
+  />
+);
+
+const PatternMosaic = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#000000",
+      backgroundImage:
+        "linear-gradient(45deg, #ef4444 25%, transparent 25%, transparent 75%, #fbbf24 75%), linear-gradient(45deg, #3b82f6 25%, transparent 25%, transparent 75%, #10b981 75%)",
+      backgroundSize: "20px 20px",
+      backgroundPosition: "0 0, 10px 10px",
+    }}
+  />
+);
+
+const PatternHolographic = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%), linear-gradient(135deg, #ec4899 0%, #8b5cf6 20%, #3b82f6 40%, #06b6d4 60%, #10b981 80%, #fbbf24 100%)",
+    }}
+  />
+);
+
+const PatternArgyle = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#1e3a8a",
+      backgroundImage:
+        "linear-gradient(45deg, #1e40af 25%, transparent 25%), linear-gradient(-45deg, #1e40af 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1e40af 75%), linear-gradient(-45deg, transparent 75%, #1e40af 75%), repeating-linear-gradient(45deg, transparent 0 19px, rgba(255, 255, 255, 0.18) 19px 20px), repeating-linear-gradient(-45deg, transparent 0 19px, rgba(255, 255, 255, 0.18) 19px 20px)",
+      backgroundSize:
+        "40px 40px, 40px 40px, 40px 40px, 40px 40px, 40px 40px, 40px 40px",
+      backgroundPosition: "0 0, 0 20px, 20px -20px, -20px 0px, 0 0, 0 0",
+    }}
+  />
+);
+
 export const languageColors: Record<string, string> = {
   TypeScript: "#3178c6",
   JavaScript: "#f1e05a",
@@ -418,15 +640,189 @@ export const backgroundOptions: BackgroundItem[] = [
     heading: "#ffffff",
     isDark: true,
   },
+  // {
+  //   name: "Aurora",
+  //   description: "Northern lights wash",
+  //   component: <PatternAurora />,
+  //   backgroundColor: "#0a0e27",
+  //   text: "#d1fae5",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
+  // {
+  //   name: "Plasma",
+  //   description: "Four-blob neon mesh",
+  //   component: <PatternPlasma />,
+  //   backgroundColor: "#1e1b4b",
+  //   text: "#f5d0fe",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
   {
-    name: "Aurora",
-    description: "Northern lights wash",
-    component: <PatternAurora />,
-    backgroundColor: "#0a0e27",
-    text: "#d1fae5",
+    name: "Liquid Metal",
+    description: "Conic chrome shimmer",
+    component: <PatternLiquidMetal />,
+    backgroundColor: "#a1a1aa",
+    text: "#1f2937",
+    heading: "#000000",
+  },
+  // {
+  //   name: "Bauhaus",
+  //   description: "Bold primary circles",
+  //   component: <PatternBauhaus />,
+  //   backgroundColor: "#fef3c7",
+  //   text: "#1f2937",
+  //   heading: "#000000",
+  // },
+  // {
+  //   name: "Bloodmoon",
+  //   description: "Crimson radial decay",
+  //   component: <PatternBloodmoon />,
+  //   backgroundColor: "#7f1d1d",
+  //   text: "#fecaca",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
+  // {
+  //   name: "Lava Lamp",
+  //   description: "Floating ember blobs",
+  //   component: <PatternLavaLamp />,
+  //   backgroundColor: "#1c0a0a",
+  //   text: "#fef3c7",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
+  {
+    name: "Frostbite",
+    description: "Icy crosshatch",
+    component: <PatternFrostbite />,
+    backgroundColor: "#93c5fd",
+    text: "#1e3a8a",
+    heading: "#1e1b4b",
+  },
+  {
+    name: "Cyber Streets",
+    description: "Magenta-cyan crosshair",
+    component: <PatternCyberStreets />,
+    backgroundColor: "#0a0a14",
+    text: "#f5d0fe",
     heading: "#ffffff",
     isDark: true,
   },
+  {
+    name: "Synthwave",
+    description: "80s grid sundown",
+    component: <PatternSynthwave />,
+    backgroundColor: "#1e1b4b",
+    text: "#fce7f3",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Acid Rain",
+    description: "Falling neon streaks",
+    component: <PatternAcidRain />,
+    backgroundColor: "#0f1f0a",
+    text: "#d9f99d",
+    heading: "#84cc16",
+    isDark: true,
+  },
+  {
+    name: "Carbon Fiber",
+    description: "Industrial weave",
+    component: <PatternCarbonFiber />,
+    backgroundColor: "#1f2937",
+    text: "#d1d5db",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Halftone",
+    description: "Comic-book dots",
+    component: <PatternHalftone />,
+    backgroundColor: "#fff7ed",
+    text: "#1f2937",
+    heading: "#000000",
+  },
+  {
+    name: "Tartan",
+    description: "Crimson plaid weave",
+    component: <PatternTartan />,
+    backgroundColor: "#7f1d1d",
+    text: "#fecaca",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Polkadot",
+    description: "Multicolor spots",
+    component: <PatternPolkadot />,
+    backgroundColor: "#fef3c7",
+    text: "#1f2937",
+    heading: "#000000",
+  },
+  {
+    name: "Sandstone",
+    description: "Warm desert wash",
+    component: <PatternSandstone />,
+    backgroundColor: "#f97316",
+    text: "#7c2d12",
+    heading: "#451a03",
+  },
+  // {
+  //   name: "Forest Canopy",
+  //   description: "Sun-dappled green",
+  //   component: <PatternForestCanopy />,
+  //   backgroundColor: "#14532d",
+  //   text: "#d1fae5",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
+  // {
+  //   name: "Crystal",
+  //   description: "Stepped color wheel",
+  //   component: <PatternCrystal />,
+  //   backgroundColor: "#8b5cf6",
+  //   text: "#ffffff",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
+  {
+    name: "Sunset Beach",
+    description: "Vertical golden hour",
+    component: <PatternSunsetBeach />,
+    backgroundColor: "#1e1b4b",
+    text: "#fef3c7",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  // {
+  //   name: "Mosaic",
+  //   description: "Color-block tiling",
+  //   component: <PatternMosaic />,
+  //   backgroundColor: "#000000",
+  //   text: "#ffffff",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
+  {
+    name: "Holographic",
+    description: "Foil sheen sweep",
+    component: <PatternHolographic />,
+    backgroundColor: "#8b5cf6",
+    text: "#ffffff",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  // {
+  //   name: "Argyle",
+  //   description: "Diamond plaid",
+  //   component: <PatternArgyle />,
+  //   backgroundColor: "#1e3a8a",
+  //   text: "#dbeafe",
+  //   heading: "#ffffff",
+  //   isDark: true,
+  // },
   {
     name: "Gradient 6",
     description: "Purple-blue angled",

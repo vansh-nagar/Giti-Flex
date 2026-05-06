@@ -2,18 +2,38 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Trophy } from "lucide-react";
+import { Show, SignInButton, useUser } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import GithubLogo from "@/components/logo/github";
 
+function getGithubLoginFromClerk(
+  user: ReturnType<typeof useUser>["user"],
+): string | null {
+  if (!user) return null;
+  const githubAccount = user.externalAccounts?.find(
+    (account) => account.provider === "oauth_github",
+  );
+  return githubAccount?.username ?? null;
+}
+
 export function GithubReceiptHome() {
   const router = useRouter();
+  const { user, isLoaded } = useUser();
   const [username, setUsername] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  const authedGithubLogin = getGithubLoginFromClerk(user);
+
+  useEffect(() => {
+    if (isLoaded && authedGithubLogin && !username) {
+      setUsername(authedGithubLogin);
+    }
+  }, [isLoaded, authedGithubLogin, username]);
 
   function handleSubmit() {
     const trimmedUsername = username.trim();
@@ -23,6 +43,13 @@ export function GithubReceiptHome() {
 
     startTransition(() => {
       router.push(`/${encodeURIComponent(trimmedUsername)}`);
+    });
+  }
+
+  function handleGoToMyReceipt() {
+    if (!authedGithubLogin) return;
+    startTransition(() => {
+      router.push(`/${encodeURIComponent(authedGithubLogin)}`);
     });
   }
 
@@ -60,67 +87,82 @@ export function GithubReceiptHome() {
         </h1>
 
         <p className="mt-5 max-w-md text-base text-muted-foreground sm:text-lg">
-          Type a GitHub username and we&apos;ll print a clean, shareable receipt
-          of their profile and top repos.
+          Sign in with GitHub to print your profile as a clean receipt and
+          battle other devs on the leaderboard.
         </p>
 
-        <form
-          className="mt-10 flex w-full max-w-md flex-col gap-2 sm:flex-row"
-          onSubmit={(event) => {
-            event.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <label htmlFor="username" className="sr-only">
-            GitHub Username
-          </label>
-          <Input
-            id="username"
-            type="text"
-            placeholder="e.g. vansh-nagar"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            disabled={isPending}
-            className="h-11 flex-1 text-base"
-            autoComplete="off"
-            autoCapitalize="off"
-            autoCorrect="off"
-            spellCheck={false}
-          />
-          <Button
-            type="submit"
-            disabled={isPending || !username.trim()}
-            className="h-11 px-5 text-sm sm:w-auto"
-          >
-            {isPending ? (
-              <Spinner />
-            ) : (
-              <>
+        <Show when="signed-out">
+          <div className="mt-10 flex flex-col items-center gap-3">
+            <SignInButton mode="modal">
+              <Button className="h-11 px-6 text-sm">
                 <GithubLogo size={16} color="#ffffff" />
-                Generate Receipt
-              </>
-            )}
-          </Button>
-        </form>
+                Sign in with GitHub
+              </Button>
+            </SignInButton>
+            <p className="text-xs text-muted-foreground">
+              Auth is required so leaderboard scores stay yours.
+            </p>
+          </div>
+        </Show>
 
-        <p className="mt-4 text-xs text-muted-foreground">
-          Try{" "}
-          <button
-            type="button"
-            onClick={() => setUsername("vansh-nagar")}
-            className="font-medium text-foreground underline-offset-4 hover:underline"
-          >
-            vansh-nagar
-          </button>{" "}
-          or{" "}
-          <button
-            type="button"
-            onClick={() => setUsername("torvalds")}
-            className="font-medium text-foreground underline-offset-4 hover:underline"
-          >
-            torvalds
-          </button>
-        </p>
+        <Show when="signed-in">
+          {authedGithubLogin ? (
+            <>
+              <form
+                className="mt-10 flex w-full max-w-md flex-col gap-2 sm:flex-row"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  handleSubmit();
+                }}
+              >
+                <label htmlFor="username" className="sr-only">
+                  GitHub Username
+                </label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="e.g. torvalds"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  disabled={isPending}
+                  className="h-11 flex-1 text-base"
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+                <Button
+                  type="submit"
+                  disabled={isPending || !username.trim()}
+                  className="h-11 px-5 text-sm sm:w-auto"
+                >
+                  {isPending ? (
+                    <Spinner />
+                  ) : (
+                    <>
+                      <GithubLogo size={16} color="#ffffff" />
+                      View Receipt
+                    </>
+                  )}
+                </Button>
+              </form>
+
+              <button
+                type="button"
+                onClick={handleGoToMyReceipt}
+                disabled={isPending}
+                className="mt-4 text-xs font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                or jump straight to my receipt @{authedGithubLogin}
+              </button>
+            </>
+          ) : (
+            <p className="mt-10 max-w-md text-sm text-amber-600">
+              Your Clerk account isn&apos;t linked to GitHub. Sign in again
+              choosing GitHub so we can read your username.
+            </p>
+          )}
+        </Show>
       </div>
     </section>
   );
