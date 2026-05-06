@@ -53,7 +53,9 @@ export function GithubReceipt({
   const [versusRepos, setVersusRepos] = useState<GitHubRepo[]>([]);
   const [versusLoading, setVersusLoading] = useState(false);
   const [versusError, setVersusError] = useState<string | null>(null);
+  const [autoOpenVersus, setAutoOpenVersus] = useState(false);
   const versusAutoTriggered = useRef(false);
+  const versusDialogAutoOpened = useRef(false);
 
   useEffect(() => {
     if (user) {
@@ -160,6 +162,15 @@ export function GithubReceipt({
   }, [fetchVersus, user, versusLoading, versusUser, versusUsername]);
 
   useEffect(() => {
+    if (autoOpenVersus && user && !versusDialogAutoOpened.current) {
+      versusDialogAutoOpened.current = true;
+      setVersusError(null);
+      setVersusDialogOpen(true);
+      setAutoOpenVersus(false);
+    }
+  }, [autoOpenVersus, user]);
+
+  useEffect(() => {
     if (typeof window === "undefined" || !user) return;
     const baseUrl = `/${user.login}`;
     const newUrl = versusUser
@@ -215,6 +226,11 @@ export function GithubReceipt({
         loading={loading}
         onInputUsernameChange={setInputUsername}
         onSubmit={() => setSubmittedUsername(inputUsername.trim())}
+        onSubmitVersus={() => {
+          versusDialogAutoOpened.current = false;
+          setAutoOpenVersus(true);
+          setSubmittedUsername(inputUsername.trim());
+        }}
       />
     );
   }

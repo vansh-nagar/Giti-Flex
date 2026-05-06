@@ -9,12 +9,6 @@ function isLogin(value: unknown): value is string {
   return typeof value === "string" && /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(value);
 }
 
-function battleId(a: string, b: string) {
-  const [first, second] = [a.toLowerCase(), b.toLowerCase()].sort();
-  const day = new Date().toISOString().slice(0, 10);
-  return `${first}__${second}__${day}`;
-}
-
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -36,17 +30,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Same player" }, { status: 400 });
   }
 
-  const id = battleId(winner, loser);
+  const id = crypto.randomUUID();
   const tie = Boolean(isTie);
   const points = tie ? 0 : POINTS_PER_BATTLE;
 
   try {
     const result = await prisma.$transaction(async (tx) => {
-      const existing = await tx.battle.findUnique({ where: { id } });
-      if (existing) {
-        return { recorded: false, reason: "already_recorded_today", id };
-      }
-
       await tx.player.upsert({
         where: { login: winner },
         create: { login: winner },

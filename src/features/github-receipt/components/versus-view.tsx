@@ -39,6 +39,7 @@ export function VersusView({
 }: VersusViewProps) {
   const userRef = useRef<HTMLElement>(null);
   const oppRef = useRef<HTMLElement>(null);
+  const battleRecorded = useRef(false);
   const [linkCopied, setLinkCopied] = useState(false);
 
   const userScore = calcScore(user, repos);
@@ -47,6 +48,8 @@ export function VersusView({
   const userWins = !tie && userScore > oppScore;
 
   useEffect(() => {
+    if (battleRecorded.current) return;
+    battleRecorded.current = true;
     const winner = tie ? user.login : userWins ? user.login : opponent.login;
     const loser = tie ? opponent.login : userWins ? opponent.login : user.login;
     fetch("/api/battle", {

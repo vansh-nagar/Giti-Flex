@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import BookDemoButton from "@/components/ui/book-demo-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
@@ -12,6 +12,7 @@ interface GithubReceiptSearchProps {
   loading: boolean;
   onInputUsernameChange: (value: string) => void;
   onSubmit: () => void;
+  onSubmitVersus: () => void;
 }
 
 export function GithubReceiptSearch({
@@ -20,6 +21,7 @@ export function GithubReceiptSearch({
   loading,
   onInputUsernameChange,
   onSubmit,
+  onSubmitVersus,
 }: GithubReceiptSearchProps) {
   return (
     <div
@@ -75,21 +77,31 @@ export function GithubReceiptSearch({
             />
           </div>
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-          <Button
-            variant={"secondary"}
-            type="submit"
-            disabled={loading || !inputUsername.trim()}
-            className="w-full"
-          >
-            {loading ? (
+          {loading ? (
+            <div className="flex h-11 w-full items-center justify-center">
               <Spinner />
-            ) : (
-              <>
-                <GithubLogo size={18} color="000000" />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <BookDemoButton
+                type="submit"
+                disabled={!inputUsername.trim()}
+                className="w-full"
+              >
                 Generate Receipt
-              </>
-            )}
-          </Button>
+              </BookDemoButton>
+              <BookDemoButton
+                type="button"
+                disabled={!inputUsername.trim()}
+                className="w-full"
+                onClick={() => {
+                  if (inputUsername.trim()) onSubmitVersus();
+                }}
+              >
+                Versus Battle
+              </BookDemoButton>
+            </div>
+          )}
         </div>
       </form>
     </div>

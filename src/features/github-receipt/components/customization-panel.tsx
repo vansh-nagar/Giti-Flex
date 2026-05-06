@@ -2,20 +2,13 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import {
-  Check,
-  Globe,
-  Link2,
-  Moon,
-  Palette,
-  Sun,
-  Swords,
-  X,
-} from "lucide-react";
+import { Check, Globe, Link2, Moon, Palette, Sun, X } from "lucide-react";
 
 import DownloadIcon from "./download-icon";
 
+import BookDemoButton from "@/components/ui/book-demo-button";
 import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import { cn } from "@/lib/utils";
 import GithubLogo from "@/components/logo/github";
 
@@ -307,27 +300,6 @@ export function CustomizationPanel({
             </motion.a>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mb-2">
-            <Button
-              className="w-full bg-linear-to-r from-red-500 via-orange-500 to-yellow-400 text-white border-0 hover:opacity-90"
-              onClick={onOpenVersus}
-            >
-              <motion.span
-                animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
-                transition={{
-                  duration: 1.4,
-                  repeat: Infinity,
-                  repeatDelay: 1.6,
-                  ease: "easeInOut",
-                }}
-                className="inline-flex"
-              >
-                <Swords size={16} />
-              </motion.span>
-              Versus Battle
-            </Button>
-          </motion.div>
-
           <motion.div variants={itemVariants} className="mb-3">
             <Button
               className="w-full"
@@ -361,41 +333,36 @@ export function CustomizationPanel({
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">
-            <Button variant="outline" onClick={onClose} className="flex-1">
-              <motion.span
-                whileHover={{ rotate: 90 }}
-                transition={{ type: "spring", stiffness: 400, damping: 18 }}
-                className="inline-flex"
-              >
-                <X size={16} />
-              </motion.span>
-              Close
-            </Button>
-            <Button
-              variant="default"
+            <BookDemoButton onClick={onOpenVersus} className="flex-1 w-auto">
+              Versus Battle
+            </BookDemoButton>
+            <SoftPillButton
+              variant="primary"
               onClick={onOpenExport}
               disabled={downloading}
               onMouseEnter={() => setDownloadHovered(true)}
               onMouseLeave={() => setDownloadHovered(false)}
-              className="flex-1"
+              className="flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <DownloadIcon
-                size={28}
-                className="size-7"
-                state={downloadHovered && !downloading ? "done" : "idle"}
-              />
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={downloading ? "exporting" : "download"}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.16 }}
-                >
-                  {downloading ? "Exporting..." : "Download"}
-                </motion.span>
-              </AnimatePresence>
-            </Button>
+              <span className="inline-flex items-center justify-center gap-2">
+                <DownloadIcon
+                  size={28}
+                  className="size-7"
+                  state={downloadHovered && !downloading ? "done" : "idle"}
+                />
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={downloading ? "exporting" : "download"}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.16 }}
+                  >
+                    {downloading ? "Exporting..." : "Download"}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+            </SoftPillButton>
           </motion.div>
         </motion.section>
       </motion.div>
