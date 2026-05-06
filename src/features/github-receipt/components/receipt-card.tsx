@@ -68,6 +68,7 @@ export function ReceiptCard({
               backgroundColor,
               color: textColor,
               overflow: "hidden",
+              isolation: "isolate",
             }}
           >
             <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>

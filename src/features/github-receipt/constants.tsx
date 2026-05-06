@@ -54,6 +54,181 @@ const Gradient5 = () => (
   />
 );
 
+const PatternCrosshatch = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#ffffff",
+      backgroundImage:
+        "repeating-linear-gradient(45deg, transparent 0 11px, #d1d5db 11px 12px), repeating-linear-gradient(-45deg, transparent 0 11px, #d1d5db 11px 12px)",
+    }}
+  />
+);
+
+const PatternStripes = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "repeating-linear-gradient(45deg, #f3f4f6 0 14px, #ffffff 14px 28px)",
+    }}
+  />
+);
+
+const PatternRings = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#ffffff",
+      backgroundImage:
+        "repeating-radial-gradient(circle at 50% 50%, transparent 0 18px, #d1d5db 18px 19px)",
+    }}
+  />
+);
+
+const PatternBigDots = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#ffffff",
+      backgroundImage: "radial-gradient(#9ca3af 2.5px, transparent 2.5px)",
+      backgroundSize: "22px 22px",
+    }}
+  />
+);
+
+const PatternTriMesh = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#ffffff",
+      backgroundImage:
+        "repeating-linear-gradient(60deg, transparent 0 19px, #e5e7eb 19px 20px), repeating-linear-gradient(-60deg, transparent 0 19px, #e5e7eb 19px 20px), repeating-linear-gradient(0deg, transparent 0 19px, #e5e7eb 19px 20px)",
+    }}
+  />
+);
+
+const PatternCyberGrid = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#070b1f",
+      backgroundImage:
+        "linear-gradient(rgba(34, 211, 238, 0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.35) 1px, transparent 1px), radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.18) 0%, transparent 70%)",
+      backgroundSize: "28px 28px, 28px 28px, 100% 100%",
+    }}
+  />
+);
+
+const PatternBlueprint = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#0c4a6e",
+      backgroundImage:
+        "linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px)",
+      backgroundSize: "50px 50px, 50px 50px, 10px 10px, 10px 10px",
+    }}
+  />
+);
+
+const PatternSunburst = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#fef3c7",
+      backgroundImage:
+        "repeating-conic-gradient(from 0deg at 50% 50%, #fbbf24 0deg 12deg, #fef3c7 12deg 24deg)",
+    }}
+  />
+);
+
+const PatternIridescent = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "conic-gradient(from 90deg at 50% 50%, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #5f27cd, #ff6b6b)",
+    }}
+  />
+);
+
+const PatternDarkTopo = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#0f172a",
+      backgroundImage:
+        "repeating-radial-gradient(circle at 30% 70%, transparent 0 22px, rgba(56, 189, 248, 0.18) 22px 23px), repeating-radial-gradient(circle at 75% 25%, transparent 0 18px, rgba(168, 85, 247, 0.16) 18px 19px)",
+    }}
+  />
+);
+
+const PatternVaporwave = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "repeating-linear-gradient(0deg, transparent 0 3px, rgba(0, 0, 0, 0.18) 3px 4px), linear-gradient(180deg, #2d1b69 0%, #c026d3 38%, #f97316 70%, #fbbf24 100%)",
+    }}
+  />
+);
+
+const PatternMatrix = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#000000",
+      backgroundImage:
+        "repeating-linear-gradient(90deg, transparent 0 17px, rgba(34, 197, 94, 0.55) 17px 18px), repeating-linear-gradient(0deg, transparent 0 4px, rgba(0, 0, 0, 0.55) 4px 7px), radial-gradient(ellipse at 50% 50%, rgba(34, 197, 94, 0.18) 0%, transparent 70%)",
+    }}
+  />
+);
+
+const PatternSolarFlare = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundImage:
+        "radial-gradient(circle at 50% 100%, #fde047 0%, #f97316 28%, #dc2626 55%, #1e1b4b 100%)",
+    }}
+  />
+);
+
+const PatternNeonHex = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#0a0a14",
+      backgroundImage:
+        "radial-gradient(ellipse at 50% 50%, rgba(217, 70, 239, 0.22) 0%, transparent 70%), repeating-linear-gradient(60deg, transparent 0 19px, rgba(217, 70, 239, 0.45) 19px 20px), repeating-linear-gradient(-60deg, transparent 0 19px, rgba(34, 211, 238, 0.45) 19px 20px), repeating-linear-gradient(0deg, transparent 0 19px, rgba(168, 85, 247, 0.3) 19px 20px)",
+    }}
+  />
+);
+
+const PatternCosmos = () => (
+  <div
+    style={{
+      ...fullCover,
+      backgroundColor: "#020617",
+      backgroundImage:
+        "radial-gradient(1px 1px at 20px 30px, #ffffff, transparent), radial-gradient(1px 1px at 40px 70px, #ffffff, transparent), radial-gradient(1.5px 1.5px at 90px 40px, #ffffff, transparent), radial-gradient(1px 1px at 130px 80px, #ffffff, transparent), radial-gradient(2px 2px at 60px 110px, #ffffff, transparent), radial-gradient(1px 1px at 110px 130px, #ffffff, transparent), radial-gradient(ellipse at 70% 30%, rgba(168, 85, 247, 0.18) 0%, transparent 55%), radial-gradient(ellipse at 30% 70%, rgba(56, 189, 248, 0.15) 0%, transparent 55%)",
+      backgroundSize:
+        "150px 150px, 150px 150px, 150px 150px, 150px 150px, 150px 150px, 150px 150px, 100% 100%, 100% 100%",
+    }}
+  />
+);
+
+const PatternAurora = () => (
+  <div
+    style={{
+      ...fullCover,
+      background:
+        "radial-gradient(ellipse at 20% 0%, rgba(34, 197, 94, 0.7) 0%, transparent 55%), radial-gradient(ellipse at 80% 0%, rgba(168, 85, 247, 0.65) 0%, transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(34, 211, 238, 0.55) 0%, transparent 65%), #0a0e27",
+    }}
+  />
+);
+
 export const languageColors: Record<string, string> = {
   TypeScript: "#3178c6",
   JavaScript: "#f1e05a",
@@ -66,6 +241,22 @@ export const languageColors: Record<string, string> = {
 };
 
 export const backgroundOptions: BackgroundItem[] = [
+  {
+    name: "Nexvyn gradient",
+    description: "Soft purple-orange radial",
+    component: (
+      <div
+        style={{
+          ...fullCover,
+          background:
+            "radial-gradient(44.02% 44.02% at 14.38% 14.47%, rgba(188, 92, 248, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), radial-gradient(50.49% 50.49% at 64.54% 12.33%, #EFD0BB 0%, #FFFFFF 100%)",
+        }}
+      />
+    ),
+    backgroundColor: "#ffffff",
+    text: "#6b7280",
+    heading: "#1b1b1b",
+  },
   {
     name: "Standard",
     description: "Original clean look",
@@ -97,6 +288,144 @@ export const backgroundOptions: BackgroundItem[] = [
     backgroundColor: "#ffffff",
     text: "#6b7280",
     heading: "#1b1b1b",
+  },
+  {
+    name: "Crosshatch",
+    description: "Fine 45° X-mesh",
+    component: <PatternCrosshatch />,
+    backgroundColor: "#ffffff",
+    text: "#6b7280",
+    heading: "#1b1b1b",
+  },
+  {
+    name: "Bold Stripes",
+    description: "Wide diagonal stripes",
+    component: <PatternStripes />,
+    backgroundColor: "#ffffff",
+    text: "#6b7280",
+    heading: "#1b1b1b",
+  },
+  {
+    name: "Concentric Rings",
+    description: "Bullseye target",
+    component: <PatternRings />,
+    backgroundColor: "#ffffff",
+    text: "#6b7280",
+    heading: "#1b1b1b",
+  },
+  // {
+  //   name: "Chunky Dots",
+  //   description: "Bold polka grid",
+  //   component: <PatternBigDots />,
+  //   backgroundColor: "#ffffff",
+  //   text: "#6b7280",
+  //   heading: "#1b1b1b",
+  // },
+  {
+    name: "Tri Mesh",
+    description: "Triangular line grid",
+    component: <PatternTriMesh />,
+    backgroundColor: "#ffffff",
+    text: "#6b7280",
+    heading: "#1b1b1b",
+  },
+  {
+    name: "Cyber Grid",
+    description: "Neon cyan on midnight",
+    component: <PatternCyberGrid />,
+    backgroundColor: "#070b1f",
+    text: "#a5f3fc",
+    heading: "#67e8f9",
+    isDark: true,
+  },
+  {
+    name: "Blueprint",
+    description: "Architect graph paper",
+    component: <PatternBlueprint />,
+    backgroundColor: "#0c4a6e",
+    text: "#e0f2fe",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Sunburst",
+    description: "Conic golden rays",
+    component: <PatternSunburst />,
+    backgroundColor: "#fef3c7",
+    text: "#7c2d12",
+    heading: "#451a03",
+  },
+  {
+    name: "Iridescent",
+    description: "Rainbow conic spin",
+    component: <PatternIridescent />,
+    backgroundColor: "#ff6b6b",
+    text: "#ffffff",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Dark Topo",
+    description: "Cyber contour lines",
+    component: <PatternDarkTopo />,
+    backgroundColor: "#0f172a",
+    text: "#cbd5e1",
+    heading: "#f1f5f9",
+    isDark: true,
+  },
+  {
+    name: "Vaporwave",
+    description: "Retro sunset scanlines",
+    component: <PatternVaporwave />,
+    backgroundColor: "#2d1b69",
+    text: "#fde68a",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Matrix",
+    description: "Terminal green rain",
+    component: <PatternMatrix />,
+    backgroundColor: "#000000",
+    text: "#86efac",
+    heading: "#22c55e",
+    isDark: true,
+  },
+  {
+    name: "Solar Flare",
+    description: "Sunset radial burn",
+    component: <PatternSolarFlare />,
+    backgroundColor: "#1e1b4b",
+    text: "#fef3c7",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Neon Hex",
+    description: "Magenta-cyan triangulation",
+    component: <PatternNeonHex />,
+    backgroundColor: "#0a0a14",
+    text: "#f5d0fe",
+    heading: "#f0abfc",
+    isDark: true,
+  },
+  {
+    name: "Cosmos",
+    description: "Deep-space starfield",
+    component: <PatternCosmos />,
+    backgroundColor: "#020617",
+    text: "#cbd5e1",
+    heading: "#ffffff",
+    isDark: true,
+  },
+  {
+    name: "Aurora",
+    description: "Northern lights wash",
+    component: <PatternAurora />,
+    backgroundColor: "#0a0e27",
+    text: "#d1fae5",
+    heading: "#ffffff",
+    isDark: true,
   },
   {
     name: "Gradient 6",

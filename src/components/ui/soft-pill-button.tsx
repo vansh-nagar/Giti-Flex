@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 
 export type SoftPillVariant = "secondary" | "primary";
 
-interface SoftPillButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface SoftPillButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: SoftPillVariant;
 }
 
@@ -16,7 +15,7 @@ const SoftPillButton = React.forwardRef<HTMLButtonElement, SoftPillButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "group relative block rounded-full text-center px-5 py-2.5 text-[13px] font-medium tracking-tight transition-[transform] duration-200 active:scale-[0.99] active:duration-[50ms]",
+          "group relative block rounded-full text-center px-5 py-1.5 text-[13px] font-medium tracking-tight transition-[transform] duration-200 active:scale-[0.99] active:duration-[50ms]",
           "[backdrop-filter:blur(6px)]",
           isPrimary ? "text-white/90" : "text-neutral-900",
           className,
@@ -38,9 +37,7 @@ const SoftPillButton = React.forwardRef<HTMLButtonElement, SoftPillButtonProps>(
           }}
         >
           {!isPrimary && (
-            <span
-              className="absolute inset-0 transition duration-200 bg-black/[0.06] group-hover:bg-black/[0.03] group-active:bg-black/[0.07] group-active:duration-[50ms]"
-            />
+            <span className="absolute inset-0 transition duration-200 bg-black/[0.06] group-hover:bg-black/[0.03] group-active:bg-black/[0.07] group-active:duration-[50ms]" />
           )}
           <span
             className="absolute inset-0 transition duration-200 group-active:opacity-0 group-active:duration-[50ms]"

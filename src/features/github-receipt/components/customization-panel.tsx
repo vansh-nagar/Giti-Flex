@@ -113,7 +113,6 @@ export function CustomizationPanel({
         width: { duration: 0.4, ease: [0.32, 0.72, 0, 1] },
         opacity: { duration: 0.25, ease: [0.32, 0.72, 0, 1] },
       }}
-      style={{ overflow: "hidden" }}
       className="sticky top-4 self-start shrink-0"
     >
       <motion.div
@@ -174,13 +173,6 @@ export function CustomizationPanel({
               </motion.span>
             </Button>
           </div>
-        </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          className="mb-2 text-sm text-muted-foreground underline"
-        >
-          Themes & Backgrounds
         </motion.div>
 
         <motion.div
@@ -293,43 +285,47 @@ export function CustomizationPanel({
               style={{ textDecoration: "none" }}
               className="mb-2 block"
             >
-              <Button className="w-full" variant="outline">
-                <GithubLogo size={16} />
-                View Profile
-              </Button>
+              <SoftPillButton variant="secondary" className="w-full">
+                <span className="inline-flex items-center justify-center gap-2">
+                  <GithubLogo size={16} />
+                  View Profile
+                </span>
+              </SoftPillButton>
             </motion.a>
           </motion.div>
 
           <motion.div variants={itemVariants} className="mb-3">
-            <Button
-              className="w-full"
-              variant="outline"
+            <SoftPillButton
+              variant="secondary"
               onClick={handleCopyShareLink}
+              className="w-full"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={copied ? "check" : "link"}
-                  initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
-                  transition={iconSwapTransition}
-                  className="inline-flex"
-                >
-                  {copied ? <Check size={16} /> : <Link2 size={16} />}
-                </motion.span>
-              </AnimatePresence>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={copied ? "copied-text" : "link-text"}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.16 }}
-                >
-                  {copied ? "Link copied!" : "Copy Share Link"}
-                </motion.span>
-              </AnimatePresence>
-            </Button>
+              <span className="inline-flex items-center justify-center gap-2">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={copied ? "check" : "link"}
+                    initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+                    transition={iconSwapTransition}
+                    className="inline-flex"
+                  >
+                    {copied ? <Check size={16} /> : <Link2 size={16} />}
+                  </motion.span>
+                </AnimatePresence>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={copied ? "copied-text" : "link-text"}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.16 }}
+                  >
+                    {copied ? "Link copied!" : "Copy Share Link"}
+                  </motion.span>
+                </AnimatePresence>
+              </span>
+            </SoftPillButton>
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">
