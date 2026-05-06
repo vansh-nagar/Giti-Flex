@@ -1,5 +1,12 @@
-import { GithubReceiptHome } from "@/features/github-receipt/github-receipt-home";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+import { GithubReceiptHome } from "@/features/github-receipt/github-receipt-home";
+import { getAuthedGithubLogin } from "@/lib/auth";
+
+export default async function Page() {
+  const login = await getAuthedGithubLogin();
+  if (login) {
+    redirect(`/${encodeURIComponent(login)}`);
+  }
   return <GithubReceiptHome />;
 }

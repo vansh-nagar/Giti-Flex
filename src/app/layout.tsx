@@ -44,7 +44,7 @@ export default function RootLayout({
               </SignInButton>
             </Show>
             <Show when="signed-in">
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             </Show>
           </header>
           {children}

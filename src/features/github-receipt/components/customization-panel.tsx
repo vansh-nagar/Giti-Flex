@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { Check, Globe, Link2, Moon, Palette, Sun, X } from "lucide-react";
+import {
+  Check,
+  Globe,
+  Link2,
+  Moon,
+  Palette,
+  Sun,
+  Trophy,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 
 import DownloadIcon from "./download-icon";
 
@@ -294,7 +304,7 @@ export function CustomizationPanel({
             </motion.a>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mb-3">
+          <motion.div variants={itemVariants} className="mb-2">
             <SoftPillButton
               variant="secondary"
               onClick={handleCopyShareLink}
@@ -328,6 +338,17 @@ export function CustomizationPanel({
             </SoftPillButton>
           </motion.div>
 
+          <motion.div variants={itemVariants} className="mb-2">
+            <Link href="/leaderboard">
+              <SoftPillButton variant="secondary" className="w-full">
+                <span className="inline-flex items-center justify-center gap-2">
+                  <Trophy size={16} />
+                  Leaderboard
+                </span>
+              </SoftPillButton>
+            </Link>
+          </motion.div>
+
           <motion.div variants={itemVariants} className="flex gap-2">
             <BookDemoButton onClick={onOpenVersus} className="flex-1 w-auto">
               Versus Battle
@@ -340,7 +361,7 @@ export function CustomizationPanel({
               onMouseLeave={() => setDownloadHovered(false)}
               className="flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <span className="inline-flex items-center justify-center gap-2">
+              <span className="inline-flex items-center justify-center">
                 <DownloadIcon
                   size={28}
                   className="size-7"

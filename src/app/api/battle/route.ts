@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthedGithubLogin } from "@/lib/auth";
 
 const POINTS_PER_BATTLE = 10;
 
@@ -8,16 +8,6 @@ export const runtime = "nodejs";
 
 function isLogin(value: unknown): value is string {
   return typeof value === "string" && /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(value);
-}
-
-async function getAuthedGithubLogin(): Promise<string | null> {
-  const { userId } = await auth();
-  if (!userId) return null;
-  const user = await currentUser();
-  const githubAccount = user?.externalAccounts?.find(
-    (account) => account.provider === "oauth_github",
-  );
-  return githubAccount?.username ?? null;
 }
 
 export async function POST(req: Request) {
