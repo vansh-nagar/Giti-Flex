@@ -15,7 +15,7 @@ const SoftPillButton = React.forwardRef<HTMLButtonElement, SoftPillButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "group relative block rounded-full text-center px-5 py-1.5 text-[13px] font-medium tracking-tight transition-[transform] duration-200 active:scale-[0.99] active:duration-[50ms]",
+          "group relative rounded-full flex justify-center items-center text-center px-5 py-1.5 text-[13px] font-medium tracking-tight transition-[transform] duration-200 active:scale-[0.99] active:duration-[50ms]",
           "[backdrop-filter:blur(6px)]",
           isPrimary ? "text-white/90" : "text-neutral-900",
           className,
@@ -80,7 +80,9 @@ const SoftPillButton = React.forwardRef<HTMLButtonElement, SoftPillButtonProps>(
             }}
           />
         </span>
-        <span className="relative">{children}</span>
+        <span className="relative inline-flex items-center justify-center leading-none">
+          {children}
+        </span>
       </button>
     );
   },

@@ -17,7 +17,6 @@ import Link from "next/link";
 import DownloadIcon from "./download-icon";
 
 import BookDemoButton from "@/components/ui/book-demo-button";
-import { Button } from "@/components/ui/button";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { cn } from "@/lib/utils";
 import GithubLogo from "@/components/logo/github";
@@ -140,11 +139,11 @@ export function CustomizationPanel({
             Customize
           </h3>
           <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
+            <SoftPillButton
+              variant="secondary"
               onClick={toggleTheme}
               title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+              className="size-9 px-0! py-0!"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
@@ -158,8 +157,12 @@ export function CustomizationPanel({
                   {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
                 </motion.span>
               </AnimatePresence>
-            </Button>
-            <Button variant="outline" size="icon" onClick={onClose}>
+            </SoftPillButton>
+            <SoftPillButton
+              variant="secondary"
+              onClick={onClose}
+              className="size-9 px-0! py-0!"
+            >
               <motion.span
                 whileHover={{ rotate: 90 }}
                 transition={{ type: "spring", stiffness: 400, damping: 18 }}
@@ -167,7 +170,7 @@ export function CustomizationPanel({
               >
                 <X size={14} />
               </motion.span>
-            </Button>
+            </SoftPillButton>
           </div>
         </motion.div>
 
