@@ -9,13 +9,13 @@ import { backgroundOptions } from "./constants";
 import { CustomizationPanel } from "./components/customization-panel";
 import { ExportDialog } from "./components/export-dialog";
 import { GithubReceiptSearch } from "./components/github-receipt-search";
+import { OpponentDeck } from "./components/opponent-deck";
 import { ReceiptCard } from "./components/receipt-card";
 import { VersusDialog } from "./components/versus-dialog";
 import { VersusView } from "./components/versus-view";
 import { githubReceiptStyles } from "./styles";
 import type { BackgroundItem, GitHubRepo, GitHubUser } from "./types";
 import {
-  fetchRandomGithubLogin,
   getDefaultCustomization,
   getReceiptThemeStyles,
   getTopRepos,
@@ -55,6 +55,7 @@ export function GithubReceipt({
   const [versusLoading, setVersusLoading] = useState(false);
   const [versusError, setVersusError] = useState<string | null>(null);
   const [autoOpenVersus, setAutoOpenVersus] = useState(false);
+  const [deckOpen, setDeckOpen] = useState(false);
   const versusAutoTriggered = useRef(false);
   const versusDialogAutoOpened = useRef(false);
 
@@ -69,7 +70,7 @@ export function GithubReceipt({
     setError(null);
 
     Promise.all([
-      fetch(`https://api.github.com/users/${username}`).then((response) => {
+      fetch(`/api/github/users/${username}`).then((response) => {
         if (!response.ok) {
           throw new Error("User not found");
         }
@@ -77,7 +78,7 @@ export function GithubReceipt({
         return response.json() as Promise<GitHubUser>;
       }),
       fetch(
-        `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`,
+        `/api/github/users/${username}/repos?per_page=100&sort=updated`,
       ).then((response) => {
         if (!response.ok) {
           throw new Error("Could not fetch repositories");
@@ -109,12 +110,12 @@ export function GithubReceipt({
     setVersusError(null);
 
     Promise.all([
-      fetch(`https://api.github.com/users/${opponentLogin}`).then((response) => {
+      fetch(`/api/github/users/${opponentLogin}`).then((response) => {
         if (!response.ok) throw new Error("Opponent not found");
         return response.json() as Promise<GitHubUser>;
       }),
       fetch(
-        `https://api.github.com/users/${opponentLogin}/repos?per_page=100&sort=updated`,
+        `/api/github/users/${opponentLogin}/repos?per_page=100&sort=updated`,
       ).then((response) => {
         if (!response.ok) throw new Error("Could not fetch opponent repos");
         return response.json() as Promise<GitHubRepo[]>;
@@ -139,21 +140,20 @@ export function GithubReceipt({
     fetchVersus(trimmed);
   }, [fetchVersus, versusInput, versusLoading]);
 
-  const handleVersusRandom = useCallback(async () => {
-    if (versusLoading) return;
+  const handleOpenDeck = useCallback(() => {
     setVersusError(null);
-    setVersusLoading(true);
-    try {
-      const login = await fetchRandomGithubLogin();
+    setVersusDialogOpen(false);
+    setDeckOpen(true);
+  }, []);
+
+  const handleDeckPick = useCallback(
+    (login: string) => {
+      setDeckOpen(false);
       setVersusInput(login);
-      setVersusLoading(false);
       fetchVersus(login);
-    } catch (randomError) {
-      console.error("Failed to find random opponent:", randomError);
-      setVersusError("Couldn't find a random opponent. Try again.");
-      setVersusLoading(false);
-    }
-  }, [fetchVersus, versusLoading]);
+    },
+    [fetchVersus],
+  );
 
   const handleExitVersus = useCallback(() => {
     setVersusUser(null);
@@ -280,7 +280,7 @@ export function GithubReceipt({
               opponent={versusUser}
               opponentRepos={versusRepos}
               onClose={handleExitVersus}
-              onRandomBattle={handleVersusRandom}
+              onBrowseOpponents={handleOpenDeck}
             />
           </motion.div>
         ) : (
@@ -372,7 +372,16 @@ export function GithubReceipt({
         onInputChange={setVersusInput}
         onOpenChange={setVersusDialogOpen}
         onSubmit={handleVersusSubmit}
-        onRandomBattle={handleVersusRandom}
+        onBrowseOpponents={handleOpenDeck}
+      />
+
+      <OpponentDeck
+        open={deckOpen}
+        selfLogin={user.login}
+        selfUser={user}
+        selfFollowers={user.followers}
+        onClose={() => setDeckOpen(false)}
+        onPick={handleDeckPick}
       />
     </>
   );

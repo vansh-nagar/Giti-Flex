@@ -15,9 +15,15 @@ export async function getAuthedGithubLogin(): Promise<string | null> {
 
   if (githubAccount.providerUserId) {
     try {
+      const headers: Record<string, string> = {
+        Accept: "application/vnd.github+json",
+      };
+      if (process.env.GITHUB_TOKEN) {
+        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+      }
       const response = await fetch(
         `https://api.github.com/user/${githubAccount.providerUserId}`,
-        { headers: { Accept: "application/vnd.github+json" } },
+        { headers },
       );
       if (response.ok) {
         const data = (await response.json()) as { login?: string };

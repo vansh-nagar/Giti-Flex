@@ -1,6 +1,6 @@
 "use client";
 
-import { Shuffle, Sword, Users } from "lucide-react";
+import { Layers, Sword, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +22,7 @@ interface VersusDialogProps {
   onInputChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
   onSubmit: () => void;
-  onRandomBattle: () => void;
+  onBrowseOpponents: () => void;
 }
 
 export function VersusDialog({
@@ -33,7 +33,7 @@ export function VersusDialog({
   onInputChange,
   onOpenChange,
   onSubmit,
-  onRandomBattle,
+  onBrowseOpponents,
 }: VersusDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -77,11 +77,11 @@ export function VersusDialog({
               variant="outline"
               size="sm"
               className="mt-1 w-full"
-              onClick={onRandomBattle}
+              onClick={onBrowseOpponents}
               disabled={loading}
             >
-              <Shuffle size={14} />
-              Battle a random GitHub user
+              <Layers size={14} />
+              Browse opponents
             </Button>
           </div>
 

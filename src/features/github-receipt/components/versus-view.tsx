@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Check, Crown, Link2, Shuffle, Skull, Star, Sword, X } from "lucide-react";
+import { Check, Crown, Layers, Link2, Skull, Star, Sword, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ interface VersusViewProps {
   opponent: GitHubUser;
   opponentRepos: GitHubRepo[];
   onClose: () => void;
-  onRandomBattle: () => void;
+  onBrowseOpponents: () => void;
 }
 
 function calcScore(user: GitHubUser, repos: GitHubRepo[]) {
@@ -34,7 +34,7 @@ export function VersusView({
   opponent,
   opponentRepos,
   onClose,
-  onRandomBattle,
+  onBrowseOpponents,
 }: VersusViewProps) {
   const userRef = useRef<HTMLElement>(null);
   const oppRef = useRef<HTMLElement>(null);
@@ -230,11 +230,11 @@ export function VersusView({
 
         <Button
           variant="outline"
-          onClick={onRandomBattle}
+          onClick={onBrowseOpponents}
           className="mt-4"
         >
-          <Shuffle size={16} />
-          Battle a random GitHub user
+          <Layers size={16} />
+          Browse opponents
         </Button>
       </motion.div>
     </div>

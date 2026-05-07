@@ -92,14 +92,39 @@ export function getDisplayBlog(blog: string | null) {
   return blog.replace(/^https?:\/\//, "");
 }
 
-export async function fetchRandomGithubLogin(): Promise<string> {
-  const since = Math.floor(Math.random() * 50_000_000);
+export async function fetchOpponentLogins(
+  count: number,
+  minFollowers: number,
+  exclude?: string,
+): Promise<string[]> {
+  const page = Math.floor(Math.random() * 10) + 1;
+  const order = Math.random() < 0.5 ? "asc" : "desc";
+  const query = `followers:>=${minFollowers} type:user`;
   const response = await fetch(
-    `https://api.github.com/users?since=${since}&per_page=30`,
+    `/api/github/search/users?q=${encodeURIComponent(query)}&per_page=100&page=${page}&sort=joined&order=${order}`,
   );
-  if (!response.ok) throw new Error("Failed to fetch random user list");
-  const list = (await response.json()) as { login: string; type: string }[];
-  const real = list.filter((entry) => entry.type === "User");
-  if (real.length === 0) throw new Error("No real users in this slice");
-  return real[Math.floor(Math.random() * real.length)].login;
+  if (!response.ok) {
+    const remaining = response.headers.get("x-ratelimit-remaining");
+    if (response.status === 403 && remaining === "0") {
+      throw new Error(
+        "GitHub rate limit hit. Wait a minute and try again.",
+      );
+    }
+    throw new Error(
+      `Failed to fetch opponents (HTTP ${response.status})`,
+    );
+  }
+  const data = (await response.json()) as {
+    items: { login: string; type: string }[];
+  };
+  const excludeLower = exclude?.toLowerCase();
+  const real = (data.items ?? []).filter(
+    (entry) =>
+      entry.type === "User" && entry.login.toLowerCase() !== excludeLower,
+  );
+  for (let i = real.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [real[i], real[j]] = [real[j], real[i]];
+  }
+  return real.slice(0, count).map((entry) => entry.login);
 }

@@ -136,26 +136,12 @@ export function CustomizationPanel({
           variants={itemVariants}
           className="flex items-center justify-between mb-2"
         >
-          <h3 className="flex items-center gap-1 text-base">
-            <motion.span
-              initial={{ rotate: -60, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 380,
-                damping: 22,
-                delay: 0.25,
-              }}
-              whileHover={{ rotate: 18, scale: 1.1 }}
-              className="inline-flex"
-            >
-              <Palette size={16} />
-            </motion.span>
+          <h3 className="flex items-center gap-1 text-base font-semibold">
             Customize
           </h3>
           <div className="flex items-center gap-1">
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
               onClick={toggleTheme}
               title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
@@ -173,7 +159,7 @@ export function CustomizationPanel({
                 </motion.span>
               </AnimatePresence>
             </Button>
-            <Button variant="ghost" size="icon" onClick={onClose}>
+            <Button variant="outline" size="icon" onClick={onClose}>
               <motion.span
                 whileHover={{ rotate: 90 }}
                 transition={{ type: "spring", stiffness: 400, damping: 18 }}

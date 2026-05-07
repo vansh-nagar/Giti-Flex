@@ -1,10 +1,6 @@
 "use client";
 
-import BookDemoButton from "@/components/ui/book-demo-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Spinner } from "@/components/ui/spinner";
-import GithubLogo from "@/components/logo/github";
+import { RoseCurveLoader } from "@/components/ui/rose-curve-loader";
 
 interface GithubReceiptSearchProps {
   error: string | null;
@@ -15,95 +11,10 @@ interface GithubReceiptSearchProps {
   onSubmitVersus: () => void;
 }
 
-export function GithubReceiptSearch({
-  error,
-  inputUsername,
-  loading,
-  onInputUsernameChange,
-  onSubmit,
-  onSubmitVersus,
-}: GithubReceiptSearchProps) {
+export function GithubReceiptSearch({}: GithubReceiptSearchProps) {
   return (
-    <div
-      className="gh-receipt"
-      style={{
-        width: "min(95%, 425px)",
-        margin: "4em auto",
-        textAlign: "center",
-        fontFamily:
-          "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      }}
-    >
-      <div
-        className="flex flex-col justify-center items-center"
-        style={{ marginBottom: "2em" }}
-      >
-        <GithubLogo />
-        <h1
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "#111",
-            marginBottom: "0.5em",
-            marginTop: "0.5em",
-          }}
-        >
-          GitHub Receipt
-        </h1>
-        <p style={{ color: "#6b7280", fontSize: "0.9rem" }}>
-          Generate cool receipts for your GitHub profile <br /> and share them
-          with your friends!
-        </p>
-      </div>
-
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (inputUsername.trim()) {
-            onSubmit();
-          }
-        }}
-      >
-        <div className="space-y-2">
-          <div className="flex flex-col gap-2 text-left">
-            <Label htmlFor="username">GitHub Username</Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="e.g. vansh-nagar"
-              value={inputUsername}
-              onChange={(event) => onInputUsernameChange(event.target.value)}
-              disabled={loading}
-            />
-          </div>
-          {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-          {loading ? (
-            <div className="flex h-11 w-full items-center justify-center">
-              <Spinner />
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              <BookDemoButton
-                type="submit"
-                disabled={!inputUsername.trim()}
-                className="w-full"
-              >
-                Generate Receipt
-              </BookDemoButton>
-              <BookDemoButton
-                type="button"
-                disabled={!inputUsername.trim()}
-                className="w-full"
-                onClick={() => {
-                  if (inputUsername.trim()) onSubmitVersus();
-                }}
-              >
-                Versus Battle
-              </BookDemoButton>
-            </div>
-          )}
-        </div>
-      </form>
+    <div className=" h-screen w-full flex justify-center items-center">
+      <RoseCurveLoader className="size-40 text-zinc-900" />
     </div>
   );
 }
