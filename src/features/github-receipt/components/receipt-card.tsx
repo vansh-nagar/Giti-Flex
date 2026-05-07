@@ -187,7 +187,12 @@ export function ReceiptCard({
                 <motion.li
                   key={repo.id}
                   className="gh-receipt__repo"
-                  style={{ borderBottom: `1px dashed ${borderColor}` }}
+                  style={{
+                    borderBottom:
+                      index === repos.length - 1
+                        ? "none"
+                        : `1px dashed ${borderColor}`,
+                  }}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{

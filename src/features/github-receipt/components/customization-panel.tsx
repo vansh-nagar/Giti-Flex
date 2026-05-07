@@ -9,10 +9,8 @@ import {
   Moon,
   Palette,
   Sun,
-  Trophy,
   X,
 } from "lucide-react";
-import Link from "next/link";
 
 import DownloadIcon from "./download-icon";
 
@@ -324,17 +322,6 @@ export function CustomizationPanel({
                 </AnimatePresence>
               </span>
             </SoftPillButton>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="mb-2">
-            <Link href="/leaderboard">
-              <SoftPillButton variant="secondary" className="w-full">
-                <span className="inline-flex items-center justify-center gap-2">
-                  <Trophy size={16} />
-                  Leaderboard
-                </span>
-              </SoftPillButton>
-            </Link>
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">

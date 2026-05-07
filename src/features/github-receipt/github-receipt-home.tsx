@@ -19,19 +19,16 @@ export function GithubReceiptHome() {
         className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,theme(colors.zinc.200/.4)_1px,transparent_1px),linear-gradient(to_bottom,theme(colors.zinc.200/.4)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)] dark:bg-[linear-gradient(to_right,theme(colors.zinc.800/.5)_1px,transparent_1px),linear-gradient(to_bottom,theme(colors.zinc.800/.5)_1px,transparent_1px)]"
       />
 
-      <Link
-        href="/leaderboard"
-        className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur transition-colors hover:text-foreground sm:right-6 sm:top-6"
-      >
-        <Trophy size={14} />
-        Leaderboard
-      </Link>
-
       <div className="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
+        <SoftPillButton
+          variant="secondary"
+          type="button"
+          tabIndex={-1}
+          className="mb-6 cursor-default px-3! py-1! text-xs"
+        >
           <GithubLogo size={14} />
           Generate a printable GitHub receipt
-        </span>
+        </SoftPillButton>
 
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
           Your GitHub profile,
@@ -47,16 +44,19 @@ export function GithubReceiptHome() {
         </p>
 
         <Show when="signed-out">
-          <div className="mt-10 flex flex-col items-center gap-3">
+          <div className="mt-10 flex flex-row items-center gap-3">
             <SignInButton mode="modal">
               <SoftPillButton variant="primary" className="h-11 px-6 text-sm">
                 <GithubLogo size={16} color="#ffffff" />
                 Sign in with GitHub
               </SoftPillButton>
             </SignInButton>
-            <p className="text-xs text-muted-foreground">
-              Auth is required so leaderboard scores stay yours.
-            </p>
+            <Link href="/leaderboard">
+              <SoftPillButton variant="secondary" className="h-11 px-6 text-sm">
+                <Trophy size={16} />
+                Leaderboard
+              </SoftPillButton>
+            </Link>
           </div>
         </Show>
 

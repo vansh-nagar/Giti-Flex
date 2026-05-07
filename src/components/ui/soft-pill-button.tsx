@@ -80,7 +80,7 @@ const SoftPillButton = React.forwardRef<HTMLButtonElement, SoftPillButtonProps>(
             }}
           />
         </span>
-        <span className="relative inline-flex items-center justify-center leading-none">
+        <span className="relative inline-flex items-center justify-center gap-2 leading-none">
           {children}
         </span>
       </button>

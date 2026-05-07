@@ -3,7 +3,16 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { Check, Crown, Layers, Link2, Skull, Star, Sword, X } from "lucide-react";
+import {
+  Check,
+  Crown,
+  Layers,
+  Link2,
+  Skull,
+  Star,
+  Sword,
+  X,
+} from "lucide-react";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { cn } from "@/lib/utils";
@@ -185,9 +194,6 @@ export function VersusView({
         }}
         className="flex flex-col items-center gap-3"
       >
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Share this battle
-        </p>
         <div className="flex items-center gap-2">
           <ShareIconButton label="Share on X" onClick={handleShareX}>
             <XLogo />
@@ -204,10 +210,7 @@ export function VersusView({
           >
             <LinkedInLogo />
           </ShareIconButton>
-          <ShareIconButton
-            label="Share on Reddit"
-            onClick={handleShareReddit}
-          >
+          <ShareIconButton label="Share on Reddit" onClick={handleShareReddit}>
             <RedditLogo />
           </ShareIconButton>
           <ShareIconButton

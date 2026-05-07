@@ -9,7 +9,7 @@ import {
   useTransform,
   type PanInfo,
 } from "motion/react";
-import { ExternalLink, Sword, Users, X } from "lucide-react";
+import { Sword, Users, X } from "lucide-react";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { Spinner } from "@/components/ui/spinner";
@@ -416,17 +416,6 @@ function DeckCard({ slot, index, isTop, onSkip, onFight }: DeckCardProps) {
               value={slot.user.followers.toLocaleString()}
               label="followers"
             />
-            <a
-              href={slot.user.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(event) => event.stopPropagation()}
-              onPointerDown={(event) => event.stopPropagation()}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              View on GitHub
-              <ExternalLink size={12} />
-            </a>
           </div>
 
           {isTop && (
@@ -459,12 +448,17 @@ interface StatProps {
 
 function Stat({ icon, value, label }: StatProps) {
   return (
-    <div className="flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-3 py-1.5">
+    <SoftPillButton
+      variant="secondary"
+      type="button"
+      tabIndex={-1}
+      className="cursor-default px-3! py-1.5! text-sm"
+    >
       {icon}
-      <span className="font-mono text-sm font-bold tabular-nums">{value}</span>
+      <span className="font-mono font-bold tabular-nums">{value}</span>
       <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
         {label}
       </span>
-    </div>
+    </SoftPillButton>
   );
 }

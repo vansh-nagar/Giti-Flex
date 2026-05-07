@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Palette } from "lucide-react";
 
+import { RoseCurveLoader } from "@/components/ui/rose-curve-loader";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { backgroundOptions } from "./constants";
 import { CustomizationPanel } from "./components/customization-panel";
@@ -384,6 +385,21 @@ export function GithubReceipt({
         onClose={() => setDeckOpen(false)}
         onPick={handleDeckPick}
       />
+
+      <AnimatePresence>
+        {versusLoading && !versusUser && !versusDialogOpen && (
+          <motion.div
+            key="versus-loading"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-60 flex items-center justify-center bg-background"
+          >
+            <RoseCurveLoader className="size-40 text-zinc-900" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
