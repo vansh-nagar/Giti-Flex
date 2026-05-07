@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Trophy } from "lucide-react";
 import { Show, SignInButton } from "@clerk/nextjs";
 
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import GithubLogo from "@/components/logo/github";
 
 export function GithubReceiptHome() {
@@ -49,10 +49,10 @@ export function GithubReceiptHome() {
         <Show when="signed-out">
           <div className="mt-10 flex flex-col items-center gap-3">
             <SignInButton mode="modal">
-              <Button className="h-11 px-6 text-sm">
+              <SoftPillButton variant="primary" className="h-11 px-6 text-sm">
                 <GithubLogo size={16} color="#ffffff" />
                 Sign in with GitHub
-              </Button>
+              </SoftPillButton>
             </SignInButton>
             <p className="text-xs text-muted-foreground">
               Auth is required so leaderboard scores stay yours.

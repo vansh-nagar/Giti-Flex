@@ -11,7 +11,7 @@ import {
 } from "motion/react";
 import { ExternalLink, Sword, Users, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
@@ -187,14 +187,14 @@ export function OpponentDeck({
         >
           <div className="flex w-full max-w-md items-center justify-between gap-3">
             <SelfCard user={selfUser} followers={selfFollowers} />
-            <Button
-              variant="outline"
-              size="icon"
+            <SoftPillButton
+              variant="secondary"
               onClick={onClose}
               aria-label="Close opponent deck"
+              className="size-9 px-0! py-0!"
             >
               <X size={16} />
-            </Button>
+            </SoftPillButton>
           </div>
 
           <div className="relative flex h-105 w-full max-w-sm items-center justify-center">
@@ -210,9 +210,12 @@ export function OpponentDeck({
                   <p className="text-sm text-muted-foreground">
                     {refillError ?? "Out of opponents."}
                   </p>
-                  <Button variant="outline" onClick={handleManualRefill}>
+                  <SoftPillButton
+                    variant="secondary"
+                    onClick={handleManualRefill}
+                  >
                     Find more
-                  </Button>
+                  </SoftPillButton>
                 </motion.div>
               )}
 
@@ -244,25 +247,24 @@ export function OpponentDeck({
 
           <div className="flex w-full max-w-sm flex-col items-center gap-3">
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="lg"
-                className="size-16 rounded-full"
+              <SoftPillButton
+                variant="secondary"
+                className="size-16 px-0! py-0!"
                 onClick={() => top && handleSkip(top.id)}
                 disabled={!top}
                 aria-label="Skip opponent"
               >
                 <X size={26} />
-              </Button>
-              <Button
-                size="lg"
-                className="size-16 rounded-full"
+              </SoftPillButton>
+              <SoftPillButton
+                variant="primary"
+                className="size-16 px-0! py-0!"
                 onClick={() => top && handleFight(top)}
                 disabled={!topReady}
                 aria-label="Challenge opponent"
               >
                 <Sword size={24} />
-              </Button>
+              </SoftPillButton>
             </div>
             <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Swipe right to fight • left to skip
@@ -384,9 +386,9 @@ function DeckCard({ slot, index, isTop, onSkip, onFight }: DeckCardProps) {
       {slot.status === "error" && (
         <div className="flex h-full w-full flex-col items-center justify-center gap-3 px-6 text-center text-muted-foreground">
           <p className="text-sm">Couldn&apos;t load this user.</p>
-          <Button variant="outline" size="sm" onClick={onSkip}>
+          <SoftPillButton variant="secondary" onClick={onSkip}>
             Skip
-          </Button>
+          </SoftPillButton>
         </div>
       )}
 

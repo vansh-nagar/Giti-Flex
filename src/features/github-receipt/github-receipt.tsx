@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Palette } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import { backgroundOptions } from "./constants";
 import { CustomizationPanel } from "./components/customization-panel";
 import { ExportDialog } from "./components/export-dialog";
@@ -301,14 +301,15 @@ export function GithubReceipt({
                   transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                   className="fixed top-4 right-4 z-50"
                 >
-                  <Button
-                    variant="default"
+                  <SoftPillButton
+                    className="gap-2 flex"
+                    variant="primary"
                     onClick={() => setCustomizing(true)}
                     title="Open customizer"
                   >
                     <Palette size={16} />
                     Customize
-                  </Button>
+                  </SoftPillButton>
                 </motion.div>
               )}
             </AnimatePresence>

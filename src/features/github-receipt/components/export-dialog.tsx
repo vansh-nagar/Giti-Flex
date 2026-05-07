@@ -2,7 +2,7 @@
 
 import { Download } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import {
   Dialog,
   DialogContent,
@@ -84,13 +84,13 @@ export function ExportDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <SoftPillButton variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
-          </Button>
-          <Button onClick={onExport}>
+          </SoftPillButton>
+          <SoftPillButton variant="primary" onClick={onExport}>
             <Download size={18} />
             Export Image
-          </Button>
+          </SoftPillButton>
         </DialogFooter>
       </DialogContent>
     </Dialog>

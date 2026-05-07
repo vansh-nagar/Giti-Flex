@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Check, Crown, Layers, Link2, Skull, Star, Sword, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import { cn } from "@/lib/utils";
 
 import type { GitHubRepo, GitHubUser } from "../types";
@@ -115,10 +115,10 @@ export function VersusView({
         transition={{ delay: 1.5, duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
         className="fixed top-4 right-4 z-50"
       >
-        <Button onClick={onClose} variant="default">
+        <SoftPillButton onClick={onClose} variant="primary">
           <X size={16} />
           Exit Versus
-        </Button>
+        </SoftPillButton>
       </motion.div>
 
       <div className="flex w-full items-center justify-center gap-6 px-4">
@@ -228,14 +228,14 @@ export function VersusView({
           </ShareIconButton>
         </div>
 
-        <Button
-          variant="outline"
+        <SoftPillButton
+          variant="secondary"
           onClick={onBrowseOpponents}
           className="mt-4"
         >
           <Layers size={16} />
           Browse opponents
-        </Button>
+        </SoftPillButton>
       </motion.div>
     </div>
   );
@@ -254,16 +254,15 @@ function ShareIconButton({ label, onClick, children }: ShareIconButtonProps) {
       whileTap={{ scale: 0.92 }}
       transition={{ type: "spring", stiffness: 420, damping: 22 }}
     >
-      <Button
-        variant="outline"
-        size="icon"
+      <SoftPillButton
+        variant="secondary"
         onClick={onClick}
         title={label}
         aria-label={label}
-        className="size-10"
+        className="size-10 px-0! py-0!"
       >
         {children}
-      </Button>
+      </SoftPillButton>
     </motion.div>
   );
 }

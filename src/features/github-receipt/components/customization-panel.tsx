@@ -16,7 +16,6 @@ import Link from "next/link";
 
 import DownloadIcon from "./download-icon";
 
-import BookDemoButton from "@/components/ui/book-demo-button";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { cn } from "@/lib/utils";
 import GithubLogo from "@/components/logo/github";
@@ -339,9 +338,13 @@ export function CustomizationPanel({
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">
-            <BookDemoButton onClick={onOpenVersus} className="flex-1 w-auto">
+            <SoftPillButton
+              variant="secondary"
+              onClick={onOpenVersus}
+              className="flex-1"
+            >
               Versus Battle
-            </BookDemoButton>
+            </SoftPillButton>
             <SoftPillButton
               variant="primary"
               onClick={onOpenExport}

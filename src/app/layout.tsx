@@ -6,6 +6,7 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/nextjs";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -38,9 +39,9 @@ export default function RootLayout({
           <header className="fixed left-4 top-4 z-50 flex items-center gap-2">
             <Show when="signed-out">
               <SignInButton mode="modal">
-                <button className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground backdrop-blur transition-colors hover:bg-background">
+                <SoftPillButton variant="secondary">
                   Sign in with GitHub
-                </button>
+                </SoftPillButton>
               </SignInButton>
             </Show>
             <Show when="signed-in">

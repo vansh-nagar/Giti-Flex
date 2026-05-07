@@ -2,7 +2,7 @@
 
 import { Layers, Sword, Users } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 import {
   Dialog,
   DialogContent,
@@ -72,32 +72,32 @@ export function VersusDialog({
               autoCorrect="off"
               spellCheck={false}
             />
-            <Button
+            <SoftPillButton
               type="button"
-              variant="outline"
-              size="sm"
+              variant="secondary"
               className="mt-1 w-full"
               onClick={onBrowseOpponents}
               disabled={loading}
             >
               <Layers size={14} />
               Browse opponents
-            </Button>
+            </SoftPillButton>
           </div>
 
           {error && <p className="text-sm font-medium text-red-600">{error}</p>}
 
           <DialogFooter>
-            <Button
+            <SoftPillButton
               type="button"
-              variant="outline"
+              variant="secondary"
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
               Cancel
-            </Button>
-            <Button
+            </SoftPillButton>
+            <SoftPillButton
               type="submit"
+              variant="primary"
               disabled={loading || !inputUsername.trim()}
             >
               {loading ? (
@@ -108,7 +108,7 @@ export function VersusDialog({
                   Start Battle
                 </>
               )}
-            </Button>
+            </SoftPillButton>
           </DialogFooter>
         </form>
       </DialogContent>

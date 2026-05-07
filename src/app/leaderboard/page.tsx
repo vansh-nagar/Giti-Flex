@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 import GithubLogo from "@/components/logo/github";
-import { Button } from "@/components/ui/button";
+import SoftPillButton from "@/components/ui/soft-pill-button";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -56,9 +56,9 @@ export default async function LeaderboardPage() {
           </p>
           <div className="mt-6 flex gap-2">
             <Link href="/">
-              <Button variant="outline" size="sm">
+              <SoftPillButton variant="secondary">
                 Build a receipt
-              </Button>
+              </SoftPillButton>
             </Link>
           </div>
         </div>
