@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getAuthedGithubLogin } from "@/lib/auth";
+
+type TxClient = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
 
 const POINTS_PER_BATTLE = 10;
 
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
   const authedIsWinner = authedLower === winnerLower;
 
   try {
-    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    const result = await prisma.$transaction(async (tx: TxClient) => {
       await tx.player.upsert({
         where: { login: authedLogin },
         create: { login: authedLogin },
