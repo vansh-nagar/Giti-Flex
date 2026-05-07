@@ -2,18 +2,12 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import {
-  Check,
-  Globe,
-  Link2,
-  Moon,
-  Palette,
-  Sun,
-  X,
-} from "lucide-react";
+import { Check, Globe, Link2, Moon, Sun, X } from "lucide-react";
+import Link from "next/link";
 
 import DownloadIcon from "./download-icon";
 
+import BookDemoButton from "@/components/ui/book-demo-button";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { cn } from "@/lib/utils";
 import GithubLogo from "@/components/logo/github";
@@ -30,7 +24,6 @@ interface CustomizationPanelProps {
   onClose: () => void;
   onSelect: (background: BackgroundItem) => void;
   onOpenExport: () => void;
-  onOpenVersus: () => void;
 }
 
 const containerVariants: Variants = {
@@ -87,7 +80,6 @@ export function CustomizationPanel({
   onClose,
   onSelect,
   onOpenExport,
-  onOpenVersus,
 }: CustomizationPanelProps) {
   const { theme, toggleTheme } = useTheme();
   const [copied, setCopied] = useState(false);
@@ -325,39 +317,35 @@ export function CustomizationPanel({
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">
-            <SoftPillButton
-              variant="secondary"
-              onClick={onOpenVersus}
-              className="flex-1"
-            >
-              Versus Battle
-            </SoftPillButton>
+            <Link href="/find-opponent" className="flex-1">
+              <BookDemoButton className="w-full">
+                Versus Battle
+              </BookDemoButton>
+            </Link>
             <SoftPillButton
               variant="primary"
               onClick={onOpenExport}
               disabled={downloading}
               onMouseEnter={() => setDownloadHovered(true)}
               onMouseLeave={() => setDownloadHovered(false)}
-              className="flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="h-11 flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <span className="inline-flex items-center justify-center">
-                <DownloadIcon
-                  size={28}
-                  className="size-7"
-                  state={downloadHovered && !downloading ? "done" : "idle"}
-                />
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.span
-                    key={downloading ? "exporting" : "download"}
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    transition={{ duration: 0.16 }}
-                  >
-                    {downloading ? "Exporting..." : "Download"}
-                  </motion.span>
-                </AnimatePresence>
-              </span>
+              <DownloadIcon
+                size={28}
+                className="size-7"
+                state={downloadHovered && !downloading ? "done" : "idle"}
+              />
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={downloading ? "exporting" : "download"}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  transition={{ duration: 0.16 }}
+                >
+                  {downloading ? "Exporting..." : "Download"}
+                </motion.span>
+              </AnimatePresence>
             </SoftPillButton>
           </motion.div>
         </motion.section>

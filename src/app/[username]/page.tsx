@@ -25,15 +25,20 @@ export default async function UserPage({
   }
 
   const decodedUsername = decodeURIComponent(username);
-  if (decodedUsername.toLowerCase() !== authedLogin.toLowerCase()) {
-    const vsParam = vs ? `?vs=${encodeURIComponent(decodeURIComponent(vs))}` : "";
-    redirect(`/${encodeURIComponent(authedLogin)}${vsParam}`);
+  const targetLogin =
+    decodedUsername.toLowerCase() === authedLogin.toLowerCase()
+      ? decodedUsername
+      : authedLogin;
+
+  if (vs) {
+    redirect(
+      `/${encodeURIComponent(targetLogin)}/vs/${encodeURIComponent(decodeURIComponent(vs))}`,
+    );
   }
 
-  return (
-    <GithubReceipt
-      username={authedLogin}
-      versusUsername={vs ? decodeURIComponent(vs) : undefined}
-    />
-  );
+  if (decodedUsername.toLowerCase() !== authedLogin.toLowerCase()) {
+    redirect(`/${encodeURIComponent(authedLogin)}`);
+  }
+
+  return <GithubReceipt username={authedLogin} />;
 }

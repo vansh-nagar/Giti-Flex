@@ -52,12 +52,12 @@ async function loadCardData(login: string) {
       if (!response.ok) throw new Error("user");
       return response.json() as Promise<GitHubUser>;
     }),
-    fetch(
-      `/api/github/users/${login}/repos?per_page=100&sort=updated`,
-    ).then((response) => {
-      if (!response.ok) throw new Error("repos");
-      return response.json() as Promise<GitHubRepo[]>;
-    }),
+    fetch(`/api/github/users/${login}/repos?per_page=100&sort=updated`).then(
+      (response) => {
+        if (!response.ok) throw new Error("repos");
+        return response.json() as Promise<GitHubRepo[]>;
+      },
+    ),
   ]);
   const totalStars = repos.reduce(
     (sum, repo) => sum + repo.stargazers_count,
@@ -266,9 +266,6 @@ export function OpponentDeck({
                 <Sword size={24} />
               </SoftPillButton>
             </div>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-              Swipe right to fight • left to skip
-            </p>
           </div>
         </motion.div>
       )}
@@ -329,10 +326,7 @@ function DeckCard({ slot, index, isTop, onSkip, onFight }: DeckCardProps) {
     if (!isTop) return;
     const offset = info.offset.x;
     const velocity = info.velocity.x;
-    if (
-      offset > SWIPE_COMMIT_DISTANCE ||
-      velocity > SWIPE_COMMIT_VELOCITY
-    ) {
+    if (offset > SWIPE_COMMIT_DISTANCE || velocity > SWIPE_COMMIT_VELOCITY) {
       if (slot.status === "ready") {
         onFight();
       } else {

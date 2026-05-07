@@ -47,6 +47,7 @@ export function VersusView({
 }: VersusViewProps) {
   const userRef = useRef<HTMLElement>(null);
   const oppRef = useRef<HTMLElement>(null);
+  const battleSceneRef = useRef<HTMLDivElement>(null);
   const battleRecorded = useRef(false);
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -84,26 +85,33 @@ export function VersusView({
     }
   };
 
-  const handleShareX = () =>
+  const captureAndDownloadImage = async () => {
+    if (!battleSceneRef.current) return;
+    try {
+      const { toBlob } = await import("html-to-image");
+      const blob = await toBlob(battleSceneRef.current, {
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+      });
+      if (!blob) return;
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = `battle-${user.login}-vs-${opponent.login}.png`;
+      link.click();
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error("Failed to capture battle image:", error);
+    }
+  };
+
+  const handleShareX = () => {
     openShare(
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
     );
-  const handleShareFacebook = () =>
-    openShare(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-    );
-  const handleShareLinkedIn = () =>
-    openShare(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-    );
-  const handleShareReddit = () =>
-    openShare(
-      `https://reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareText)}`,
-    );
-  const handleShareWhatsApp = () =>
-    openShare(
-      `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
-    );
+    captureAndDownloadImage();
+  };
 
   const handleCopyLink = async () => {
     if (!shareUrl) return;
@@ -130,7 +138,10 @@ export function VersusView({
         </SoftPillButton>
       </motion.div>
 
-      <div className="flex w-full items-center justify-center gap-6 px-4">
+      <div
+        ref={battleSceneRef}
+        className="flex w-full items-center justify-center gap-6 bg-background px-4 py-8"
+      >
         <ContestantSide
           ref={userRef}
           side="left"
@@ -197,27 +208,6 @@ export function VersusView({
         <div className="flex items-center gap-2">
           <ShareIconButton label="Share on X" onClick={handleShareX}>
             <XLogo />
-          </ShareIconButton>
-          <ShareIconButton
-            label="Share on Facebook"
-            onClick={handleShareFacebook}
-          >
-            <FacebookLogo />
-          </ShareIconButton>
-          <ShareIconButton
-            label="Share on LinkedIn"
-            onClick={handleShareLinkedIn}
-          >
-            <LinkedInLogo />
-          </ShareIconButton>
-          <ShareIconButton label="Share on Reddit" onClick={handleShareReddit}>
-            <RedditLogo />
-          </ShareIconButton>
-          <ShareIconButton
-            label="Share on WhatsApp"
-            onClick={handleShareWhatsApp}
-          >
-            <WhatsAppLogo />
           </ShareIconButton>
           <ShareIconButton
             label={linkCopied ? "Link copied" : "Copy link"}
