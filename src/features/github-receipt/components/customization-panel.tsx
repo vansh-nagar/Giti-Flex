@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { Check, Globe, Link2, Moon, Sun, X } from "lucide-react";
+import { Check, Globe, Link2, Moon, Sun, Trophy, X } from "lucide-react";
 import Link from "next/link";
+import { UserButton } from "@clerk/nextjs";
 
 import DownloadIcon from "./download-icon";
 
@@ -128,6 +129,31 @@ export function CustomizationPanel({
             Customize
           </h3>
           <div className="flex items-center gap-1">
+            <div
+              className="size-9 inline-flex items-center justify-center rounded-full"
+              style={{
+                border: "1px solid rgba(255, 255, 255, 0.6)",
+                boxShadow:
+                  "0 12px 24px -8px rgba(0, 0, 0, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)",
+              }}
+            >
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: { width: 36, height: 36 },
+                    userButtonTrigger: {
+                      width: 36,
+                      height: 36,
+                      borderRadius: 9999,
+                      boxShadow: "none",
+                      border: "none",
+                      background: "transparent",
+                      "&:focus": { boxShadow: "none" },
+                    },
+                  },
+                }}
+              />
+            </div>
             <SoftPillButton
               variant="secondary"
               onClick={toggleTheme}
@@ -314,6 +340,15 @@ export function CustomizationPanel({
                 </AnimatePresence>
               </span>
             </SoftPillButton>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="mb-2">
+            <Link href="/leaderboard">
+              <SoftPillButton variant="secondary" className="w-full">
+                <Trophy size={16} />
+                Leaderboard
+              </SoftPillButton>
+            </Link>
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">

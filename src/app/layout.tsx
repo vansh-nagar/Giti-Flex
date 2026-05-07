@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import {
-  ClerkProvider,
-  Show,
-  SignInButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider, Show, SignInButton } from "@clerk/nextjs";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import "./globals.css";
 
@@ -43,9 +38,6 @@ export default function RootLayout({
                   Sign in with GitHub
                 </SoftPillButton>
               </SignInButton>
-            </Show>
-            <Show when="signed-in">
-              <UserButton />
             </Show>
           </header>
           {children}

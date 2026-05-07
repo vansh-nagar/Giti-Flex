@@ -43,17 +43,10 @@ export default async function LeaderboardPage() {
 
       <div className="mx-auto flex w-full max-w-3xl flex-col">
         <div className="mb-10 flex flex-col items-center text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
-            <GithubLogo size={14} />
-            Versus Leaderboard
-          </span>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Top contenders
           </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            +10 points per win · −10 per loss · {totalBattles.toLocaleString()}{" "}
-            battles fought
-          </p>
+
           <div className="mt-6 flex gap-2">
             <Link href="/">
               <SoftPillButton variant="secondary">
