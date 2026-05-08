@@ -2,11 +2,18 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { Check, Globe, Link2, Moon, Sun, Trophy, X } from "lucide-react";
+import {
+  Check,
+  Download,
+  Globe,
+  Link2,
+  Moon,
+  Sun,
+  Trophy,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-
-import DownloadIcon from "./download-icon";
 
 import BookDemoButton from "@/components/ui/book-demo-button";
 import SoftPillButton from "@/components/ui/soft-pill-button";
@@ -353,9 +360,7 @@ export function CustomizationPanel({
 
           <motion.div variants={itemVariants} className="flex gap-2">
             <Link href="/find-opponent" className="flex-1">
-              <BookDemoButton className="w-full">
-                Versus Battle
-              </BookDemoButton>
+              <BookDemoButton className="w-full">Versus Battle</BookDemoButton>
             </Link>
             <SoftPillButton
               variant="primary"
@@ -365,11 +370,7 @@ export function CustomizationPanel({
               onMouseLeave={() => setDownloadHovered(false)}
               className="h-11 flex-1 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <DownloadIcon
-                size={28}
-                className="size-7"
-                state={downloadHovered && !downloading ? "done" : "idle"}
-              />
+              <Download size={16} />
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={downloading ? "exporting" : "download"}
