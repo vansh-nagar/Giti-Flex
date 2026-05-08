@@ -206,17 +206,55 @@ const PatternNeonHex = () => (
   />
 );
 
+const cosmosStars: Array<[number, number, number, number]> = [
+  [4, 6, 0.6, 0.9], [12, 14, 0.4, 0.7], [19, 4, 0.5, 0.8], [27, 11, 0.7, 1],
+  [33, 18, 0.4, 0.65], [41, 7, 0.55, 0.85], [49, 15, 0.45, 0.75], [57, 3, 0.6, 0.95],
+  [64, 12, 0.5, 0.8], [72, 19, 0.4, 0.7], [80, 6, 0.65, 0.9], [88, 14, 0.5, 0.8],
+  [96, 9, 0.4, 0.7], [7, 22, 0.55, 0.85], [16, 28, 0.45, 0.75], [24, 24, 0.6, 0.9],
+  [31, 31, 0.4, 0.7], [38, 26, 0.5, 0.8], [46, 33, 0.65, 0.95], [54, 28, 0.45, 0.75],
+  [62, 35, 0.55, 0.85], [70, 30, 0.4, 0.7], [78, 37, 0.6, 0.9], [86, 32, 0.5, 0.8],
+  [94, 39, 0.45, 0.75], [3, 42, 0.5, 0.8], [11, 48, 0.6, 0.9], [20, 44, 0.4, 0.7],
+  [28, 51, 0.55, 0.85], [36, 46, 0.45, 0.75], [44, 53, 0.65, 0.95], [52, 48, 0.4, 0.7],
+  [60, 55, 0.5, 0.8], [68, 50, 0.6, 0.9], [76, 57, 0.45, 0.75], [84, 52, 0.55, 0.85],
+  [92, 59, 0.4, 0.7], [6, 62, 0.5, 0.8], [14, 68, 0.65, 0.95], [22, 64, 0.45, 0.75],
+  [30, 71, 0.55, 0.85], [38, 66, 0.4, 0.7], [46, 73, 0.6, 0.9], [54, 68, 0.5, 0.8],
+  [62, 75, 0.45, 0.75], [70, 70, 0.55, 0.85], [78, 77, 0.4, 0.7], [86, 72, 0.6, 0.9],
+  [94, 79, 0.5, 0.8], [9, 82, 0.45, 0.75], [17, 88, 0.55, 0.85], [25, 84, 0.65, 0.95],
+  [33, 91, 0.4, 0.7], [41, 86, 0.5, 0.8], [49, 93, 0.6, 0.9], [57, 88, 0.45, 0.75],
+  [65, 95, 0.55, 0.85], [73, 90, 0.4, 0.7], [81, 97, 0.5, 0.8], [89, 92, 0.6, 0.9],
+];
+
 const PatternCosmos = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#020617",
-      backgroundImage:
-        "radial-gradient(1px 1px at 20px 30px, #ffffff, transparent), radial-gradient(1px 1px at 40px 70px, #ffffff, transparent), radial-gradient(1.5px 1.5px at 90px 40px, #ffffff, transparent), radial-gradient(1px 1px at 130px 80px, #ffffff, transparent), radial-gradient(2px 2px at 60px 110px, #ffffff, transparent), radial-gradient(1px 1px at 110px 130px, #ffffff, transparent), radial-gradient(ellipse at 70% 30%, rgba(168, 85, 247, 0.18) 0%, transparent 55%), radial-gradient(ellipse at 30% 70%, rgba(56, 189, 248, 0.15) 0%, transparent 55%)",
-      backgroundSize:
-        "150px 150px, 150px 150px, 150px 150px, 150px 150px, 150px 150px, 150px 150px, 100% 100%, 100% 100%",
-    }}
-  />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+    preserveAspectRatio="none"
+    style={{ ...fullCover, width: "100%", height: "100%", display: "block" }}
+  >
+    <defs>
+      <radialGradient id="cosmos-nebula-purple" cx="70%" cy="30%" r="55%">
+        <stop offset="0%" stopColor="rgba(168, 85, 247, 0.22)" />
+        <stop offset="100%" stopColor="rgba(168, 85, 247, 0)" />
+      </radialGradient>
+      <radialGradient id="cosmos-nebula-cyan" cx="30%" cy="70%" r="55%">
+        <stop offset="0%" stopColor="rgba(56, 189, 248, 0.18)" />
+        <stop offset="100%" stopColor="rgba(56, 189, 248, 0)" />
+      </radialGradient>
+    </defs>
+    <rect width="100" height="100" fill="#020617" />
+    <rect width="100" height="100" fill="url(#cosmos-nebula-purple)" />
+    <rect width="100" height="100" fill="url(#cosmos-nebula-cyan)" />
+    {cosmosStars.map(([cx, cy, r, opacity], index) => (
+      <circle
+        key={index}
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="#ffffff"
+        opacity={opacity}
+      />
+    ))}
+  </svg>
 );
 
 const PatternAurora = () => (

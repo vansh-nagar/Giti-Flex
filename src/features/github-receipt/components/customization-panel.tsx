@@ -5,6 +5,7 @@ import { AnimatePresence, motion, type Variants } from "motion/react";
 import {
   Check,
   Download,
+  Gift,
   Globe,
   Link2,
   Moon,
@@ -13,10 +14,21 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 
 import BookDemoButton from "@/components/ui/book-demo-button";
 import SoftPillButton from "@/components/ui/soft-pill-button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import GithubLogo from "@/components/logo/github";
 
@@ -90,8 +102,34 @@ export function CustomizationPanel({
   onOpenExport,
 }: CustomizationPanelProps) {
   const { theme, toggleTheme } = useTheme();
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [downloadHovered, setDownloadHovered] = useState(false);
+  const [friendDialogOpen, setFriendDialogOpen] = useState(false);
+  const [friendUsername, setFriendUsername] = useState("");
+  const [friendLoading, setFriendLoading] = useState(false);
+  const [friendError, setFriendError] = useState<string | null>(null);
+
+  const handleOpenFriendDialog = (open: boolean) => {
+    setFriendDialogOpen(open);
+    if (!open) {
+      setFriendUsername("");
+      setFriendError(null);
+      setFriendLoading(false);
+    }
+  };
+
+  const handleSubmitFriend = () => {
+    const trimmed = friendUsername.trim();
+    if (!trimmed) return;
+    if (trimmed.toLowerCase() === user.login.toLowerCase()) {
+      setFriendError("That's your own profile — try a friend's username.");
+      return;
+    }
+    setFriendError(null);
+    setFriendLoading(true);
+    router.push(`/${encodeURIComponent(trimmed)}`);
+  };
 
   const handleCopyShareLink = async () => {
     const shareUrl =
@@ -349,13 +387,21 @@ export function CustomizationPanel({
             </SoftPillButton>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mb-2">
-            <Link href="/leaderboard">
+          <motion.div variants={itemVariants} className="mb-2 flex gap-2">
+            <Link href="/leaderboard" className="flex-1">
               <SoftPillButton variant="secondary" className="w-full">
                 <Trophy size={16} />
                 Leaderboard
               </SoftPillButton>
             </Link>
+            <SoftPillButton
+              variant="secondary"
+              className="flex-1"
+              onClick={() => handleOpenFriendDialog(true)}
+            >
+              <Gift size={16} />
+              For a Friend
+            </SoftPillButton>
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex gap-2">
@@ -386,6 +432,79 @@ export function CustomizationPanel({
           </motion.div>
         </motion.section>
       </motion.div>
+
+      <Dialog open={friendDialogOpen} onOpenChange={handleOpenFriendDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Gift size={18} />
+              Make a receipt for a friend
+            </DialogTitle>
+          </DialogHeader>
+
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (friendUsername.trim() && !friendLoading) handleSubmitFriend();
+            }}
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
+            <p className="text-sm text-muted-foreground">
+              Enter your friend&apos;s GitHub username and we&apos;ll print
+              their receipt — share the link with them after.
+            </p>
+
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
+              <Label htmlFor="friend-username">
+                Friend&apos;s GitHub Username
+              </Label>
+              <Input
+                id="friend-username"
+                type="text"
+                placeholder="e.g. torvalds"
+                value={friendUsername}
+                onChange={(event) => setFriendUsername(event.target.value)}
+                disabled={friendLoading}
+                autoComplete="off"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+              />
+            </div>
+
+            {friendError && (
+              <p className="text-sm font-medium text-red-600">{friendError}</p>
+            )}
+
+            <DialogFooter>
+              <SoftPillButton
+                type="button"
+                variant="secondary"
+                onClick={() => handleOpenFriendDialog(false)}
+                disabled={friendLoading}
+              >
+                Cancel
+              </SoftPillButton>
+              <SoftPillButton
+                type="submit"
+                variant="primary"
+                disabled={friendLoading || !friendUsername.trim()}
+              >
+                {friendLoading ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    <Gift size={16} />
+                    Print Receipt
+                  </>
+                )}
+              </SoftPillButton>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }

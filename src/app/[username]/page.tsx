@@ -25,20 +25,12 @@ export default async function UserPage({
   }
 
   const decodedUsername = decodeURIComponent(username);
-  const targetLogin =
-    decodedUsername.toLowerCase() === authedLogin.toLowerCase()
-      ? decodedUsername
-      : authedLogin;
 
   if (vs) {
     redirect(
-      `/${encodeURIComponent(targetLogin)}/vs/${encodeURIComponent(decodeURIComponent(vs))}`,
+      `/${encodeURIComponent(decodedUsername)}/vs/${encodeURIComponent(decodeURIComponent(vs))}`,
     );
   }
 
-  if (decodedUsername.toLowerCase() !== authedLogin.toLowerCase()) {
-    redirect(`/${encodeURIComponent(authedLogin)}`);
-  }
-
-  return <GithubReceipt username={authedLogin} />;
+  return <GithubReceipt username={decodedUsername} />;
 }

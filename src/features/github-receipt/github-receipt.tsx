@@ -82,6 +82,16 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   }, []);
 
   useEffect(() => {
+    if (!username) return;
+    if (submittedUsername?.toLowerCase() === username.toLowerCase()) return;
+    setUser(null);
+    setRepos([]);
+    setError(null);
+    setInputUsername(username);
+    setSubmittedUsername(username);
+  }, [username, submittedUsername]);
+
+  useEffect(() => {
     if (submittedUsername) {
       fetchGithubData(submittedUsername);
     }

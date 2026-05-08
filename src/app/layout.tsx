@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ClerkProvider, Show, SignInButton } from "@clerk/nextjs";
-import SoftPillButton from "@/components/ui/soft-pill-button";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,15 +30,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
         <body className="min-h-full flex flex-col">
-          <header className="fixed left-4 top-4 z-50 flex items-center gap-2">
-            <Show when="signed-out">
-              <SignInButton mode="modal">
-                <SoftPillButton variant="secondary">
-                  Sign in with GitHub
-                </SoftPillButton>
-              </SignInButton>
-            </Show>
-          </header>
           {children}
         </body>
       </html>

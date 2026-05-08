@@ -180,13 +180,16 @@ export const githubReceiptStyles = `
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.75em;
     font-size: 0.8rem;
     margin-bottom: 0.4em;
+    white-space: nowrap;
   }
 
   .gh-receipt__total-value {
     font-weight: 700;
     font-size: 1rem;
+    white-space: nowrap;
   }
 
   .gh-receipt__date {
