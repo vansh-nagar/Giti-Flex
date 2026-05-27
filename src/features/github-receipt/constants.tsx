@@ -210,28 +210,6 @@ const PatternLavaLamp = () => (
   />
 );
 
-const PatternSynthwave = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundImage:
-        "linear-gradient(rgba(236, 72, 153, 0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(236, 72, 153, 0.55) 1px, transparent 1px), linear-gradient(180deg, #1e1b4b 0%, #4c1d95 50%, #ec4899 100%)",
-      backgroundSize: "40px 40px, 40px 40px, 100% 100%",
-    }}
-  />
-);
-
-const PatternAcidRain = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#0f1f0a",
-      backgroundImage:
-        "repeating-linear-gradient(180deg, transparent 0 4px, rgba(132, 204, 22, 0.45) 4px 5px, transparent 5px 11px), radial-gradient(ellipse at 50% 100%, rgba(132, 204, 22, 0.25) 0%, transparent 70%)",
-    }}
-  />
-);
-
 const PatternSandstone = () => (
   <div
     style={{
@@ -498,24 +476,6 @@ export const backgroundOptions: BackgroundItem[] = [
   //   heading: "#ffffff",
   //   isDark: true,
   // },
-  {
-    name: "Synthwave",
-    description: "80s grid sundown",
-    component: <PatternSynthwave />,
-    backgroundColor: "#1e1b4b",
-    text: "#fce7f3",
-    heading: "#ffffff",
-    isDark: true,
-  },
-  {
-    name: "Acid Rain",
-    description: "Falling neon streaks",
-    component: <PatternAcidRain />,
-    backgroundColor: "#0f1f0a",
-    text: "#d9f99d",
-    heading: "#84cc16",
-    isDark: true,
-  },
   {
     name: "Sandstone",
     description: "Warm desert wash",

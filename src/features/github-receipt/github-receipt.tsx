@@ -168,6 +168,7 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
       <style>{githubReceiptStyles}</style>
 
       <SiteHeader
+        fixed
         actions={
           <AnimatePresence initial={false}>
             {!customizing && (

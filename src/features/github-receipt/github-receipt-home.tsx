@@ -8,6 +8,7 @@ import { motion } from "motion/react";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import GithubLogo from "@/components/logo/github";
 import { SiteHeader } from "@/components/layout/site-header";
+import { TrophyDoodle } from "@/components/icons/trophy-doodle";
 import { cn } from "@/lib/utils";
 
 type GithubReceiptHomeProps = {
@@ -121,7 +122,8 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                 </SoftPillButton>
               </SignInButton>
               <Link href="/leaderboard">
-                <SoftPillButton variant="secondary" className="h-9 px-4 text-[13px]">
+                <SoftPillButton variant="secondary" className="h-9 gap-2 px-4 text-[13px]">
+                  <TrophyDoodle size={14} />
                   Leaderboard
                 </SoftPillButton>
               </Link>
@@ -143,7 +145,8 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                   </SoftPillButton>
                 </Link>
                 <Link href="/leaderboard">
-                  <SoftPillButton variant="secondary" className="h-9 px-4 text-[13px]">
+                  <SoftPillButton variant="secondary" className="h-9 gap-2 px-4 text-[13px]">
+                    <TrophyDoodle size={14} />
                     Leaderboard
                   </SoftPillButton>
                 </Link>

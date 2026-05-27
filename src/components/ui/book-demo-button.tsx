@@ -47,14 +47,9 @@ const BookDemoButton = React.forwardRef<HTMLButtonElement, BookDemoButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "group/btn relative inline-flex h-11 w-48 rounded-full overflow-hidden transition-transform active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed",
+          "group/btn relative inline-flex h-11 w-48 rounded-full overflow-hidden bg-neutral-900/90 ring-1 ring-white/10 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.28),0_1px_2px_rgba(0,0,0,0.12)] backdrop-blur transition active:scale-[0.98] hover:bg-neutral-900 disabled:opacity-60 disabled:cursor-not-allowed",
           className,
         )}
-        style={{
-          background: "linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 12px rgba(0,0,0,0.18)",
-        }}
         {...props}
       >
         <style>{`

@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import { GiftDoodle } from "@/components/icons/gift-doodle";
 import { cn } from "@/lib/utils";
 
 import type { BackgroundItem, GitHubUser } from "../types";
@@ -150,7 +151,7 @@ export function CustomizationPanel({
         width: { duration: 0.4, ease: [0.32, 0.72, 0, 1] },
         opacity: { duration: 0.25, ease: [0.32, 0.72, 0, 1] },
       }}
-      className="sticky top-4 self-start shrink-0"
+      className="sticky top-24 self-start shrink-0"
     >
       <motion.div
         variants={containerVariants}
@@ -276,9 +277,9 @@ export function CustomizationPanel({
             scrollbarWidth: "none",
             msOverflowStyle: "none",
             maskImage:
-              "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+              "linear-gradient(to bottom, black 0%, black 95%, transparent 100%)",
             WebkitMaskImage:
-              "linear-gradient(to bottom, black 0%, black 85%, transparent 100%)",
+              "linear-gradient(to bottom, black 0%, black 95%, transparent 100%)",
           }}
           className="grid grid-cols-2 gap-2 max-h-[65vh] overflow-y-auto px-2 pt-1 pb-6 [&::-webkit-scrollbar]:hidden"
         >
@@ -371,7 +372,7 @@ export function CustomizationPanel({
               className="h-11 w-full"
               onClick={() => handleOpenFriendDialog(true)}
             >
-              <Gift size={16} />
+              <GiftDoodle size={18} />
               For a Friend
             </SoftPillButton>
           </motion.div>
