@@ -209,7 +209,7 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
             <CustomizationPanel
               key="customization-panel"
               selectedBackground={selectedBackground}
-              backgrounds={backgroundOptions}
+              backgrounds={[...backgroundOptions].reverse()}
               user={user}
               downloading={downloading}
               onClose={() => setCustomizing(false)}

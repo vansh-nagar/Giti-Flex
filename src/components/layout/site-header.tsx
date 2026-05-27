@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 
@@ -23,12 +23,44 @@ export function SiteHeader({
   showLeaderboard = true,
   fixed = false,
 }: SiteHeaderProps = {}) {
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    if (!fixed) return;
+
+    lastScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY.current;
+
+      if (currentScrollY < 20) {
+        setHidden(false);
+      } else if (delta > 4) {
+        setHidden(true);
+      } else if (delta < -4) {
+        setHidden(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [fixed]);
+
   return (
     <header
       className={
         fixed
-          ? "sticky top-0 z-50 flex w-full items-center justify-between bg-background/80 px-6 py-5 backdrop-blur sm:px-10"
+          ? "sticky top-0 z-50 flex w-full items-center justify-between bg-background/80 px-6 py-5 backdrop-blur sm:px-10 transition-transform duration-300 ease-out will-change-transform"
           : "relative z-10 flex w-full items-center justify-between px-6 py-5 sm:px-10"
+      }
+      style={
+        fixed
+          ? { transform: hidden ? "translateY(-100%)" : "translateY(0)" }
+          : undefined
       }
     >
       <Link href="/" aria-label="Giti Flex" className="flex items-center">

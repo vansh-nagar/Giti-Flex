@@ -296,10 +296,6 @@ export function CustomizationPanel({
           style={{
             scrollbarWidth: "none",
             msOverflowStyle: "none",
-            maskImage:
-              "linear-gradient(to bottom, black 0%, black 95%, transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to bottom, black 0%, black 95%, transparent 100%)",
           }}
           className={cn(
             "grid grid-cols-2 gap-2 px-2 pt-1 pb-6 overflow-y-auto [&::-webkit-scrollbar]:hidden",
