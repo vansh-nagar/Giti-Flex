@@ -28,7 +28,9 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [customizing, setCustomizing] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState<BackgroundItem>(
-    backgroundOptions[0],
+    () =>
+      backgroundOptions.find((bg) => bg.name === "Holographic") ??
+      backgroundOptions[0],
   );
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportScale, setExportScale] = useState(2);
@@ -165,30 +167,31 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     <>
       <style>{githubReceiptStyles}</style>
 
-      <SiteHeader />
-
-      <AnimatePresence>
-        {!customizing && (
-          <motion.div
-            key="open-customizer"
-            initial={{ opacity: 0, scale: 0.85, y: -8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: -8 }}
-            transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-            className="fixed top-4 right-4 z-50"
-          >
-            <SoftPillButton
-              className="gap-2 flex"
-              variant="primary"
-              onClick={() => setCustomizing(true)}
-              title="Open customizer"
-            >
-              <Palette size={16} />
-              Customize
-            </SoftPillButton>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <SiteHeader
+        actions={
+          <AnimatePresence initial={false}>
+            {!customizing && (
+              <motion.div
+                key="open-customizer"
+                initial={{ opacity: 0, scale: 0.85, y: -4 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.85, y: -4 }}
+                transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              >
+                <SoftPillButton
+                  className="h-9 gap-2 px-4 text-[13px]"
+                  variant="primary"
+                  onClick={() => setCustomizing(true)}
+                  title="Open customizer"
+                >
+                  <Palette size={14} />
+                  Customize
+                </SoftPillButton>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        }
+      />
 
       <div
         style={{

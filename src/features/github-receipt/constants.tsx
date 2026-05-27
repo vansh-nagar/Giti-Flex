@@ -108,30 +108,6 @@ const PatternTriMesh = () => (
   />
 );
 
-const PatternCyberGrid = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#070b1f",
-      backgroundImage:
-        "linear-gradient(rgba(34, 211, 238, 0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.35) 1px, transparent 1px), radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.18) 0%, transparent 70%)",
-      backgroundSize: "28px 28px, 28px 28px, 100% 100%",
-    }}
-  />
-);
-
-const PatternBlueprint = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#0c4a6e",
-      backgroundImage:
-        "linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px)",
-      backgroundSize: "50px 50px, 50px 50px, 10px 10px, 10px 10px",
-    }}
-  />
-);
-
 const PatternSunburst = () => (
   <div
     style={{
@@ -434,24 +410,6 @@ export const backgroundOptions: BackgroundItem[] = [
     backgroundColor: "#ffffff",
     text: "#6b7280",
     heading: "#1b1b1b",
-  },
-  {
-    name: "Cyber Grid",
-    description: "Neon cyan on midnight",
-    component: <PatternCyberGrid />,
-    backgroundColor: "#070b1f",
-    text: "#a5f3fc",
-    heading: "#67e8f9",
-    isDark: true,
-  },
-  {
-    name: "Blueprint",
-    description: "Architect graph paper",
-    component: <PatternBlueprint />,
-    backgroundColor: "#0c4a6e",
-    text: "#e0f2fe",
-    heading: "#ffffff",
-    isDark: true,
   },
   {
     name: "Sunburst",

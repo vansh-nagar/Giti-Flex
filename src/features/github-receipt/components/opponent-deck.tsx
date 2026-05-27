@@ -405,11 +405,6 @@ function DeckCard({ slot, index, isTop, onSkip, onFight }: DeckCardProps) {
                 @{slot.user.login}
               </p>
             </div>
-            <Stat
-              icon={<Users className="size-4 text-sky-500" />}
-              value={slot.user.followers.toLocaleString()}
-              label="followers"
-            />
           </div>
 
           {isTop && (
@@ -434,25 +429,3 @@ function DeckCard({ slot, index, isTop, onSkip, onFight }: DeckCardProps) {
   );
 }
 
-interface StatProps {
-  icon: React.ReactNode;
-  value: string;
-  label: string;
-}
-
-function Stat({ icon, value, label }: StatProps) {
-  return (
-    <SoftPillButton
-      variant="secondary"
-      type="button"
-      tabIndex={-1}
-      className="cursor-default px-3! py-1.5! text-sm"
-    >
-      {icon}
-      <span className="font-mono font-bold tabular-nums">{value}</span>
-      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </span>
-    </SoftPillButton>
-  );
-}

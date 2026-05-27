@@ -59,7 +59,7 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
           </h1>
             <span
               aria-hidden
-              className="pointer-events-none absolute -bottom-6 -right-6 -rotate-12 sm:-bottom-8 sm:-right-10 md:-bottom-10 md:-right-14"
+              className="pointer-events-none absolute bottom-4 right-4 -rotate-12 sm:-bottom-8 sm:-right-10 md:-bottom-10 md:-right-14"
             >
               <svg
                 width="89"
@@ -67,7 +67,7 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                 viewBox="0 0 89 89"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="size-10 sm:size-14 md:size-20 origin-center animate-spin animation-duration-[14s]"
+                className="size-7 sm:size-9 md:size-12 origin-center animate-spin animation-duration-[14s]"
               >
                 <path
                   d="M59.6821 0C62.856 0.222207 66.7738 1.57679 69.562 3.08971C73.5022 5.22777 76.2691 9.92984 77.4284 14.1721C79.3203 21.0944 77.0105 24.7582 73.7153 30.4826C74.7952 31.4718 76.1914 32.3914 77.4729 33.1164C84.1924 36.9154 90.1556 47.2114 87.8712 54.9457C85.9626 61.4071 81.3447 67.1792 74.2197 67.6693C71.1925 67.8774 67.2565 67.9333 64.3378 67.0914C62.4866 74.2006 62.2677 79.7246 55.8699 84.6741C47.425 91.2069 35.9345 89.4112 29.4176 81.1437C27.6331 78.4332 26.4317 72.8977 25.966 69.641C23.1869 70.5342 14.5772 70.7799 12.007 69.5774C2.54355 65.1501 -2.49062 52.4946 1.23226 42.7426C3.67639 36.3402 7.86093 34.7822 13.2408 32.1518C11.5667 29.8881 9.49857 23.8194 9.30588 21.003C9.05446 17.3314 9.74137 11.099 12.265 8.24966C15.6268 4.45383 19.6747 1.67064 24.8233 1.33657C29.475 1.03474 35.0984 1.11785 38.9315 4.08646C40.5995 5.37838 42.3884 7.09518 44.0496 8.49261C45.3055 7.6227 46.9559 5.9012 48.1444 4.81484C51.0083 2.19679 55.8891 0.442144 59.6821 0Z"
