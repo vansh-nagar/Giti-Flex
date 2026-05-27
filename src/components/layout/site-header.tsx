@@ -13,9 +13,13 @@ const GITHUB_REPO_URL = "https://github.com/vansh-nagar/Giti-Flex";
 
 type SiteHeaderProps = {
   actions?: ReactNode;
+  showLeaderboard?: boolean;
 };
 
-export function SiteHeader({ actions }: SiteHeaderProps = {}) {
+export function SiteHeader({
+  actions,
+  showLeaderboard = true,
+}: SiteHeaderProps = {}) {
   return (
     <header className="relative z-10 flex w-full items-center justify-between px-6 py-5 sm:px-10">
       <Link href="/" aria-label="Giti Flex" className="flex items-center">
@@ -24,15 +28,17 @@ export function SiteHeader({ actions }: SiteHeaderProps = {}) {
 
       <div className="flex items-center gap-3">
         {actions}
-        <Link href="/leaderboard" aria-label="Leaderboard">
-          <SoftPillButton
-            variant="secondary"
-            className="h-9 gap-2 px-4 text-[13px]"
-          >
-            <Trophy size={14} />
-            <span>Leaderboard</span>
-          </SoftPillButton>
-        </Link>
+        {showLeaderboard && (
+          <Link href="/leaderboard" aria-label="Leaderboard">
+            <SoftPillButton
+              variant="secondary"
+              className="h-9 gap-2 px-4 text-[13px]"
+            >
+              <Trophy size={14} />
+              <span>Leaderboard</span>
+            </SoftPillButton>
+          </Link>
+        )}
         <a
           href={GITHUB_REPO_URL}
           target="_blank"

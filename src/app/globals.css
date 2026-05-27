@@ -93,6 +93,36 @@
   }
 }
 
+@keyframes giti-shimmer {
+  from { background-position: 100% 50%; }
+  to { background-position: 0% 50%; }
+}
+
+.giti-shimmer-text {
+  background-image: linear-gradient(
+    90deg,
+    var(--foreground) 0%,
+    var(--foreground) 40%,
+    #a855f7 47%,
+    #06b6d4 50%,
+    #f97316 53%,
+    var(--foreground) 60%,
+    var(--foreground) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation-name: giti-shimmer;
+  animation-duration: 1.6s;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
 @keyframes flower-wobble {
   0%, 100% { transform: rotate(-6deg); }
   50% { transform: rotate(6deg); }

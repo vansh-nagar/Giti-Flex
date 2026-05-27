@@ -1,27 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Show, SignInButton } from "@clerk/nextjs";
+import { motion } from "motion/react";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import GithubLogo from "@/components/logo/github";
 import { SiteHeader } from "@/components/layout/site-header";
+import { cn } from "@/lib/utils";
 
 type GithubReceiptHomeProps = {
   login?: string | null;
 };
 
 export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
+  const [ctaHovered, setCtaHovered] = useState(false);
+
   return (
     <div className="relative flex flex-1 flex-col">
-      <SiteHeader />
+      <SiteHeader showLeaderboard={false} />
 
       <section className="relative flex flex-1 items-center justify-center px-6 pb-32">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
           <div className="relative">
             <span
               aria-hidden
-              className="pointer-events-none absolute -left-6 -top-8 -rotate-12 sm:-left-10 sm:-top-10 md:-left-14 md:-top-12"
+              className="pointer-events-none absolute -left-6 -top-8 rotate-[30deg] sm:-left-10 sm:-top-10 md:-left-6 md:-top-7"
             >
               <svg
                 width="53"
@@ -52,14 +57,26 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                 </defs>
               </svg>
             </span>
-          <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl">
+          <h1
+            className={cn(
+              "text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl",
+              ctaHovered && "giti-shimmer-text",
+            )}
+          >
             Your GitHub
             <br />
             as a receipt
           </h1>
-            <span
+            <motion.span
               aria-hidden
-              className="pointer-events-none absolute bottom-4 right-4 -rotate-12 sm:-bottom-8 sm:-right-10 md:-bottom-10 md:-right-14"
+              animate={{ rotate: [-20, -4, -20] }}
+              transition={{
+                duration: 6,
+                ease: "easeInOut",
+                repeat: Infinity,
+              }}
+              style={{ transformOrigin: "center" }}
+              className="pointer-events-none absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-10 md:-bottom-5 md:-right-6"
             >
               <svg
                 width="89"
@@ -67,7 +84,7 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                 viewBox="0 0 89 89"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="size-7 sm:size-9 md:size-12 origin-center animate-spin animation-duration-[14s]"
+                className="size-7 sm:size-9 md:size-12"
               >
                 <path
                   d="M59.6821 0C62.856 0.222207 66.7738 1.57679 69.562 3.08971C73.5022 5.22777 76.2691 9.92984 77.4284 14.1721C79.3203 21.0944 77.0105 24.7582 73.7153 30.4826C74.7952 31.4718 76.1914 32.3914 77.4729 33.1164C84.1924 36.9154 90.1556 47.2114 87.8712 54.9457C85.9626 61.4071 81.3447 67.1792 74.2197 67.6693C71.1925 67.8774 67.2565 67.9333 64.3378 67.0914C62.4866 74.2006 62.2677 79.7246 55.8699 84.6741C47.425 91.2069 35.9345 89.4112 29.4176 81.1437C27.6331 78.4332 26.4317 72.8977 25.966 69.641C23.1869 70.5342 14.5772 70.7799 12.007 69.5774C2.54355 65.1501 -2.49062 52.4946 1.23226 42.7426C3.67639 36.3402 7.86093 34.7822 13.2408 32.1518C11.5667 29.8881 9.49857 23.8194 9.30588 21.003C9.05446 17.3314 9.74137 11.099 12.265 8.24966C15.6268 4.45383 19.6747 1.67064 24.8233 1.33657C29.475 1.03474 35.0984 1.11785 38.9315 4.08646C40.5995 5.37838 42.3884 7.09518 44.0496 8.49261C45.3055 7.6227 46.9559 5.9012 48.1444 4.81484C51.0083 2.19679 55.8891 0.442144 59.6821 0Z"
@@ -83,10 +100,10 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                 />
                 <path
                   d="M42.9391 34.7563C47.7471 34.3147 51.9972 37.8677 52.4148 42.6778C52.8324 47.488 49.2584 51.7202 44.4463 52.1139C39.6679 52.5047 35.4718 48.9612 35.0571 44.1849C34.6423 39.4086 38.165 35.1949 42.9391 34.7563Z"
-                  fill="white"
+                  fill="#FBBF24"
                 />
               </svg>
-            </span>
+            </motion.span>
           </div>
 
           <p className="mt-6 max-w-lg text-sm text-muted-foreground">
@@ -114,7 +131,13 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
           <Show when="signed-in">
             {login ? (
               <div className="mt-10 flex flex-row items-center gap-3">
-                <Link href={`/${encodeURIComponent(login)}`}>
+                <Link
+                  href={`/${encodeURIComponent(login)}`}
+                  onMouseEnter={() => setCtaHovered(true)}
+                  onMouseLeave={() => setCtaHovered(false)}
+                  onFocus={() => setCtaHovered(true)}
+                  onBlur={() => setCtaHovered(false)}
+                >
                   <SoftPillButton variant="primary" className="h-9 px-4 text-[13px]">
                     Go to your receipt
                   </SoftPillButton>
@@ -134,32 +157,6 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
           </Show>
         </div>
       </section>
-
-      <a
-        href="https://x.com/vansh1029"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Built by @vansh1029 on X"
-        className="fixed bottom-5 right-5 z-20 inline-flex items-center gap-0.5 rounded-full bg-white/80 px-3 py-1.5 text-[13px] font-medium text-neutral-900 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.06)] ring-1 ring-black/6 backdrop-blur transition hover:bg-white"
-      >
-        <svg
-          width="13"
-          height="15"
-          viewBox="0 0 66 76"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M44.7034 8.57185C47.9134 7.1441 50.1754 4.24235 52.8387 1.98485C55.6439 -0.516897 58.9391 -1.2849 59.5779 3.47485C60.2279 8.31985 60.3564 13.2769 61.3501 18.0806C62.2769 22.5596 64.3851 26.9443 65.1514 31.4538C65.5834 33.9908 65.6919 36.5723 65.4736 39.1368C64.7244 48.1231 58.7004 59.1939 47.7519 59.0734C44.9864 59.0429 42.4179 56.7753 40.7039 54.6798C34.7864 59.0818 27.2842 61.1506 20.9019 56.2586C17.7722 53.8393 15.7292 50.2781 15.2209 46.3551C13.5637 33.7349 25.9669 19.1431 39.6111 24.4506C42.7836 25.6846 45.6359 29.5806 49.0004 30.9386C49.6429 31.1981 50.2899 32.7871 50.2441 33.5236C49.7761 36.3466 45.5611 48.3966 48.3066 50.5951C51.4139 51.3158 55.1799 45.9403 56.0597 43.4018C58.1604 37.3378 57.3727 32.1238 54.7879 26.4806C54.2234 25.3548 53.2634 23.9654 52.4372 23.0101C48.8559 18.8714 43.7647 16.3409 38.3032 15.9854C29.2839 15.3344 21.5259 18.4104 15.3924 24.9606C7.3204 33.3739 5.50664 50.8024 13.5899 59.6334C22.0219 68.8449 39.8709 68.7611 50.6159 64.3086C53.1444 63.2609 56.7299 61.2709 58.9446 63.9371C59.6754 64.8279 60.0277 65.9696 59.9259 67.1171C59.8367 68.1786 59.3134 69.1564 58.4799 69.8196C57.7456 70.3999 55.7482 71.3129 54.8312 71.7016C40.0599 77.9649 17.3559 77.5106 6.4899 64.1821C-1.43085 54.4664 -1.64835 39.2349 3.3899 28.2074C5.4459 23.4366 8.24215 19.2036 9.89115 14.2421C11.4039 9.6916 9.22015 3.2256 13.2752 0.0348484C13.8799 -0.00340163 15.1194 -0.00340274 15.6236 0.286847C20.0404 2.82835 21.5241 5.91685 26.2596 8.6791C34.0816 7.1736 36.9714 7.01235 44.7034 8.57185Z"
-            fill="currentColor"
-          />
-          <path
-            d="M33.1078 31.81C43.818 31.095 41.2693 47.719 30.4978 50.5127C18.4585 51.0077 23.141 33.8847 33.1078 31.81Z"
-            fill="#F9F8F8"
-          />
-        </svg>
-        <span>vansh1029</span>
-      </a>
     </div>
   );
 }
