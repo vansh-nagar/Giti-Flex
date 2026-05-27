@@ -58,7 +58,7 @@ export function ReceiptCard({
         duration: 0.45,
         ease: [0.23, 1, 0.32, 1],
       }}
-      style={{ flexShrink: 0 }}
+      style={{ width: "100%", maxWidth: 425, flexShrink: 1, minWidth: 0 }}
     >
       <section ref={receiptRef} className="gh-receipt">
         <section className="gh-receipt__invoice-container">

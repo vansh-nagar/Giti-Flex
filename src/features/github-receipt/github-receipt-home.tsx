@@ -1,33 +1,73 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Show, SignInButton } from "@clerk/nextjs";
-import { motion } from "motion/react";
+import { ClerkLoaded, ClerkLoading, Show, SignInButton } from "@clerk/nextjs";
+import { motion, type Variants } from "motion/react";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import GithubLogo from "@/components/logo/github";
 import { SiteHeader } from "@/components/layout/site-header";
 import { TrophyDoodle } from "@/components/icons/trophy-doodle";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type GithubReceiptHomeProps = {
   login?: string | null;
 };
 
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.18,
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 340, damping: 28, mass: 0.8 },
+  },
+};
+
 export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
   const [ctaHovered, setCtaHovered] = useState(false);
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
     <div className="relative flex flex-1 flex-col">
       <SiteHeader showLeaderboard={false} />
 
       <section className="relative flex flex-1 items-center justify-center px-6 pb-32">
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="mx-auto flex w-full max-w-3xl flex-col items-center text-center"
+        >
           <div className="relative">
-            <span
+            <motion.span
               aria-hidden
-              className="pointer-events-none absolute -left-6 -top-8 rotate-[30deg] sm:-left-10 sm:-top-10 md:-left-6 md:-top-7"
+              initial={{ scale: 0, rotate: 30, opacity: 0 }}
+              animate={{ scale: 1, rotate: 30, opacity: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 320,
+                damping: 14,
+                delay: 0.35,
+              }}
+              className="pointer-events-none absolute -left-3 -top-4 sm:-left-4 sm:-top-5 md:-left-6 md:-top-7"
             >
               <svg
                 width="53"
@@ -57,27 +97,34 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
                   </clipPath>
                 </defs>
               </svg>
-            </span>
-          <h1
+            </motion.span>
+          <motion.h1
+            variants={itemVariants}
             className={cn(
               "text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl",
-              ctaHovered && "giti-shimmer-text",
+              (entered || ctaHovered) && "giti-shimmer-text",
             )}
           >
             Your GitHub
             <br />
             as a receipt
-          </h1>
+          </motion.h1>
             <motion.span
               aria-hidden
-              animate={{ rotate: [-20, -4, -20] }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1, rotate: [-20, -4, -20] }}
               transition={{
-                duration: 6,
-                ease: "easeInOut",
-                repeat: Infinity,
+                scale: { type: "spring", stiffness: 320, damping: 14, delay: 0.55 },
+                opacity: { duration: 0.3, delay: 0.55 },
+                rotate: {
+                  duration: 6,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  delay: 0.9,
+                },
               }}
               style={{ transformOrigin: "center" }}
-              className="pointer-events-none absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-10 md:-bottom-5 md:-right-6"
+              className="pointer-events-none absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 md:-bottom-5 md:-right-6"
             >
               <svg
                 width="89"
@@ -107,58 +154,81 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
             </motion.span>
           </div>
 
-          <p className="mt-6 max-w-lg text-sm text-muted-foreground">
+          <motion.p
+            variants={itemVariants}
+            className="mt-6 max-w-lg text-sm text-muted-foreground"
+          >
             A printable summary of your dev career. Style it, share it,
-            <br />
+            <br className="hidden sm:inline" />
             and challenge any GitHub user to a 1v1.
-          </p>
+          </motion.p>
 
-          <Show when="signed-out">
-            <div className="mt-10 flex flex-row items-center gap-3">
-              <SignInButton mode="modal">
-                <SoftPillButton variant="primary" className="h-9 px-4 text-[13px]">
-                  <GithubLogo size={16} color="#ffffff" />
-                  Sign in with GitHub
-                </SoftPillButton>
-              </SignInButton>
-              <Link href="/leaderboard">
-                <SoftPillButton variant="secondary" className="h-9 gap-2 px-4 text-[13px]">
-                  <TrophyDoodle size={14} />
-                  Leaderboard
-                </SoftPillButton>
-              </Link>
-            </div>
-          </Show>
+          <ClerkLoading>
+            <motion.div
+              variants={itemVariants}
+              className="mt-10 flex h-9 items-center justify-center gap-2 text-sm text-muted-foreground"
+            >
+              <Spinner className="size-4" />
+            </motion.div>
+          </ClerkLoading>
 
-          <Show when="signed-in">
-            {login ? (
-              <div className="mt-10 flex flex-row items-center gap-3">
-                <Link
-                  href={`/${encodeURIComponent(login)}`}
-                  onMouseEnter={() => setCtaHovered(true)}
-                  onMouseLeave={() => setCtaHovered(false)}
-                  onFocus={() => setCtaHovered(true)}
-                  onBlur={() => setCtaHovered(false)}
-                >
-                  <SoftPillButton variant="primary" className="h-9 px-4 text-[13px]">
-                    Go to your receipt
-                  </SoftPillButton>
-                </Link>
-                <Link href="/leaderboard">
-                  <SoftPillButton variant="secondary" className="h-9 gap-2 px-4 text-[13px]">
-                    <TrophyDoodle size={14} />
-                    Leaderboard
-                  </SoftPillButton>
-                </Link>
-              </div>
-            ) : (
-              <p className="mt-10 max-w-md text-sm text-amber-600">
-                Your Clerk account isn&apos;t linked to GitHub. Sign out and sign
-                back in choosing GitHub so we can read your username.
-              </p>
-            )}
-          </Show>
-        </div>
+          <ClerkLoaded>
+            <motion.div variants={itemVariants}>
+              <Show when="signed-out">
+                <div className="mt-10 flex flex-row items-center gap-3">
+                  <div
+                    onMouseEnter={() => setCtaHovered(true)}
+                    onMouseLeave={() => setCtaHovered(false)}
+                    onFocus={() => setCtaHovered(true)}
+                    onBlur={() => setCtaHovered(false)}
+                  >
+                    <SignInButton mode="modal">
+                      <SoftPillButton variant="primary" className="h-9 px-4 text-[13px]">
+                        <GithubLogo size={16} color="#ffffff" />
+                        Sign in with GitHub
+                      </SoftPillButton>
+                    </SignInButton>
+                  </div>
+                  <Link href="/leaderboard">
+                    <SoftPillButton variant="secondary" className="h-9 gap-2 px-4 text-[13px]">
+                      <TrophyDoodle size={14} />
+                      Leaderboard
+                    </SoftPillButton>
+                  </Link>
+                </div>
+              </Show>
+
+              <Show when="signed-in">
+                {login ? (
+                  <div className="mt-10 flex flex-row items-center gap-3">
+                    <Link
+                      href={`/${encodeURIComponent(login)}`}
+                      onMouseEnter={() => setCtaHovered(true)}
+                      onMouseLeave={() => setCtaHovered(false)}
+                      onFocus={() => setCtaHovered(true)}
+                      onBlur={() => setCtaHovered(false)}
+                    >
+                      <SoftPillButton variant="primary" className="h-9 px-4 text-[13px]">
+                        Go to your receipt
+                      </SoftPillButton>
+                    </Link>
+                    <Link href="/leaderboard">
+                      <SoftPillButton variant="secondary" className="h-9 gap-2 px-4 text-[13px]">
+                        <TrophyDoodle size={14} />
+                        Leaderboard
+                      </SoftPillButton>
+                    </Link>
+                  </div>
+                ) : (
+                  <p className="mt-10 max-w-md text-sm text-amber-600">
+                    Your Clerk account isn&apos;t linked to GitHub. Sign out and sign
+                    back in choosing GitHub so we can read your username.
+                  </p>
+                )}
+              </Show>
+            </motion.div>
+          </ClerkLoaded>
+        </motion.div>
       </section>
     </div>
   );

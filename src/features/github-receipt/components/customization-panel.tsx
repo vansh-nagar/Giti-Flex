@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import {
   Check,
@@ -87,6 +87,22 @@ const iconSwapTransition = {
   mass: 0.7,
 };
 
+const MOBILE_BREAKPOINT_QUERY = "(max-width: 767px)";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_BREAKPOINT_QUERY);
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
+
 export function CustomizationPanel({
   selectedBackground,
   backgrounds,
@@ -97,12 +113,22 @@ export function CustomizationPanel({
   onOpenExport,
 }: CustomizationPanelProps) {
   const router = useRouter();
+  const isMobile = useIsMobile();
   const [copied, setCopied] = useState(false);
   const [downloadHovered, setDownloadHovered] = useState(false);
   const [friendDialogOpen, setFriendDialogOpen] = useState(false);
   const [friendUsername, setFriendUsername] = useState("");
   const [friendLoading, setFriendLoading] = useState(false);
   const [friendError, setFriendError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isMobile]);
 
   const handleOpenFriendDialog = (open: boolean) => {
     setFriendDialogOpen(open);
@@ -142,24 +168,18 @@ export function CustomizationPanel({
     }
   };
 
-  return (
+  const panelInner = (
     <motion.div
-      initial={{ width: 0, opacity: 0 }}
-      animate={{ width: 382, opacity: 1 }}
-      exit={{ width: 0, opacity: 0 }}
-      transition={{
-        width: { duration: 0.4, ease: [0.32, 0.72, 0, 1] },
-        opacity: { duration: 0.25, ease: [0.32, 0.72, 0, 1] },
-      }}
-      className="sticky top-24 self-start shrink-0"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className={cn(
+        "pt-4",
+        isMobile
+          ? "flex flex-col min-h-0 flex-1 w-full px-5 pb-6"
+          : "w-[350px] pr-8",
+      )}
     >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        style={{ width: 350, paddingRight: 32 }}
-        className="pt-4"
-      >
         <motion.div
           variants={itemVariants}
           className="flex items-center justify-between mb-2"
@@ -281,7 +301,10 @@ export function CustomizationPanel({
             WebkitMaskImage:
               "linear-gradient(to bottom, black 0%, black 95%, transparent 100%)",
           }}
-          className="grid grid-cols-2 gap-2 max-h-[65vh] overflow-y-auto px-2 pt-1 pb-6 [&::-webkit-scrollbar]:hidden"
+          className={cn(
+            "grid grid-cols-2 gap-2 px-2 pt-1 pb-6 overflow-y-auto [&::-webkit-scrollbar]:hidden",
+            isMobile ? "flex-1 min-h-0" : "max-h-[65vh]",
+          )}
         >
           {backgrounds.map((background) => {
             const isSelected = selectedBackground.name === background.name;
@@ -340,7 +363,7 @@ export function CustomizationPanel({
 
         <motion.section
           variants={itemVariants}
-          className="mt-8 flex flex-col justify-center"
+          className="mt-4 sm:mt-8 flex flex-col justify-center"
         >
           <motion.div
             variants={itemVariants}
@@ -404,7 +427,55 @@ export function CustomizationPanel({
             </SoftPillButton>
           </motion.div>
         </motion.section>
-      </motion.div>
+    </motion.div>
+  );
+
+  return (
+    <>
+      {isMobile ? (
+        <>
+          <motion.div
+            key="customization-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={onClose}
+            className="fixed inset-0 z-40 bg-black/40 supports-backdrop-filter:backdrop-blur-xs"
+          />
+          <motion.div
+            key="customization-drawer"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{
+              type: "spring",
+              stiffness: 360,
+              damping: 36,
+              mass: 0.9,
+            }}
+            className="fixed inset-x-0 bottom-0 z-50 flex max-h-[85vh] flex-col overflow-hidden rounded-t-2xl bg-background ring-1 ring-foreground/10 shadow-2xl"
+          >
+            <div className="flex shrink-0 justify-center pt-2 pb-1">
+              <span className="h-1.5 w-10 rounded-full bg-foreground/20" />
+            </div>
+            {panelInner}
+          </motion.div>
+        </>
+      ) : (
+        <motion.div
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: 382, opacity: 1 }}
+          exit={{ width: 0, opacity: 0 }}
+          transition={{
+            width: { duration: 0.4, ease: [0.32, 0.72, 0, 1] },
+            opacity: { duration: 0.25, ease: [0.32, 0.72, 0, 1] },
+          }}
+          className="sticky top-24 self-start shrink-0"
+        >
+          {panelInner}
+        </motion.div>
+      )}
 
       <Dialog open={friendDialogOpen} onOpenChange={handleOpenFriendDialog}>
         <DialogContent>
@@ -478,6 +549,6 @@ export function CustomizationPanel({
           </form>
         </DialogContent>
       </Dialog>
-    </motion.div>
+    </>
   );
 }

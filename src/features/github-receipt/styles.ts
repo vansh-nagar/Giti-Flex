@@ -11,8 +11,8 @@ export const githubReceiptStyles = `
     --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-family: var(--mono);
-    width: 425px;
-    min-width: 425px;
+    width: 100%;
+    max-width: 425px;
     margin: 1em auto;
     -webkit-font-smoothing: antialiased;
   }

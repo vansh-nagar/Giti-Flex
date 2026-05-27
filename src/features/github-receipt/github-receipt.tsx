@@ -180,13 +180,14 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
                 transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
               >
                 <SoftPillButton
-                  className="h-9 gap-2 px-4 text-[13px]"
+                  className="size-9 sm:w-auto sm:px-4 text-[13px]"
                   variant="primary"
                   onClick={() => setCustomizing(true)}
                   title="Open customizer"
+                  aria-label="Open customizer"
                 >
                   <Palette size={14} />
-                  Customize
+                  <span className="hidden sm:inline">Customize</span>
                 </SoftPillButton>
               </motion.div>
             )}

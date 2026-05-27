@@ -35,16 +35,16 @@ export function SiteHeader({
         <GitiFlexLogo size={52} className="text-foreground" />
       </Link>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {actions}
         {showLeaderboard && (
           <Link href="/leaderboard" aria-label="Leaderboard">
             <SoftPillButton
               variant="secondary"
-              className="h-9 gap-2 px-4 text-[13px]"
+              className="size-9 sm:w-auto sm:px-4 text-[13px]"
             >
               <TrophyDoodle size={14} />
-              <span>Leaderboard</span>
+              <span className="hidden sm:inline">Leaderboard</span>
             </SoftPillButton>
           </Link>
         )}
@@ -57,10 +57,10 @@ export function SiteHeader({
         >
           <SoftPillButton
             variant="secondary"
-            className="relative z-10 h-9 gap-2 px-4 text-[13px]"
+            className="relative z-10 size-9 sm:w-auto sm:px-4 text-[13px]"
           >
             <GithubLogo size={14} />
-            <span>Star on GitHub</span>
+            <span className="hidden sm:inline">Star on GitHub</span>
           </SoftPillButton>
           <span
             aria-hidden
@@ -71,7 +71,10 @@ export function SiteHeader({
         </a>
         <Show when="signed-out">
           <SignInButton mode="modal">
-            <SoftPillButton variant="secondary" className="h-9 px-4 text-[13px]">
+            <SoftPillButton
+              variant="secondary"
+              className="hidden h-9 px-4 text-[13px] sm:inline-flex"
+            >
               Log In
             </SoftPillButton>
           </SignInButton>
