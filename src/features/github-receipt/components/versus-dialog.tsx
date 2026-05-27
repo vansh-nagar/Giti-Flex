@@ -1,6 +1,6 @@
 "use client";
 
-import { Layers, Sword, Users } from "lucide-react";
+import { Layers, Sword, Users } from "@/components/icons";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import {

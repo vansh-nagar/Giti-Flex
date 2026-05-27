@@ -153,34 +153,12 @@ const PatternIridescent = () => (
   />
 );
 
-const PatternDarkTopo = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#0f172a",
-      backgroundImage:
-        "repeating-radial-gradient(circle at 30% 70%, transparent 0 22px, rgba(56, 189, 248, 0.18) 22px 23px), repeating-radial-gradient(circle at 75% 25%, transparent 0 18px, rgba(168, 85, 247, 0.16) 18px 19px)",
-    }}
-  />
-);
-
 const PatternVaporwave = () => (
   <div
     style={{
       ...fullCover,
       backgroundImage:
         "repeating-linear-gradient(0deg, transparent 0 3px, rgba(0, 0, 0, 0.18) 3px 4px), linear-gradient(180deg, #2d1b69 0%, #c026d3 38%, #f97316 70%, #fbbf24 100%)",
-    }}
-  />
-);
-
-const PatternMatrix = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#000000",
-      backgroundImage:
-        "repeating-linear-gradient(90deg, transparent 0 17px, rgba(34, 197, 94, 0.55) 17px 18px), repeating-linear-gradient(0deg, transparent 0 4px, rgba(0, 0, 0, 0.55) 4px 7px), radial-gradient(ellipse at 50% 50%, rgba(34, 197, 94, 0.18) 0%, transparent 70%)",
     }}
   />
 );
@@ -193,68 +171,6 @@ const PatternSolarFlare = () => (
         "radial-gradient(circle at 50% 100%, #fde047 0%, #f97316 28%, #dc2626 55%, #1e1b4b 100%)",
     }}
   />
-);
-
-const PatternNeonHex = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#0a0a14",
-      backgroundImage:
-        "radial-gradient(ellipse at 50% 50%, rgba(217, 70, 239, 0.22) 0%, transparent 70%), repeating-linear-gradient(60deg, transparent 0 19px, rgba(217, 70, 239, 0.45) 19px 20px), repeating-linear-gradient(-60deg, transparent 0 19px, rgba(34, 211, 238, 0.45) 19px 20px), repeating-linear-gradient(0deg, transparent 0 19px, rgba(168, 85, 247, 0.3) 19px 20px)",
-    }}
-  />
-);
-
-const cosmosStars: Array<[number, number, number, number]> = [
-  [4, 6, 0.6, 0.9], [12, 14, 0.4, 0.7], [19, 4, 0.5, 0.8], [27, 11, 0.7, 1],
-  [33, 18, 0.4, 0.65], [41, 7, 0.55, 0.85], [49, 15, 0.45, 0.75], [57, 3, 0.6, 0.95],
-  [64, 12, 0.5, 0.8], [72, 19, 0.4, 0.7], [80, 6, 0.65, 0.9], [88, 14, 0.5, 0.8],
-  [96, 9, 0.4, 0.7], [7, 22, 0.55, 0.85], [16, 28, 0.45, 0.75], [24, 24, 0.6, 0.9],
-  [31, 31, 0.4, 0.7], [38, 26, 0.5, 0.8], [46, 33, 0.65, 0.95], [54, 28, 0.45, 0.75],
-  [62, 35, 0.55, 0.85], [70, 30, 0.4, 0.7], [78, 37, 0.6, 0.9], [86, 32, 0.5, 0.8],
-  [94, 39, 0.45, 0.75], [3, 42, 0.5, 0.8], [11, 48, 0.6, 0.9], [20, 44, 0.4, 0.7],
-  [28, 51, 0.55, 0.85], [36, 46, 0.45, 0.75], [44, 53, 0.65, 0.95], [52, 48, 0.4, 0.7],
-  [60, 55, 0.5, 0.8], [68, 50, 0.6, 0.9], [76, 57, 0.45, 0.75], [84, 52, 0.55, 0.85],
-  [92, 59, 0.4, 0.7], [6, 62, 0.5, 0.8], [14, 68, 0.65, 0.95], [22, 64, 0.45, 0.75],
-  [30, 71, 0.55, 0.85], [38, 66, 0.4, 0.7], [46, 73, 0.6, 0.9], [54, 68, 0.5, 0.8],
-  [62, 75, 0.45, 0.75], [70, 70, 0.55, 0.85], [78, 77, 0.4, 0.7], [86, 72, 0.6, 0.9],
-  [94, 79, 0.5, 0.8], [9, 82, 0.45, 0.75], [17, 88, 0.55, 0.85], [25, 84, 0.65, 0.95],
-  [33, 91, 0.4, 0.7], [41, 86, 0.5, 0.8], [49, 93, 0.6, 0.9], [57, 88, 0.45, 0.75],
-  [65, 95, 0.55, 0.85], [73, 90, 0.4, 0.7], [81, 97, 0.5, 0.8], [89, 92, 0.6, 0.9],
-];
-
-const PatternCosmos = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 100 100"
-    preserveAspectRatio="none"
-    style={{ ...fullCover, width: "100%", height: "100%", display: "block" }}
-  >
-    <defs>
-      <radialGradient id="cosmos-nebula-purple" cx="70%" cy="30%" r="55%">
-        <stop offset="0%" stopColor="rgba(168, 85, 247, 0.22)" />
-        <stop offset="100%" stopColor="rgba(168, 85, 247, 0)" />
-      </radialGradient>
-      <radialGradient id="cosmos-nebula-cyan" cx="30%" cy="70%" r="55%">
-        <stop offset="0%" stopColor="rgba(56, 189, 248, 0.18)" />
-        <stop offset="100%" stopColor="rgba(56, 189, 248, 0)" />
-      </radialGradient>
-    </defs>
-    <rect width="100" height="100" fill="#020617" />
-    <rect width="100" height="100" fill="url(#cosmos-nebula-purple)" />
-    <rect width="100" height="100" fill="url(#cosmos-nebula-cyan)" />
-    {cosmosStars.map(([cx, cy, r, opacity], index) => (
-      <circle
-        key={index}
-        cx={cx}
-        cy={cy}
-        r={r}
-        fill="#ffffff"
-        opacity={opacity}
-      />
-    ))}
-  </svg>
 );
 
 const PatternAurora = () => (
@@ -318,28 +234,6 @@ const PatternLavaLamp = () => (
   />
 );
 
-const PatternFrostbite = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundImage:
-        "repeating-linear-gradient(45deg, transparent 0 13px, rgba(255, 255, 255, 0.45) 13px 14px), repeating-linear-gradient(-45deg, transparent 0 13px, rgba(255, 255, 255, 0.45) 13px 14px), linear-gradient(135deg, #dbeafe 0%, #93c5fd 50%, #3b82f6 100%)",
-    }}
-  />
-);
-
-const PatternCyberStreets = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#0a0a14",
-      backgroundImage:
-        "linear-gradient(rgba(236, 72, 153, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.5) 1px, transparent 1px), radial-gradient(ellipse at 50% 100%, rgba(236, 72, 153, 0.28) 0%, transparent 60%)",
-      backgroundSize: "40px 40px, 40px 40px, 100% 100%",
-    }}
-  />
-);
-
 const PatternSynthwave = () => (
   <div
     style={{
@@ -358,54 +252,6 @@ const PatternAcidRain = () => (
       backgroundColor: "#0f1f0a",
       backgroundImage:
         "repeating-linear-gradient(180deg, transparent 0 4px, rgba(132, 204, 22, 0.45) 4px 5px, transparent 5px 11px), radial-gradient(ellipse at 50% 100%, rgba(132, 204, 22, 0.25) 0%, transparent 70%)",
-    }}
-  />
-);
-
-const PatternCarbonFiber = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#1f2937",
-      backgroundImage:
-        "linear-gradient(45deg, rgba(0, 0, 0, 0.5) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 75%, transparent 75%, transparent)",
-      backgroundSize: "12px 12px",
-    }}
-  />
-);
-
-const PatternHalftone = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#fff7ed",
-      backgroundImage:
-        "radial-gradient(#1f2937 25%, transparent 26%), radial-gradient(#1f2937 25%, transparent 26%)",
-      backgroundSize: "14px 14px",
-      backgroundPosition: "0 0, 7px 7px",
-    }}
-  />
-);
-
-const PatternTartan = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#7f1d1d",
-      backgroundImage:
-        "repeating-linear-gradient(0deg, transparent 0 18px, rgba(255, 255, 255, 0.16) 18px 21px, transparent 21px 39px, rgba(0, 0, 0, 0.5) 39px 42px), repeating-linear-gradient(90deg, transparent 0 18px, rgba(255, 255, 255, 0.16) 18px 21px, transparent 21px 39px, rgba(0, 0, 0, 0.5) 39px 42px)",
-    }}
-  />
-);
-
-const PatternPolkadot = () => (
-  <div
-    style={{
-      ...fullCover,
-      backgroundColor: "#fef3c7",
-      backgroundImage:
-        "radial-gradient(circle at 25% 25%, #ec4899 0%, #ec4899 22%, transparent 22%), radial-gradient(circle at 75% 75%, #3b82f6 0%, #3b82f6 22%, transparent 22%), radial-gradient(circle at 75% 25%, #10b981 0%, #10b981 22%, transparent 22%), radial-gradient(circle at 25% 75%, #f97316 0%, #f97316 22%, transparent 22%)",
-      backgroundSize: "50px 50px, 50px 50px, 50px 50px, 50px 50px",
     }}
   />
 );
@@ -625,15 +471,6 @@ export const backgroundOptions: BackgroundItem[] = [
     isDark: true,
   },
   {
-    name: "Dark Topo",
-    description: "Cyber contour lines",
-    component: <PatternDarkTopo />,
-    backgroundColor: "#0f172a",
-    text: "#cbd5e1",
-    heading: "#f1f5f9",
-    isDark: true,
-  },
-  {
     name: "Vaporwave",
     description: "Retro sunset scanlines",
     component: <PatternVaporwave />,
@@ -643,38 +480,11 @@ export const backgroundOptions: BackgroundItem[] = [
     isDark: true,
   },
   {
-    name: "Matrix",
-    description: "Terminal green rain",
-    component: <PatternMatrix />,
-    backgroundColor: "#000000",
-    text: "#86efac",
-    heading: "#22c55e",
-    isDark: true,
-  },
-  {
     name: "Solar Flare",
     description: "Sunset radial burn",
     component: <PatternSolarFlare />,
     backgroundColor: "#1e1b4b",
     text: "#fef3c7",
-    heading: "#ffffff",
-    isDark: true,
-  },
-  {
-    name: "Neon Hex",
-    description: "Magenta-cyan triangulation",
-    component: <PatternNeonHex />,
-    backgroundColor: "#0a0a14",
-    text: "#f5d0fe",
-    heading: "#f0abfc",
-    isDark: true,
-  },
-  {
-    name: "Cosmos",
-    description: "Deep-space starfield",
-    component: <PatternCosmos />,
-    backgroundColor: "#020617",
-    text: "#cbd5e1",
     heading: "#ffffff",
     isDark: true,
   },
@@ -731,23 +541,6 @@ export const backgroundOptions: BackgroundItem[] = [
   //   isDark: true,
   // },
   {
-    name: "Frostbite",
-    description: "Icy crosshatch",
-    component: <PatternFrostbite />,
-    backgroundColor: "#93c5fd",
-    text: "#1e3a8a",
-    heading: "#1e1b4b",
-  },
-  {
-    name: "Cyber Streets",
-    description: "Magenta-cyan crosshair",
-    component: <PatternCyberStreets />,
-    backgroundColor: "#0a0a14",
-    text: "#f5d0fe",
-    heading: "#ffffff",
-    isDark: true,
-  },
-  {
     name: "Synthwave",
     description: "80s grid sundown",
     component: <PatternSynthwave />,
@@ -764,40 +557,6 @@ export const backgroundOptions: BackgroundItem[] = [
     text: "#d9f99d",
     heading: "#84cc16",
     isDark: true,
-  },
-  {
-    name: "Carbon Fiber",
-    description: "Industrial weave",
-    component: <PatternCarbonFiber />,
-    backgroundColor: "#1f2937",
-    text: "#d1d5db",
-    heading: "#ffffff",
-    isDark: true,
-  },
-  {
-    name: "Halftone",
-    description: "Comic-book dots",
-    component: <PatternHalftone />,
-    backgroundColor: "#fff7ed",
-    text: "#1f2937",
-    heading: "#000000",
-  },
-  {
-    name: "Tartan",
-    description: "Crimson plaid weave",
-    component: <PatternTartan />,
-    backgroundColor: "#7f1d1d",
-    text: "#fecaca",
-    heading: "#ffffff",
-    isDark: true,
-  },
-  {
-    name: "Polkadot",
-    description: "Multicolor spots",
-    component: <PatternPolkadot />,
-    backgroundColor: "#fef3c7",
-    text: "#1f2937",
-    heading: "#000000",
   },
   {
     name: "Sandstone",

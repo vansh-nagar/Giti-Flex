@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { RoseCurveLoader } from "@/components/ui/rose-curve-loader";
+import { Spinner } from "@/components/ui/spinner";
 import SoftPillButton from "@/components/ui/soft-pill-button";
 
 import { VersusView } from "./components/versus-view";
@@ -85,7 +85,7 @@ export function VersusPageClient({
   if (!data) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
-        <RoseCurveLoader className="size-40 text-zinc-900" />
+        <Spinner className="size-8 text-zinc-900" />
       </div>
     );
   }

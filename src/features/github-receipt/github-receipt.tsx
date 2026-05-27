@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Palette } from "lucide-react";
+import { Palette } from "@/components/icons";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
+import { SiteHeader } from "@/components/layout/site-header";
 import { backgroundOptions } from "./constants";
 import { CustomizationPanel } from "./components/customization-panel";
 import { ExportDialog } from "./components/export-dialog";
@@ -47,6 +48,9 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     }
   }, [user]);
 
+  const lastSyncedPropRef = useRef<string | null>(null);
+  const lastFetchedRef = useRef<string | null>(null);
+
   const fetchGithubData = useCallback((username: string) => {
     setLoading(true);
     setError(null);
@@ -74,7 +78,6 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
       })
       .catch((fetchError: Error) => {
         setError(fetchError.message);
-        setSubmittedUsername(null);
       })
       .finally(() => {
         setLoading(false);
@@ -83,18 +86,22 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
 
   useEffect(() => {
     if (!username) return;
-    if (submittedUsername?.toLowerCase() === username.toLowerCase()) return;
+    if (lastSyncedPropRef.current?.toLowerCase() === username.toLowerCase()) {
+      return;
+    }
+    lastSyncedPropRef.current = username;
     setUser(null);
     setRepos([]);
     setError(null);
     setInputUsername(username);
     setSubmittedUsername(username);
-  }, [username, submittedUsername]);
+  }, [username]);
 
   useEffect(() => {
-    if (submittedUsername) {
-      fetchGithubData(submittedUsername);
-    }
+    if (!submittedUsername) return;
+    if (lastFetchedRef.current === submittedUsername) return;
+    lastFetchedRef.current = submittedUsername;
+    fetchGithubData(submittedUsername);
   }, [fetchGithubData, submittedUsername]);
 
   const handleDownload = useCallback(async () => {
@@ -157,6 +164,8 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   return (
     <>
       <style>{githubReceiptStyles}</style>
+
+      <SiteHeader />
 
       <AnimatePresence>
         {!customizing && (

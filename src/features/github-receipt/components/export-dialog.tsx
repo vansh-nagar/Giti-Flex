@@ -1,6 +1,6 @@
 "use client";
 
-import { Download } from "lucide-react";
+import { Download } from "@/components/icons";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import {

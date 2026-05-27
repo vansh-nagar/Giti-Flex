@@ -9,7 +9,7 @@ import {
   Star,
   UserPlus,
   Users,
-} from "lucide-react";
+} from "@/components/icons";
 import type { RefObject } from "react";
 
 import { languageColors } from "../constants";

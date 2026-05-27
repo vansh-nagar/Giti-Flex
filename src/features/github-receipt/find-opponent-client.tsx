@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { RoseCurveLoader } from "@/components/ui/rose-curve-loader";
+import { Spinner } from "@/components/ui/spinner";
 
 import { OpponentDeck } from "./components/opponent-deck";
 import type { GitHubUser } from "./types";
@@ -46,7 +46,7 @@ export function FindOpponentClient({ login }: FindOpponentClientProps) {
   if (!user) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
-        <RoseCurveLoader className="size-40 text-zinc-900" />
+        <Spinner className="size-8 text-zinc-900" />
       </div>
     );
   }

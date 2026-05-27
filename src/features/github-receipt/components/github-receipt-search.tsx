@@ -1,6 +1,6 @@
 "use client";
 
-import { RoseCurveLoader } from "@/components/ui/rose-curve-loader";
+import { Spinner } from "@/components/ui/spinner";
 
 interface GithubReceiptSearchProps {
   error: string | null;
@@ -14,7 +14,7 @@ interface GithubReceiptSearchProps {
 export function GithubReceiptSearch({}: GithubReceiptSearchProps) {
   return (
     <div className=" h-screen w-full flex justify-center items-center">
-      <RoseCurveLoader className="size-40 text-zinc-900" />
+      <Spinner className="size-8 text-zinc-900" />
     </div>
   );
 }

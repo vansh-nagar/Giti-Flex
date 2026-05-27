@@ -54,29 +54,36 @@ export async function POST(req: Request) {
   const id = crypto.randomUUID();
   const tie = Boolean(isTie);
   const points = tie ? 0 : POINTS_PER_BATTLE;
-  const authedIsWinner = authedLower === winnerLower;
 
   try {
     const result = await prisma.$transaction(async (tx: TxClient) => {
       await tx.player.upsert({
-        where: { login: authedLogin },
-        create: { login: authedLogin },
+        where: { login: winner },
+        create: { login: winner },
+        update: {},
+      });
+      await tx.player.upsert({
+        where: { login: loser },
+        create: { login: loser },
         update: {},
       });
 
       if (tie) {
         await tx.player.update({
-          where: { login: authedLogin },
+          where: { login: winner },
           data: { ties: { increment: 1 } },
         });
-      } else if (authedIsWinner) {
         await tx.player.update({
-          where: { login: authedLogin },
-          data: { points: { increment: points }, wins: { increment: 1 } },
+          where: { login: loser },
+          data: { ties: { increment: 1 } },
         });
       } else {
         await tx.player.update({
-          where: { login: authedLogin },
+          where: { login: winner },
+          data: { points: { increment: points }, wins: { increment: 1 } },
+        });
+        await tx.player.update({
+          where: { login: loser },
           data: { points: { decrement: points }, losses: { increment: 1 } },
         });
       }

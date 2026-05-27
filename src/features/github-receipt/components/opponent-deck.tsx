@@ -9,7 +9,7 @@ import {
   useTransform,
   type PanInfo,
 } from "motion/react";
-import { Sword, Users, X } from "lucide-react";
+import { Sword, Users, X } from "@/components/icons";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
 import { Spinner } from "@/components/ui/spinner";
