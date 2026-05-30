@@ -22,11 +22,112 @@ export const githubReceiptStyles = `
     margin-bottom: 2em;
   }
 
+  /* Receipt printer machine + "printing out" effect */
+  .gh-printer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gh-printer__machine {
+    position: relative;
+    z-index: 3;
+    width: 92%;
+    height: 62px;
+    border-radius: 16px 16px 9px 9px;
+    background: linear-gradient(#ececec, #c9c9c9);
+    box-shadow:
+      inset 0 9px 7px rgba(255, 255, 255, 0.9),
+      inset 0 -12px 14px rgba(0, 0, 0, 0.12),
+      inset 7px 0 9px rgba(0, 0, 0, 0.16),
+      inset -7px 0 9px rgba(0, 0, 0, 0.16),
+      0 12px 20px rgba(0, 0, 0, 0.28);
+    /* Pull the paper up so its top tucks behind the machine and emerges
+       through the slot, instead of sitting below as a separate sheet. */
+    margin-bottom: -10px;
+  }
+
+  .gh-printer__brand {
+    position: absolute;
+    left: 16px;
+    top: 13px;
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.42);
+  }
+
+  .gh-printer__led {
+    position: absolute;
+    right: 16px;
+    top: 15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 6px #22c55e;
+    animation: gh-printer-blink 1.4s linear infinite;
+  }
+
+  @keyframes gh-printer-blink {
+    0%, 70% { opacity: 1; }
+    71%, 100% { opacity: 0.2; }
+  }
+
+  .gh-printer__mouth {
+    position: absolute;
+    left: 3%;
+    right: 3%;
+    bottom: 5px;
+    height: 6px;
+    border-radius: 4px;
+    background: #161616;
+    box-shadow:
+      inset 0 2px 3px rgba(0, 0, 0, 0.85),
+      0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  /* The paper lives inside this window. Its top is permanently clipped at
+     the slot, so the receipt always reads as continuous paper emerging from
+     the machine (never a separate card sitting below it). padding-bottom
+     leaves room for the paper's drop-shadow. */
+  .gh-printer__feed {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    padding-bottom: 24px;
+  }
+
+  .gh-receipt__paper {
+    position: relative;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .gh-receipt__paper--shadow {
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
+  }
+
+  /* Flat top (continuous paper) + torn / perforated bottom edge */
+  .gh-receipt__invoice--torn {
+    border-radius: 0;
+    -webkit-mask: radial-gradient(circle at bottom, transparent 0.45rem, #000 0.5rem);
+    mask: radial-gradient(circle at bottom, transparent 0.45rem, #000 0.5rem);
+    -webkit-mask-size: 10% 100%;
+    mask-size: 10% 100%;
+  }
+
   .gh-receipt__invoice {
     position: relative;
     width: 85%;
     margin: 0 auto;
-    padding: 1em;
+    padding: 1.15em 1.25em;
     border-radius: 0.5em;
     box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.15);
     transition: background-color 0.4s ease, color 0.4s ease;
@@ -34,18 +135,18 @@ export const githubReceiptStyles = `
 
   .gh-receipt__title {
     position: relative;
-    font-size: 1.15rem;
-    padding: 0.55em 0;
-    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+    padding: 0.6em 0;
+    letter-spacing: 0.3px;
     text-align: center;
-    margin-bottom: 1.25em;
-    font-weight: 500;
+    margin-bottom: 1em;
+    font-weight: 600;
   }
 
   .gh-receipt__header {
     text-align: center;
-    padding-bottom: 0.75em;
-    margin-bottom: 0.75em;
+    padding-bottom: 0.9em;
+    margin-bottom: 0.9em;
   }
 
   .gh-receipt__avatar {
@@ -67,20 +168,21 @@ export const githubReceiptStyles = `
 
   .gh-receipt__login {
     font-size: 0.78rem;
-    margin-top: 2px;
+    margin-top: 3px;
   }
 
   .gh-receipt__bio {
     font-size: 0.75rem;
-    margin-top: 6px;
+    margin-top: 8px;
     font-style: italic;
+    line-height: 1.45;
   }
 
   .gh-receipt__stats {
     display: flex;
     justify-content: space-around;
-    padding: 0.6em 0;
-    margin-bottom: 0.75em;
+    padding: 0.75em 0;
+    margin-bottom: 0.9em;
   }
 
   .gh-receipt__stat {
@@ -108,19 +210,19 @@ export const githubReceiptStyles = `
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.4em;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
 
   .gh-receipt__repos {
     list-style-type: none;
-    margin-bottom: 0.75em;
+    margin-bottom: 0.9em;
   }
 
   .gh-receipt__repo {
-    padding: 0.45em 0;
+    padding: 0.55em 0;
   }
 
   .gh-receipt__repo-name {
@@ -145,8 +247,8 @@ export const githubReceiptStyles = `
   .gh-receipt__repo-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 2px;
+    gap: 12px;
+    margin-top: 5px;
     font-size: 0.7rem;
   }
 
@@ -165,36 +267,45 @@ export const githubReceiptStyles = `
 
   .gh-receipt__repo-desc {
     font-size: 0.7rem;
-    margin-top: 2px;
+    margin-top: 4px;
+    line-height: 1.4;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .gh-receipt__footer {
-    padding-top: 0.75em;
+    padding-top: 0.9em;
     text-align: center;
   }
 
   .gh-receipt__total-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     gap: 0.75em;
-    font-size: 0.8rem;
-    margin-bottom: 0.4em;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.45em;
     white-space: nowrap;
   }
 
   .gh-receipt__total-value {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    letter-spacing: -0.2px;
     white-space: nowrap;
   }
 
+  .gh-receipt__total-value--lead {
+    font-size: 1.1rem;
+  }
+
   .gh-receipt__date {
-    font-size: 0.68rem;
-    margin-top: 0.75em;
+    font-size: 0.66rem;
+    letter-spacing: 0.5px;
+    margin-top: 0.9em;
+    opacity: 0.85;
   }
 
   .gh-receipt__barcode {
@@ -244,81 +355,8 @@ export const githubReceiptStyles = `
     font-size: 0.6rem;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-top: 6px;
+    margin-top: 8px;
     opacity: 0.5;
-  }
-
-  .gh-receipt hr {
-    border: none;
-    height: 1px;
-    background-color: #ddd;
-    margin: 0.75em 0;
-  }
-
-  .gh-receipt__payment-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0.75em 1em;
-    font-size: 1rem;
-    color: #6b7280;
-  }
-
-  .gh-receipt__card-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75em;
-  }
-
-  .gh-customize {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .gh-customize__section {
-    margin-bottom: 1.25em;
-  }
-
-  .gh-customize__label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #9ca3af;
-    margin-bottom: 0.6em;
-    font-weight: 500;
-  }
-
-  .gh-customize__swatch {
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: transform 0.15s ease-out, border-color 0.15s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .gh-customize__swatch:hover {
-    transform: scale(1.08);
-  }
-
-  .gh-customize__swatch:active {
-    transform: scale(0.95);
-  }
-
-  .gh-customize__swatch--selected {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
-
-  .gh-customize__swatch-name {
-    font-size: 0.6rem;
-    text-align: center;
-    margin-top: 4px;
-    color: #6b7280;
   }
 
   @media (max-width: 424px) {

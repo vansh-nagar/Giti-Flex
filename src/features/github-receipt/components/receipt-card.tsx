@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   BookOpen,
   ExternalLink,
@@ -10,13 +10,15 @@ import {
   UserPlus,
   Users,
 } from "@/components/icons";
-import type { RefObject } from "react";
+import { useState, type RefObject } from "react";
 
+import { cn } from "@/lib/utils";
 import { languageColors } from "../constants";
 import type {
   BackgroundItem,
   GitHubRepo,
   GitHubUser,
+  ReceiptMetric,
   ReceiptThemeStyles,
 } from "../types";
 import { formatMemberSince, formatPrintedAt } from "../utils";
@@ -27,10 +29,36 @@ interface ReceiptCardProps {
   selectedBackground: BackgroundItem;
   themeStyles: ReceiptThemeStyles;
   totalStars: number;
+  metric?: ReceiptMetric;
+  contributions?: number | null;
+  /** Plays the "printing out of the slot" animation once on mount. */
+  print?: boolean;
   user: GitHubUser;
 }
 
 const barcodePattern = [1, 2, 3, 1, 2, 1, 3, 2, 1, 2];
+
+// "Printing out" in bursts: the paper jumps a chunk, then holds, like a real
+// receipt printer feeding line groups. Each plateau is duplicated so the value
+// stays put (a pause) between quick advances.
+const PRINT_KEYFRAMES = [
+  "-100%",
+  "-83.3%",
+  "-83.3%",
+  "-66.6%",
+  "-66.6%",
+  "-50%",
+  "-50%",
+  "-33.3%",
+  "-33.3%",
+  "-16.6%",
+  "-16.6%",
+  "0%",
+];
+// Quick advance (~0.04) followed by a longer hold (~0.152) between each chunk.
+const PRINT_TIMES = [
+  0, 0.04, 0.192, 0.232, 0.384, 0.424, 0.576, 0.616, 0.768, 0.808, 0.96, 1,
+];
 
 export function ReceiptCard({
   receiptRef,
@@ -38,8 +66,21 @@ export function ReceiptCard({
   selectedBackground,
   themeStyles,
   totalStars,
+  metric = "stars",
+  contributions = null,
+  print = false,
   user,
 }: ReceiptCardProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const animateIn = print && !prefersReducedMotion;
+  // Play the print sequence once; afterwards stay at rest so later re-renders
+  // (background swap, metric toggle) don't replay the keyframes.
+  const [printed, setPrinted] = useState(!animateIn);
+  const showContributions = metric === "contributions" && contributions !== null;
+  const headlineLabel = showContributions ? "CONTRIBUTIONS" : "TOTAL STARS";
+  const headlineValue = showContributions
+    ? contributions.toLocaleString()
+    : `★ ${totalStars.toLocaleString()}`;
   const {
     backgroundColor,
     barcodeColor,
@@ -51,26 +92,20 @@ export function ReceiptCard({
     textColor,
   } = themeStyles;
 
-  return (
-    <motion.div
-      layout
-      transition={{
-        duration: 0.45,
-        ease: [0.23, 1, 0.32, 1],
+  const invoice = (
+    <div
+      ref={receiptRef as RefObject<HTMLDivElement | null>}
+      className={cn(
+        "gh-receipt__invoice",
+        print && "gh-receipt__invoice--torn",
+      )}
+      style={{
+        backgroundColor,
+        color: textColor,
+        overflow: "hidden",
+        isolation: "isolate",
       }}
-      style={{ width: "100%", maxWidth: 425, flexShrink: 1, minWidth: 0 }}
     >
-      <section ref={receiptRef} className="gh-receipt">
-        <section className="gh-receipt__invoice-container">
-          <div
-            className="gh-receipt__invoice"
-            style={{
-              backgroundColor,
-              color: textColor,
-              overflow: "hidden",
-              isolation: "isolate",
-            }}
-          >
             <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
               {selectedBackground.component}
             </div>
@@ -251,10 +286,10 @@ export function ReceiptCard({
               style={{ borderTop: `1.5px dashed ${borderColor}` }}
             >
               <div className="gh-receipt__total-row">
-                <span style={{ color: textColor }}>TOTAL STARS</span>
+                <span style={{ color: textColor }}>{headlineLabel}</span>
                 <motion.span
-                  key={totalStars}
-                  className="gh-receipt__total-value"
+                  key={headlineValue}
+                  className="gh-receipt__total-value gh-receipt__total-value--lead"
                   style={{ color: headingColor, display: "inline-block" }}
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -263,14 +298,14 @@ export function ReceiptCard({
                     ease: [0.34, 1.56, 0.64, 1],
                   }}
                 >
-                  &#9733; {totalStars.toLocaleString()}
+                  {headlineValue}
                 </motion.span>
               </div>
               <div className="gh-receipt__total-row">
                 <span style={{ color: textColor }}>MEMBER SINCE</span>
                 <span
                   className="gh-receipt__total-value"
-                  style={{ fontSize: "0.82rem", color: headingColor }}
+                  style={{ color: headingColor }}
                 >
                   {formatMemberSince(user.created_at)}
                 </span>
@@ -301,9 +336,50 @@ export function ReceiptCard({
                 Thank you for your contributions
               </div>
             </div>
-          </div>
-        </section>
-      </section>
+    </div>
+  );
+
+  const body = print ? (
+    <div className="gh-printer">
+      <div className="gh-printer__machine" aria-hidden>
+        <span className="gh-printer__brand">giti·flex</span>
+        <span className="gh-printer__led" />
+        <span className="gh-printer__mouth" />
+      </div>
+      <div className="gh-printer__feed">
+        <motion.div
+          className="gh-receipt__paper gh-receipt__paper--shadow"
+          initial={animateIn ? { y: "-100%" } : false}
+          animate={
+            animateIn && !printed ? { y: PRINT_KEYFRAMES } : { y: "0%" }
+          }
+          transition={
+            animateIn && !printed
+              ? { duration: 3.6, times: PRINT_TIMES, ease: "linear" }
+              : { duration: 0 }
+          }
+          onAnimationComplete={() => {
+            if (animateIn) setPrinted(true);
+          }}
+        >
+          {invoice}
+        </motion.div>
+      </div>
+    </div>
+  ) : (
+    <section className="gh-receipt__invoice-container">{invoice}</section>
+  );
+
+  return (
+    <motion.div
+      layout
+      transition={{
+        duration: 0.45,
+        ease: [0.23, 1, 0.32, 1],
+      }}
+      style={{ width: "100%", maxWidth: 425, flexShrink: 1, minWidth: 0 }}
+    >
+      <section className="gh-receipt">{body}</section>
     </motion.div>
   );
 }

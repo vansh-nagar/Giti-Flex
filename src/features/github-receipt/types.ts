@@ -34,6 +34,8 @@ export interface BackgroundItem {
   isDark?: boolean;
 }
 
+export type ReceiptMetric = "stars" | "contributions";
+
 export interface ReceiptCustomization {
   backgroundColor: string;
   textColor: string;

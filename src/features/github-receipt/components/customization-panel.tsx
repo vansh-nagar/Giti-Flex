@@ -28,7 +28,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { GiftDoodle } from "@/components/icons/gift-doodle";
 import { cn } from "@/lib/utils";
 
-import type { BackgroundItem, GitHubUser } from "../types";
+import type { BackgroundItem, GitHubUser, ReceiptMetric } from "../types";
 import { getBlogUrl, getDisplayBlog } from "../utils";
 
 interface CustomizationPanelProps {
@@ -36,6 +36,9 @@ interface CustomizationPanelProps {
   backgrounds: BackgroundItem[];
   user: GitHubUser;
   downloading: boolean;
+  metric: ReceiptMetric;
+  contributions: number | null;
+  onMetricChange: (metric: ReceiptMetric) => void;
   onClose: () => void;
   onSelect: (background: BackgroundItem) => void;
   onOpenExport: () => void;
@@ -108,6 +111,9 @@ export function CustomizationPanel({
   backgrounds,
   user,
   downloading,
+  metric,
+  contributions,
+  onMetricChange,
   onClose,
   onSelect,
   onOpenExport,
@@ -361,6 +367,61 @@ export function CustomizationPanel({
           variants={itemVariants}
           className="mt-4 sm:mt-8 flex flex-col justify-center"
         >
+          <motion.div
+            variants={itemVariants}
+            style={{ marginBottom: "12px" }}
+            className="flex items-center justify-between gap-3 text-sm"
+          >
+            <p className="text-muted-foreground">Headline</p>
+            <div className="flex items-center gap-1 rounded-full bg-muted/60 p-1">
+              {(
+                [
+                  { value: "stars" as const, label: "Stars" },
+                  { value: "contributions" as const, label: "Contributions" },
+                ]
+              ).map((option) => {
+                const isActive = metric === option.value;
+                const isDisabled =
+                  option.value === "contributions" && contributions === null;
+
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    disabled={isDisabled}
+                    onClick={() => onMetricChange(option.value)}
+                    title={
+                      isDisabled
+                        ? "Contributions data unavailable"
+                        : `Show ${option.label.toLowerCase()}`
+                    }
+                    className={cn(
+                      "relative rounded-full px-3 py-1 text-[13px] font-medium transition-colors",
+                      isDisabled && "cursor-not-allowed opacity-40",
+                      !isDisabled &&
+                        (isActive
+                          ? "text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"),
+                    )}
+                  >
+                    {isActive && !isDisabled && (
+                      <motion.span
+                        layoutId="metric-pill"
+                        className="absolute inset-0 rounded-full bg-primary"
+                        transition={{
+                          type: "spring",
+                          stiffness: 420,
+                          damping: 32,
+                        }}
+                      />
+                    )}
+                    <span className="relative z-10">{option.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+
           <motion.div
             variants={itemVariants}
             style={{ marginBottom: "12px" }}

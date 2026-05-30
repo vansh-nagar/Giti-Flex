@@ -12,7 +12,12 @@ import { ExportDialog } from "./components/export-dialog";
 import { GithubReceiptSearch } from "./components/github-receipt-search";
 import { ReceiptCard } from "./components/receipt-card";
 import { githubReceiptStyles } from "./styles";
-import type { BackgroundItem, GitHubRepo, GitHubUser } from "./types";
+import type {
+  BackgroundItem,
+  GitHubRepo,
+  GitHubUser,
+  ReceiptMetric,
+} from "./types";
 import {
   getDefaultCustomization,
   getReceiptThemeStyles,
@@ -26,6 +31,8 @@ interface GithubReceiptProps {
 export function GithubReceipt({ username }: GithubReceiptProps = {}) {
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
+  const [contributions, setContributions] = useState<number | null>(null);
+  const [metric, setMetric] = useState<ReceiptMetric>("stars");
   const [customizing, setCustomizing] = useState(true);
   const [selectedBackground, setSelectedBackground] = useState<BackgroundItem>(
     () =>
@@ -73,10 +80,27 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
         }
         return response.json() as Promise<GitHubRepo[]>;
       }),
+      // Contributions are optional — never let them reject the whole batch.
+      fetch(`/api/github/contributions/${username}`)
+        .then((response) =>
+          response.ok
+            ? (response.json() as Promise<{
+                available: boolean;
+                total?: number;
+              }>)
+            : { available: false as const },
+        )
+        .catch(() => ({ available: false as const })),
     ])
-      .then(([fetchedUser, allRepos]) => {
+      .then(([fetchedUser, allRepos, contributionsResult]) => {
         setUser(fetchedUser);
         setRepos(getTopRepos(allRepos));
+        setContributions(
+          contributionsResult.available &&
+            typeof contributionsResult.total === "number"
+            ? contributionsResult.total
+            : null,
+        );
       })
       .catch((fetchError: Error) => {
         setError(fetchError.message);
@@ -94,6 +118,8 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
     lastSyncedPropRef.current = username;
     setUser(null);
     setRepos([]);
+    setContributions(null);
+    setMetric("stars");
     setError(null);
     setInputUsername(username);
     setSubmittedUsername(username);
@@ -122,14 +148,15 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
       });
 
       const { toPng } = await import("html-to-image");
-      const { width, height } = receiptRef.current.getBoundingClientRect();
-      const dataUrl = await toPng(receiptRef.current, {
+      const node = receiptRef.current;
+      // Use scroll dimensions (transform-independent) so framer-motion's
+      // layout/scale transforms don't crop the exported card.
+      const dataUrl = await toPng(node, {
         pixelRatio: exportScale,
-        skipAutoScale: true,
         cacheBust: true,
         backgroundColor: "transparent",
-        width: Math.ceil(width),
-        height: Math.ceil(height),
+        width: node.scrollWidth,
+        height: node.scrollHeight,
       });
 
       const link = document.createElement("a");
@@ -212,6 +239,9 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
               backgrounds={[...backgroundOptions].reverse()}
               user={user}
               downloading={downloading}
+              metric={metric}
+              contributions={contributions}
+              onMetricChange={setMetric}
               onClose={() => setCustomizing(false)}
               onSelect={setSelectedBackground}
               onOpenExport={() => setShowExportModal(true)}
@@ -225,6 +255,9 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
           selectedBackground={selectedBackground}
           themeStyles={themeStyles}
           totalStars={totalStars}
+          metric={metric}
+          contributions={contributions}
+          print
           user={user}
         />
       </div>
