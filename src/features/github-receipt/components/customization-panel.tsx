@@ -483,6 +483,18 @@ export function CustomizationPanel({
               </AnimatePresence>
             </SoftPillButton>
           </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            className="mt-6 flex items-center justify-center"
+          >
+            <span
+              className="font-mono text-[0.65rem] uppercase text-muted-foreground/60"
+              style={{ letterSpacing: "1.5px" }}
+            >
+              giti·flex
+            </span>
+          </motion.div>
         </motion.section>
     </motion.div>
   );

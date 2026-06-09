@@ -59,6 +59,9 @@ const PRINT_KEYFRAMES = [
 const PRINT_TIMES = [
   0, 0.04, 0.192, 0.232, 0.384, 0.424, 0.576, 0.616, 0.768, 0.808, 0.96, 1,
 ];
+// Once printing finishes, let the receipt drop a little further off the
+// dispenser so it doesn't visually rest on the machine.
+const REST_OFFSET = 28;
 
 export function ReceiptCard({
   receiptRef,
@@ -80,7 +83,7 @@ export function ReceiptCard({
   const headlineLabel = showContributions ? "CONTRIBUTIONS" : "TOTAL STARS";
   const headlineValue = showContributions
     ? contributions.toLocaleString()
-    : `★ ${totalStars.toLocaleString()}`;
+    : totalStars.toLocaleString();
   const {
     backgroundColor,
     barcodeColor,
@@ -290,7 +293,12 @@ export function ReceiptCard({
                 <motion.span
                   key={headlineValue}
                   className="gh-receipt__total-value gh-receipt__total-value--lead"
-                  style={{ color: headingColor, display: "inline-block" }}
+                  style={{
+                    color: headingColor,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.25em",
+                  }}
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{
@@ -298,6 +306,7 @@ export function ReceiptCard({
                     ease: [0.34, 1.56, 0.64, 1],
                   }}
                 >
+                  {!showContributions && <Star size="1em" />}
                   {headlineValue}
                 </motion.span>
               </div>
@@ -351,12 +360,14 @@ export function ReceiptCard({
           className="gh-receipt__paper gh-receipt__paper--shadow"
           initial={animateIn ? { y: "-100%" } : false}
           animate={
-            animateIn && !printed ? { y: PRINT_KEYFRAMES } : { y: "0%" }
+            animateIn && !printed ? { y: PRINT_KEYFRAMES } : { y: REST_OFFSET }
           }
           transition={
             animateIn && !printed
               ? { duration: 3.6, times: PRINT_TIMES, ease: "linear" }
-              : { duration: 0 }
+              : printed
+                ? { type: "spring", stiffness: 220, damping: 26 }
+                : { duration: 0 }
           }
           onAnimationComplete={() => {
             if (animateIn) setPrinted(true);

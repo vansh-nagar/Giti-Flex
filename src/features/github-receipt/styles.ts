@@ -96,7 +96,7 @@ export const githubReceiptStyles = `
      leaves room for the paper's drop-shadow. */
   .gh-printer__feed {
     position: relative;
-    z-index: 1;
+    z-index: 5;
     width: 100%;
     display: flex;
     justify-content: center;

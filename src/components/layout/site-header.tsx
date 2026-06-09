@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import Link from "next/link";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 
@@ -23,51 +23,21 @@ export function SiteHeader({
   showLeaderboard = true,
   fixed = false,
 }: SiteHeaderProps = {}) {
-  const [hidden, setHidden] = useState(false);
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    if (!fixed) return;
-
-    lastScrollY.current = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const delta = currentScrollY - lastScrollY.current;
-
-      if (currentScrollY < 20) {
-        setHidden(false);
-      } else if (delta > 4) {
-        setHidden(true);
-      } else if (delta < -4) {
-        setHidden(false);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [fixed]);
-
   return (
     <header
       className={
         fixed
-          ? "sticky top-0 z-50 flex w-full items-center justify-between bg-background/80 px-6 py-5 backdrop-blur sm:px-10 transition-transform duration-300 ease-out will-change-transform"
+          ? "sticky top-0 z-50 flex w-full items-center justify-between px-6 py-5 sm:px-10"
           : "relative z-10 flex w-full items-center justify-between px-6 py-5 sm:px-10"
       }
-      style={
-        fixed
-          ? { transform: hidden ? "translateY(-100%)" : "translateY(0)" }
-          : undefined
-      }
     >
-      <Link href="/" aria-label="Giti Flex" className="flex items-center">
+      {fixed && <ProgressiveBlur />}
+
+      <Link href="/" aria-label="Giti Flex" className="relative z-10 flex items-center">
         <GitiFlexLogo size={52} className="text-foreground" />
       </Link>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="relative z-10 flex items-center gap-2 sm:gap-3">
         {actions}
         {showLeaderboard && (
           <Link href="/leaderboard" aria-label="Leaderboard">
@@ -136,5 +106,37 @@ export function SiteHeader({
         </Show>
       </div>
     </header>
+  );
+}
+
+const BLUR_LAYERS = [
+  // Heaviest blur at the top edge, fading to clear at the bottom.
+  { blur: 8, mask: "rgb(0,0,0) 0%, rgb(0,0,0) 12.5%, rgba(0,0,0,0) 37.5%" },
+  { blur: 4, mask: "rgba(0,0,0,0) 0%, rgb(0,0,0) 12.5%, rgb(0,0,0) 37.5%, rgba(0,0,0,0) 62.5%" },
+  { blur: 2, mask: "rgba(0,0,0,0) 25%, rgb(0,0,0) 37.5%, rgb(0,0,0) 62.5%, rgba(0,0,0,0) 87.5%" },
+  { blur: 1, mask: "rgba(0,0,0,0) 50%, rgb(0,0,0) 62.5%, rgb(0,0,0) 87.5%, rgba(0,0,0,0) 100%" },
+  { blur: 0.5, mask: "rgba(0,0,0,0) 75%, rgb(0,0,0) 87.5%, rgb(0,0,0) 100%" },
+];
+
+function ProgressiveBlur() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[160%]">
+      {BLUR_LAYERS.map((layer, i) => {
+        const gradient = `linear-gradient(to bottom, ${layer.mask})`;
+        return (
+          <div
+            key={i}
+            className="absolute inset-0"
+            style={{
+              zIndex: i + 1,
+              backdropFilter: `blur(${layer.blur}px)`,
+              WebkitBackdropFilter: `blur(${layer.blur}px)`,
+              maskImage: gradient,
+              WebkitMaskImage: gradient,
+            }}
+          />
+        );
+      })}
+    </div>
   );
 }
