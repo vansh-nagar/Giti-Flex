@@ -149,14 +149,27 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
 
       const { toPng } = await import("html-to-image");
       const node = receiptRef.current;
-      // Use scroll dimensions (transform-independent) so framer-motion's
-      // layout/scale transforms don't crop the exported card.
+      // The receipt is laid out with a percentage width (85%) and sits inside
+      // framer-motion transforms. html-to-image re-resolves that percentage
+      // against the export canvas, which crops the content. Pin the clone to
+      // the node's actual rendered pixel box and clear transforms/margins so
+      // the export matches exactly what's on screen.
+      const rect = node.getBoundingClientRect();
+      const width = Math.ceil(rect.width);
+      const height = Math.ceil(rect.height);
       const dataUrl = await toPng(node, {
         pixelRatio: exportScale,
         cacheBust: true,
         backgroundColor: "transparent",
-        width: node.scrollWidth,
-        height: node.scrollHeight,
+        width,
+        height,
+        style: {
+          width: `${width}px`,
+          height: `${height}px`,
+          maxWidth: "none",
+          margin: "0",
+          transform: "none",
+        },
       });
 
       const link = document.createElement("a");

@@ -263,7 +263,7 @@ export function ReceiptCard({
                   >
                     {repo.language && (
                       <span>
-                        <Code size={11} color="#fff" />
+                        <Code size={11} color={textColor} />
                         {repo.language}
                       </span>
                     )}
