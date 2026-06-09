@@ -2,6 +2,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   BookOpen01Icon,
   ChampionIcon,
+  CodeIcon,
   CrownIcon,
   Download04Icon,
   GiftIcon,
@@ -35,6 +36,7 @@ function makeIcon(displayName: string, icon: HugeIconProps["icon"]) {
 
 export const BookOpen = makeIcon("BookOpen", BookOpen01Icon);
 export const Check = makeIcon("Check", Tick02Icon);
+export const Code = makeIcon("Code", CodeIcon);
 export const Crown = makeIcon("Crown", CrownIcon);
 export const Download = makeIcon("Download", Download04Icon);
 export const ExternalLink = makeIcon("ExternalLink", LinkSquare02Icon);

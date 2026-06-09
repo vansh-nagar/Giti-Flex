@@ -114,13 +114,9 @@ export const githubReceiptStyles = `
     filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
   }
 
-  /* Flat top (continuous paper) + torn / perforated bottom edge */
+  /* Flat top (continuous paper) + flat bottom edge */
   .gh-receipt__invoice--torn {
     border-radius: 0;
-    -webkit-mask: radial-gradient(circle at bottom, transparent 0.45rem, #000 0.5rem);
-    mask: radial-gradient(circle at bottom, transparent 0.45rem, #000 0.5rem);
-    -webkit-mask-size: 10% 100%;
-    mask-size: 10% 100%;
   }
 
   .gh-receipt__invoice {
@@ -256,13 +252,6 @@ export const githubReceiptStyles = `
     display: flex;
     align-items: center;
     gap: 3px;
-  }
-
-  .gh-receipt__lang-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
   }
 
   .gh-receipt__repo-desc {

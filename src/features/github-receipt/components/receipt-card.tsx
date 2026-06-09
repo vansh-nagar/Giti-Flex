@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import {
   BookOpen,
+  Code,
   ExternalLink,
   GitFork,
   Star,
@@ -13,7 +14,6 @@ import {
 import { useState, type RefObject } from "react";
 
 import { cn } from "@/lib/utils";
-import { languageColors } from "../constants";
 import type {
   BackgroundItem,
   GitHubRepo,
@@ -263,18 +263,12 @@ export function ReceiptCard({
                   >
                     {repo.language && (
                       <span>
-                        <span
-                          className="gh-receipt__lang-dot"
-                          style={{
-                            backgroundColor:
-                              languageColors[repo.language] || "#888",
-                          }}
-                        />
+                        <Code size={11} color="#fff" />
                         {repo.language}
                       </span>
                     )}
                     <span>
-                      <Star size={11} /> {repo.stargazers_count}
+                      <Star size={8} /> {repo.stargazers_count}
                     </span>
                     <span>
                       <GitFork size={11} /> {repo.forks_count}
@@ -303,7 +297,7 @@ export function ReceiptCard({
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{
                     duration: 0.4,
-                    ease: [0.34, 1.56, 0.64, 1],
+                    ease: [0.16, 1, 0.3, 1],
                   }}
                 >
                   {!showContributions && <Star size="1em" />}

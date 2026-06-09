@@ -190,7 +190,7 @@ export function CustomizationPanel({
           variants={itemVariants}
           className="flex items-center justify-between mb-2"
         >
-          <h3 className="flex items-center gap-1 text-base font-semibold">
+          <h3 className="flex items-center gap-1 text-2xl font-semibold">
             Customize
           </h3>
           <div className="flex items-center gap-1">
@@ -297,6 +297,12 @@ export function CustomizationPanel({
           </div>
         </motion.div>
 
+        <div
+          className={cn(
+            "relative",
+            isMobile ? "flex-1 min-h-0" : "",
+          )}
+        >
         <motion.div
           variants={gridVariants}
           style={{
@@ -305,7 +311,7 @@ export function CustomizationPanel({
           }}
           className={cn(
             "grid grid-cols-2 gap-2 px-2 pt-1 pb-6 overflow-y-auto [&::-webkit-scrollbar]:hidden",
-            isMobile ? "flex-1 min-h-0" : "max-h-[65vh]",
+            isMobile ? "h-full" : "max-h-[65vh]",
           )}
         >
           {backgrounds.map((background) => {
@@ -362,6 +368,8 @@ export function CustomizationPanel({
             );
           })}
         </motion.div>
+          <GridBottomBlur />
+        </div>
 
         <motion.section
           variants={itemVariants}
@@ -428,12 +436,10 @@ export function CustomizationPanel({
             className="flex justify-between items-center text-sm"
           >
             <p className="text-muted-foreground">Website</p>
-            <motion.a
+            <a
               href={getBlogUrl(user.blog)}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ x: -2 }}
-              transition={{ type: "spring", stiffness: 380, damping: 24 }}
               className="flex items-center gap-2 hover:underline text-primary"
               style={{ textDecoration: "none" }}
             >
@@ -443,7 +449,7 @@ export function CustomizationPanel({
               <span className="inline-flex">
                 <Globe size={16} className="text-primary" />
               </span>
-            </motion.a>
+            </a>
           </motion.div>
 
           <motion.div variants={itemVariants} className="mb-2">
@@ -619,5 +625,37 @@ export function CustomizationPanel({
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+// Layered backdrop-blur that ramps up toward the bottom edge of the grid
+// container, fading the scrolling swatches into a soft blur at the base.
+const GRID_BLUR_LAYERS = [
+  { blur: 0.5, mask: "rgba(0,0,0,0) 0%, rgb(0,0,0) 35%, rgb(0,0,0) 60%, rgba(0,0,0,0) 75%" },
+  { blur: 1, mask: "rgba(0,0,0,0) 35%, rgb(0,0,0) 60%, rgb(0,0,0) 80%, rgba(0,0,0,0) 95%" },
+  { blur: 2, mask: "rgba(0,0,0,0) 60%, rgb(0,0,0) 80%, rgb(0,0,0) 100%" },
+  { blur: 4, mask: "rgba(0,0,0,0) 80%, rgb(0,0,0) 100%" },
+];
+
+function GridBottomBlur() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20">
+      {GRID_BLUR_LAYERS.map((layer, i) => {
+        const gradient = `linear-gradient(to bottom, ${layer.mask})`;
+        return (
+          <div
+            key={i}
+            className="absolute inset-0"
+            style={{
+              zIndex: i + 1,
+              backdropFilter: `blur(${layer.blur}px)`,
+              WebkitBackdropFilter: `blur(${layer.blur}px)`,
+              maskImage: gradient,
+              WebkitMaskImage: gradient,
+            }}
+          />
+        );
+      })}
+    </div>
   );
 }
