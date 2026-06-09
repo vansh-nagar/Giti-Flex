@@ -123,6 +123,39 @@
   animation-fill-mode: forwards;
 }
 
+/* Same purple -> cyan -> orange accents as the heading shimmer, sweeping
+   continuously as a sheen across a button surface. */
+@keyframes giti-shimmer-sweep {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.giti-shimmer-pill {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.giti-shimmer-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(168, 85, 247, 0.65) 44%,
+    rgba(6, 182, 212, 0.65) 50%,
+    rgba(249, 115, 22, 0.65) 56%,
+    transparent 65%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  background-position: 200% 0;
+  mix-blend-mode: screen;
+  animation: giti-shimmer-sweep 2.6s linear infinite;
+}
+
 @keyframes flower-wobble {
   0%, 100% { transform: rotate(-6deg); }
   50% { transform: rotate(6deg); }

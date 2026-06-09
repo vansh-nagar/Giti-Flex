@@ -6,6 +6,7 @@ import { ClerkLoaded, ClerkLoading, Show, SignInButton } from "@clerk/nextjs";
 import { motion, type Variants } from "motion/react";
 
 import SoftPillButton from "@/components/ui/soft-pill-button";
+import ShaderBackground from "@/components/ui/shader-background";
 import GithubLogo from "@/components/logo/github";
 import { SiteHeader } from "@/components/layout/site-header";
 import { TrophyDoodle } from "@/components/icons/trophy-doodle";
@@ -47,6 +48,8 @@ export function GithubReceiptHome({ login }: GithubReceiptHomeProps = {}) {
 
   return (
     <div className="relative flex flex-1 flex-col">
+      <ShaderBackground className="fixed inset-0 -z-10 h-full w-full" />
+
       <SiteHeader showLeaderboard={false} />
 
       <section className="relative flex flex-1 items-center justify-center px-6 pb-32">

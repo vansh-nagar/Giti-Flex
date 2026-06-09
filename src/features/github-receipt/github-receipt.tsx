@@ -220,7 +220,7 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
                 transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
               >
                 <SoftPillButton
-                  className="size-9 sm:w-auto sm:px-4 text-[13px]"
+                  className="giti-shimmer-pill size-9 sm:w-auto sm:px-4 text-[13px]"
                   variant="primary"
                   onClick={() => setCustomizing(true)}
                   title="Open customizer"
