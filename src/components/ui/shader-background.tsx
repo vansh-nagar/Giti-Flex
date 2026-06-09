@@ -61,8 +61,8 @@ const ShaderBackground = ({ className }: { className?: string }) => {
       return (cos(t) + cos(t * 1.3 + 1.3) + cos(t * 1.4 + 1.4)) / 3.0;
     }
 
-    float getPlasmaY(float x, float horizontalFade, float offset) {
-      return random(x * lineFrequency + iTime * lineSpeed) * horizontalFade * lineAmplitude + offset;
+    float getPlasmaY(float x, float horizontalFade, float offset, float t) {
+      return random(x * lineFrequency + t * lineSpeed) * horizontalFade * lineAmplitude + offset;
     }
 
     // Same accent sweep as the heading shimmer: purple -> cyan -> orange, looping.
@@ -85,8 +85,17 @@ const ShaderBackground = ({ className }: { className?: string }) => {
       float horizontalFade = 1.0 - (cos(uv.x * 6.28) * 0.5 + 0.5);
       float verticalFade = 1.0 - (cos(uv.y * 6.28) * 0.5 + 0.5);
 
-      space.y += random(space.x * warpFrequency + iTime * warpSpeed) * warpAmplitude * (0.5 + horizontalFade);
-      space.x += random(space.y * warpFrequency + iTime * warpSpeed + 2.0) * warpAmplitude * horizontalFade;
+      // Intro: threads draw themselves in while everything also animates -
+      // they grow and flow together from the very start.
+      const float growDuration = 1.8;
+      float growT = clamp(iTime / growDuration, 0.0, 1.0);
+      growT = growT * growT * (3.0 - 2.0 * growT); // ease in-out
+      float grown = floor(clamp(iTime / growDuration, 0.0, 1.0)); // 1.0 once done
+      float animTime = iTime;
+      float revealEdge = 0.06;
+
+      space.y += random(space.x * warpFrequency + animTime * warpSpeed) * warpAmplitude * (0.5 + horizontalFade);
+      space.x += random(space.y * warpFrequency + animTime * warpSpeed + 2.0) * warpAmplitude * horizontalFade;
 
       vec4 lines = vec4(0.0);
       // Clean white background; only the threads carry color.
@@ -94,19 +103,26 @@ const ShaderBackground = ({ className }: { className?: string }) => {
       vec4 bgColor2 = vec4(1.0, 1.0, 1.0, 1.0);
 
       // Animated thread color sweeping across x over time, matching the heading.
-      vec4 animColor = vec4(shimmerColor(uv.x * 0.7 + iTime * 0.12), 1.0);
+      vec4 animColor = vec4(shimmerColor(uv.x * 0.7 + animTime * 0.12), 1.0);
 
       for(int l = 0; l < linesPerGroup; l++) {
         float normalizedLineIndex = float(l) / float(linesPerGroup);
-        float offsetTime = iTime * offsetSpeed;
+        float offsetTime = animTime * offsetSpeed;
         float offsetPosition = float(l) + space.x * offsetFrequency;
         float rand = random(offsetPosition + offsetTime) * 0.5 + 0.5;
         float halfWidth = mix(minLineWidth, maxLineWidth, rand * horizontalFade) / 2.0;
         float offset = random(offsetPosition + offsetTime * (1.0 + normalizedLineIndex)) * mix(minOffsetSpread, maxOffsetSpread, horizontalFade);
-        float linePosition = getPlasmaY(space.x, horizontalFade, offset);
+        float linePosition = getPlasmaY(space.x, horizontalFade, offset, animTime);
         float line = drawSmoothLine(linePosition, halfWidth, space.y) / 2.0 + drawCrispLine(linePosition, halfWidth * 0.15, space.y);
 
-        lines += line * animColor * rand;
+        // Each thread grows from a random side: <0 = left->right, else right->left.
+        float dir = random(float(l) * 7.31 + 1.7);
+        float reveal = dir < 0.0
+          ? 1.0 - smoothstep(growT - revealEdge, growT + revealEdge, uv.x)
+          : smoothstep(1.0 - growT - revealEdge, 1.0 - growT + revealEdge, uv.x);
+        reveal = max(reveal, grown); // fully visible once grown
+
+        lines += line * animColor * rand * reveal;
       }
 
       // On a light background, tint toward the line color instead of adding
