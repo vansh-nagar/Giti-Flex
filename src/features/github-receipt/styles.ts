@@ -101,7 +101,7 @@ export const githubReceiptStyles = `
     display: flex;
     justify-content: center;
     overflow: hidden;
-    padding-bottom: 24px;
+    padding-bottom: 72px;
   }
 
   .gh-receipt__paper {

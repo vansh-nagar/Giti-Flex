@@ -230,6 +230,7 @@ export function GithubReceipt({ username }: GithubReceiptProps = {}) {
           width: "100%",
           margin: "0 auto",
           paddingTop: "4rem",
+          paddingBottom: "4rem",
         }}
       >
         <AnimatePresence initial={false}>
